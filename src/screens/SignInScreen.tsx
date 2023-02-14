@@ -1,12 +1,12 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
+import {validEmail} from '../utils/emailRegex';
+
 export const SignInScreen = () => {
   const [text, onChangeText] = React.useState('');
   const [textP, onChangeTextP] = React.useState('');
   const [isVisible, setIsVisible] = React.useState(true);
-  const validEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleSubmit = () => {
     if (validEmail.test(text)) {
