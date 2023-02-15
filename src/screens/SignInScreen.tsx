@@ -1,50 +1,12 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
-import {validEmail} from '../utils/emailRegex';
+import {theme} from '../theme/theme';
+import {SignInView} from '../views/SignInView';
 
-export const SignInScreen = () => {
-  const [text, onChangeText] = React.useState('');
-  const [textP, onChangeTextP] = React.useState('');
-  const [isVisible, setIsVisible] = React.useState(true);
-
-  const handleSubmit = () => {
-    if (validEmail.test(text)) {
-      return console.log('ok', {textP});
-    }
-
-    return console.log('NEL');
-  };
-
+export const SignInScreen = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.view}>
-      <View style={styles.inputView}>
-        <TextInput
-          mode="outlined"
-          label="Email"
-          onChangeText={onChangeText}
-          right={<TextInput.Affix text={`${text.length}/100`} />}
-        />
-      </View>
-
-      <View style={styles.inputView}>
-        <TextInput
-          mode="outlined"
-          label="Password"
-          secureTextEntry={isVisible}
-          onChangeText={onChangeTextP}
-          right={
-            <TextInput.Icon
-              icon="eye"
-              onPress={() => setIsVisible(!isVisible)}
-            />
-          }
-        />
-      </View>
-
-      <Button icon="login" mode="contained" onPress={handleSubmit}>
-        Sign In
-      </Button>
+      <SignInView navigation={navigation} />
     </View>
   );
 };
@@ -59,4 +21,23 @@ const styles = StyleSheet.create({
   inputView: {
     margin: 10,
   },
+  row: {
+    flexDirection: 'row',
+    padding: 10,
+  },
+  link: {
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  forgotPassword: {
+    width: '100%',
+    alignItems: 'flex-end',
+    marginBottom: 24,
+    color: theme.colors.secondary,
+  },
+  logoView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textColor: {color: '#282828'},
 });

@@ -2,6 +2,7 @@ import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 import {Logo} from '../components/Logo';
+import {theme} from '../theme/theme';
 
 export const InitialScreen = ({navigation}: {navigation: any}) => {
   return (
@@ -13,7 +14,7 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
         labelStyle={styles.text}
         contentStyle={styles.buttomStyle}
         style={styles.buttonMargin}
-        mode="contained-tonal"
+        mode="contained"
         onPress={() => navigation.navigate('SignIn')}>
         Sign In
       </Button>
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonMargin: {
+    borderColor: theme.colors.primary,
     marginBottom: 10,
   },
 });
