@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import 'react-native-gesture-handler';
+
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {InitialScreen} from './screens/InitialScreen';
@@ -15,29 +15,23 @@ import {adaptNavigationTheme} from 'react-native-paper';
 import {SingUpScreen} from './screens/SignUpScreen';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
 import {isSigned} from './constants/auth';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {HomeScreen} from './screens/dashboard/HomeScreen';
-import {ServicesScreen} from './screens/dashboard/ServicesScreen';
+import {DrawerComponent} from './components/DrawerComponent';
 const {LightTheme} = adaptNavigationTheme({reactNavigationLight: DefaultTheme});
 const Stack = createNativeStackNavigator();
 
-const Drawer = createDrawerNavigator();
-
-const DrawerComponent = () => {
-  return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Services" component={ServicesScreen} />
-    </Drawer.Navigator>
-  );
-};
-
 function App() {
+  React.useEffect(() => {
+    console.log(isSigned());
+  }, []);
   return (
     <NavigationContainer theme={LightTheme}>
       <Stack.Navigator initialRouteName="InitialScreen">
-        {isSigned() ? (
-          <DrawerComponent />
+        {isSigned(true) ? (
+          <Stack.Screen
+            name="DrawerScreen"
+            options={{headerShown: false}}
+            component={DrawerComponent}
+          />
         ) : (
           <Stack.Group>
             <Stack.Screen

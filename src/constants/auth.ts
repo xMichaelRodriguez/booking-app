@@ -1,1 +1,1 @@
-export const isSigned = () => true;
+export const isSigned = (value?: boolean) => value;

@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {theme} from '../theme/theme';
 import {SignInView} from '../views/SignInView';
 
-export const SignInScreen = ({navigation}: {navigation: any}) => {
+export const SignInScreen = ({navigation}: {navigation?: any}) => {
   return (
     <View style={styles.view}>
       <SignInView navigation={navigation} />
