@@ -28,7 +28,7 @@ function App() {
       <Stack.Navigator initialRouteName="InitialScreen">
         {isSigned(true) ? (
           <Stack.Screen
-            name="DrawerScreen"
+            name="Root"
             options={{headerShown: false}}
             component={DrawerComponent}
           />

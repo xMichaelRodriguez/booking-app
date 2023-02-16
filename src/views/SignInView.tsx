@@ -79,7 +79,8 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         />
       </View>
       <View style={styles.forgotPassword}>
-        <TouchableOpacity onPress={() => navigation.navigate('DrawerScreen')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ResetPasswordScreen')}>
           <Text style={styles.forgotPassword}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>

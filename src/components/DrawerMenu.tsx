@@ -13,7 +13,7 @@ export const DrawerMenu = ({props}: {props: any}) => {
             style={styles.banner}
           />
         </View>
-        <DrawerItemList {...props} />
+        {props.name !== 'ServiceItem' && <DrawerItemList {...props} />}
       </TouchableOpacity>
     </View>
   );

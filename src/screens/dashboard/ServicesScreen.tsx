@@ -1,6 +1,11 @@
 import React from 'react';
-import {Text} from 'react-native-paper';
+import {View} from 'react-native';
+import {ListComponent} from '../../components/list/ListComponent';
 
-export const ServicesScreen = () => {
-  return <Text>ServicesScreen</Text>;
+export const ServicesScreen = ({navigation}: {navigation: any}) => {
+  return (
+    <View>
+      <ListComponent navigation={navigation} />
+    </View>
+  );
 };

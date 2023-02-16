@@ -2,12 +2,10 @@ import React from 'react';
 
 import {StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import {isSigned} from '../../constants/auth';
 
-export const HomeScreen = () => {
+export const HomeScreen = ({navigation}: {navigation: any}) => {
   const logout = () => {
-    console.log('hola');
-    isSigned(false);
+    navigation.navigate('Services');
   };
   return (
     <View style={styles.container}>
