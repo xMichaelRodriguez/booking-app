@@ -30,17 +30,23 @@ export const ServiceItem = ({
     }
   }, [description, name, price, setValue]);
 
+  const handleGoBack = () => {
+    navigation.replace('Root', {screen: 'Services'});
+    navigation.closeDrawer();
+
+    return true;
+  };
   useFocusEffect(
     React.useCallback(() => {
       const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         () => {
-          return navigation.replace('Root', {screen: 'Services'});
+          return handleGoBack();
         },
       );
 
       return () => subscription.remove();
-    }, []),
+    }, [handleGoBack]),
   );
 
   const onSubmit: SubmitHandler<IServiceInput> = data => {

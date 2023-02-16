@@ -12,11 +12,16 @@ const data: IServiceInput[] = [
     description: 'item description',
     price: 10,
   },
+  {
+    name: 'Second Item',
+    description: 'item description 2',
+    price: 15,
+  },
 ];
 export const ListComponent = ({navigation}: {navigation: any}) => {
   const details = (item: IServiceInput) => {
     const {name, description, price} = item;
-    navigation.navigate('Root', {
+    navigation.replace('Root', {
       screen: 'ServiceItem',
       params: {
         name,
@@ -36,7 +41,7 @@ export const ListComponent = ({navigation}: {navigation: any}) => {
           <List.Item
             key={item.name}
             title={item.name}
-            description={item.price}
+            description={`Price: $${item.price}`}
             onPress={() => details(item)}
             right={props => <List.Icon {...props} icon="chevron-right" />}
           />
