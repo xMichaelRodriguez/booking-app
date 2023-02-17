@@ -1,11 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useFocusEffect} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {Button, Text, TextInput, IconButton} from 'react-native-paper';
+import SelectDropdown from 'react-native-select-dropdown';
 import {BackHandler, StyleSheet, View} from 'react-native/';
+import {token} from '../../constants/auth';
 import {IBooking} from '../../interface/booking.interface';
+import {IServiceInput} from '../../interface/service.interface';
 import {theme} from '../../theme/theme';
+
+const url = 'https://booking-api-5d1g.onrender.com/api/v1/services';
 export const BookingItemList = ({
   route,
   navigation,
@@ -13,6 +18,7 @@ export const BookingItemList = ({
   route: any;
   navigation: any;
 }) => {
+  const [services, setServices] = useState<IServiceInput[]>([]);
   const bookingParams: IBooking = route.params;
 
   const {
@@ -22,7 +28,7 @@ export const BookingItemList = ({
     setValue,
   } = useForm<IBooking>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (bookingParams) {
       const {client, date, hour, id, service, status} = bookingParams;
       setValue('client.username', client.username);
@@ -53,9 +59,24 @@ export const BookingItemList = ({
     }, [handleGoBack]),
   );
 
+  useEffect(() => {
+    const getServices = async () => {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {Authorization: `Bearer ${token}`},
+      });
+      const data: IServiceInput[] = await response.json();
+      setServices(data);
+    };
+
+    getServices();
+  }, [bookingParams]);
+
   const onSubmit: SubmitHandler<IBooking> = data => {
     console.log(data);
   };
+
+  const setTextForSelection = (item: IServiceInput) => item.name;
   return (
     <View style={styles.container}>
       <View style={styles.margins}>
@@ -71,6 +92,7 @@ export const BookingItemList = ({
               error={!!errors.client?.username}
               label="client"
               mode="outlined"
+              disabled
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -90,34 +112,21 @@ export const BookingItemList = ({
       </View>
 
       <View style={styles.margins}>
-        <Controller
-          name="service.name"
-          control={control}
-          rules={{
-            required: {value: true, message: 'Required Description'},
-            minLength: {value: 3, message: 'Minumum valid characters: 50'},
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              error={!!errors.service?.name}
-              label="service"
-              mode="outlined"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
+        <SelectDropdown
+          renderSearchInputLeftIcon={() => (
+            <IconButton icon="select-search" size={28} />
           )}
+          search
+          data={services}
+          onSelect={(selectdItem, index) => {
+            console.log({selectdItem, index});
+          }}
+          buttonTextAfterSelection={setTextForSelection}
+          rowTextForSelection={setTextForSelection}
+          onChangeSearchInputText={(searchText: string) => {
+            console.log({searchText});
+          }}
         />
-        {errors.service?.name?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.service?.name.message}
-          </Text>
-        )}
-        {errors.service?.name?.type === 'minLength' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.service?.name.message}
-          </Text>
-        )}
       </View>
 
       <View style={styles.margins}>
