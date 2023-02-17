@@ -9,11 +9,13 @@ import {DrawerMenu} from './DrawerMenu';
 import {ServiceItem} from '../screens/dashboard/ServiceItem';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton} from 'react-native-paper';
+import {BookingItemList} from '../screens/dashboard/BookingItemList';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
-  const handleGoBack = () => {
-    navigation.replace('Root', {screen: 'Services'});
+  const handleGoBack = (subScreen: string) => {
+    console.log({subScreen});
+    navigation.replace('Root', {screen: subScreen});
   };
   return (
     <Drawer.Navigator
@@ -37,7 +39,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
         options={{
           title: 'Details',
           headerLeft: () => (
-            <TouchableOpacity onPress={handleGoBack}>
+            <TouchableOpacity onPress={() => handleGoBack('Services')}>
               <IconButton icon="chevron-left" />
             </TouchableOpacity>
           ),
@@ -46,6 +48,21 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           },
         }}
         component={ServiceItem}
+      />
+      <Drawer.Screen
+        name="BookingItem"
+        options={{
+          title: 'Details',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => handleGoBack('Bookings')}>
+              <IconButton icon="chevron-left" />
+            </TouchableOpacity>
+          ),
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+        component={BookingItemList}
       />
     </Drawer.Navigator>
   );

@@ -33,7 +33,7 @@ export const ListComponent = ({navigation}: {navigation: any}) => {
   return (
     <List.Section>
       <List.Subheader>
-        <Text>Services List</Text>
+        <Text variant="displaySmall">Services List</Text>
       </List.Subheader>
       <FlatList
         data={data}
