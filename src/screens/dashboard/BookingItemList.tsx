@@ -6,11 +6,12 @@ import {Button, Text, TextInput, IconButton} from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import {BackHandler, StyleSheet, View} from 'react-native/';
 import {token} from '../../constants/auth';
-import {IBooking} from '../../interface/booking.interface';
+import {IBooking, IState} from '../../interface/booking.interface';
 import {IServiceInput} from '../../interface/service.interface';
 import {theme} from '../../theme/theme';
 
-const url = 'https://booking-api-5d1g.onrender.com/api/v1/services';
+const urlService = 'https://booking-api-5d1g.onrender.com/api/v1/services';
+const urlStates = 'https://booking-api-5d1g.onrender.com/api/v1/states';
 export const BookingItemList = ({
   route,
   navigation,
@@ -19,6 +20,7 @@ export const BookingItemList = ({
   navigation: any;
 }) => {
   const [services, setServices] = useState<IServiceInput[]>([]);
+  const [states, setStates] = useState<IState[]>([]);
   const bookingParams: IBooking = route.params;
 
   const {
@@ -61,15 +63,36 @@ export const BookingItemList = ({
 
   useEffect(() => {
     const getServices = async () => {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {Authorization: `Bearer ${token}`},
-      });
-      const data: IServiceInput[] = await response.json();
-      setServices(data);
+      try {
+        const response = await fetch(urlService, {
+          method: 'GET',
+          headers: {Authorization: `Bearer ${token}`},
+        });
+        const data: IServiceInput[] = await response.json();
+        setServices(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+        }
+      }
+    };
+    const getStates = async () => {
+      try {
+        const response = await fetch(urlStates, {
+          method: 'GET',
+          headers: {Authorization: `Bearer ${token}`},
+        });
+        const data: IState[] = await response.json();
+        setStates(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+        }
+      }
     };
 
     getServices();
+    getStates();
   }, [bookingParams]);
 
   const onSubmit: SubmitHandler<IBooking> = data => {
@@ -112,47 +135,77 @@ export const BookingItemList = ({
       </View>
 
       <View style={styles.margins}>
+        <Text variant="bodyLarge" style={styles.margins}>
+          Services
+        </Text>
         <SelectDropdown
-          renderSearchInputLeftIcon={() => (
-            <IconButton icon="select-search" size={28} />
-          )}
+          defaultButtonText={bookingParams.service.name}
+          buttonStyle={theme.dropdown1BtnStyle}
+          buttonTextStyle={styles.dropdown1BtnTxtStyle}
+          renderDropdownIcon={isOpened => {
+            return (
+              <IconButton
+                icon={isOpened ? 'chevron-up' : 'chevron-down'}
+                size={18}
+              />
+            );
+          }}
+          dropdownIconPosition={'right'}
+          dropdownStyle={theme.dropdown1DropdownStyle}
+          rowStyle={theme.dropdown1RowStyle}
+          rowTextStyle={styles.dropdown1RowTxtStyle}
+          selectedRowStyle={theme.dropdown1SelectedRowStyle}
           search
+          searchInputStyle={theme.dropdown1searchInputStyleStyle}
+          searchPlaceHolder={'Search here'}
+          searchPlaceHolderColor={'#707070'}
+          renderSearchInputLeftIcon={() => (
+            <IconButton icon="select-search" size={26} />
+          )}
           data={services}
           onSelect={(selectdItem, index) => {
             console.log({selectdItem, index});
           }}
           buttonTextAfterSelection={setTextForSelection}
           rowTextForSelection={setTextForSelection}
-          onChangeSearchInputText={(searchText: string) => {
-            console.log({searchText});
-          }}
         />
       </View>
 
       <View style={styles.margins}>
-        <Controller
-          name="status.name"
-          control={control}
-          rules={{
-            required: {value: true, message: 'Required Price'},
+        <Text variant="bodyLarge" style={styles.margins}>
+          States
+        </Text>
+        <SelectDropdown
+          defaultButtonText={bookingParams.status.name}
+          buttonStyle={theme.dropdown1BtnStyle}
+          buttonTextStyle={styles.dropdown1BtnTxtStyle}
+          renderDropdownIcon={isOpened => {
+            return (
+              <IconButton
+                icon={isOpened ? 'chevron-up' : 'chevron-down'}
+                size={18}
+              />
+            );
           }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              error={!!errors.status?.name}
-              label="State"
-              mode="outlined"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              keyboardType="decimal-pad"
-              value={String(value)}
-            />
+          dropdownIconPosition={'right'}
+          dropdownStyle={theme.dropdown1DropdownStyle}
+          rowStyle={theme.dropdown1RowStyle}
+          rowTextStyle={styles.dropdown1RowTxtStyle}
+          selectedRowStyle={theme.dropdown1SelectedRowStyle}
+          search
+          searchInputStyle={theme.dropdown1searchInputStyleStyle}
+          searchPlaceHolder={'Search here'}
+          searchPlaceHolderColor={'#707070'}
+          renderSearchInputLeftIcon={() => (
+            <IconButton icon="select-search" size={26} />
           )}
+          data={states}
+          onSelect={(selectdItem, index) => {
+            console.log({selectdItem, index});
+          }}
+          buttonTextAfterSelection={setTextForSelection}
+          rowTextForSelection={setTextForSelection}
         />
-        {errors.status?.name?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.status?.name.message}
-          </Text>
-        )}
       </View>
 
       <Button mode="contained" onPress={handleSubmit(onSubmit)}>
@@ -170,4 +223,7 @@ const styles = StyleSheet.create({
     margin: 3,
     justifyContent: 'center',
   },
+
+  dropdown1BtnTxtStyle: {color: '#444', textAlign: 'left'},
+  dropdown1RowTxtStyle: {color: '#444', textAlign: 'left'},
 });

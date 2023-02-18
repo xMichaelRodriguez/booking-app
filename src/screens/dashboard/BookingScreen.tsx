@@ -2,6 +2,7 @@
 import React from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {List, Text} from 'react-native-paper';
+import {DescriptionItem} from '../../components/list/DescriptionItem';
 import {IBooking} from '../../interface/booking.interface';
 
 const data: IBooking[] = [
@@ -20,7 +21,7 @@ const data: IBooking[] = [
     },
     status: {
       id: 1,
-      name: 'Completed',
+      name: 'Reservado',
     },
     date: '01/14/2023',
     hour: '12:00 AM',
@@ -40,8 +41,28 @@ const data: IBooking[] = [
       email: 'johndoe@example.com',
     },
     status: {
+      id: 2,
+      name: 'Cancelado',
+    },
+    date: '01/14/2023',
+    hour: '01:00 PM',
+  },
+  {
+    id: 3,
+    service: {
+      id: 3,
+      name: 'Service 3',
+      description: 'item description',
+      price: 13,
+    },
+    client: {
       id: 1,
-      name: 'Completed',
+      username: 'JohnDoe',
+      email: 'johndoe@example.com',
+    },
+    status: {
+      id: 3,
+      name: 'Entregado',
     },
     date: '01/14/2023',
     hour: '01:00 PM',
@@ -65,10 +86,15 @@ export const BookingScreen = ({navigation}: {navigation: any}) => {
         data={data}
         renderItem={({item}) => (
           <List.Item
-            onPress={() => goBookingItem(item)}
             key={item.id}
+            onPress={() => goBookingItem(item)}
             title={item.service?.name}
-            description={item.client?.username}
+            description={() => (
+              <DescriptionItem
+                status={item.status}
+                username={item.client.username}
+              />
+            )}
             right={props => <List.Icon {...props} icon="chevron-right" />}
           />
         )}

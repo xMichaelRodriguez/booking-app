@@ -15,7 +15,7 @@ interface IClient {
   email: string;
 }
 
-interface IState {
+export interface IState {
   id: number;
   name: string;
 }
