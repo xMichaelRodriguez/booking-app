@@ -10,11 +10,11 @@ import {ServiceItem} from '../screens/dashboard/ServiceItem';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton} from 'react-native-paper';
 import {BookingItemList} from '../screens/dashboard/BookingItemList';
+import {CreateService} from './list/CreateService';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
   const handleGoBack = (subScreen: string) => {
-    console.log({subScreen});
     navigation.replace('Root', {screen: subScreen});
   };
   return (
@@ -33,7 +33,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
       }}>
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Services" component={ServicesScreen} />
-      <Drawer.Screen name="Bookings" component={BookingScreen} />
+
       <Drawer.Screen
         name="ServiceItem"
         options={{
@@ -43,12 +43,21 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
               <IconButton icon="chevron-left" />
             </TouchableOpacity>
           ),
+
           drawerItemStyle: {
             display: 'none',
           },
         }}
         component={ServiceItem}
       />
+      <Drawer.Screen
+        name="NewService"
+        component={CreateService}
+        options={{
+          title: 'Create Service',
+        }}
+      />
+      <Drawer.Screen name="Bookings" component={BookingScreen} />
       <Drawer.Screen
         name="BookingItem"
         options={{

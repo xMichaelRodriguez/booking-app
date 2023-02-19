@@ -1,62 +1,25 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import {useFocusEffect} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
-import {Button, Text, TextInput} from 'react-native-paper';
-import {BackHandler, StyleSheet, View} from 'react-native/';
+import {View, StyleSheet} from 'react-native';
+
+import {Text, TextInput, Button} from 'react-native-paper';
 import {IServiceInput} from '../../interface/service.interface';
 import {theme} from '../../theme/theme';
-export const ServiceItem = ({
-  route,
-  navigation,
-}: {
-  route: any;
-  navigation: any;
-}) => {
-  const serviceItem: IServiceInput = route.params;
-
+export const CreateService = () => {
+  const [formData, setFormData] = useState<IServiceInput>();
   const {
     control,
     handleSubmit,
     formState: {errors},
-    setValue,
   } = useForm<IServiceInput>();
-
-  useEffect(() => {
-    if (Object.entries(serviceItem).length > 0) {
-      const {description, id, name, price} = serviceItem;
-      setValue('id', id);
-      setValue('name', name);
-      setValue('description', description);
-      setValue('price', price);
-    }
-  }, [serviceItem, setValue]);
-
-  const handleGoBack = () => {
-    navigation.replace('Root', {screen: 'Services'});
-    navigation.closeDrawer();
-
-    return true;
-  };
-  useFocusEffect(
-    React.useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        'hardwareBackPress',
-        () => {
-          return handleGoBack();
-        },
-      );
-
-      return () => subscription.remove();
-    }, [handleGoBack]),
-  );
 
   const onSubmit: SubmitHandler<IServiceInput> = data => {
     console.log({data});
+    setFormData(data);
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.margins}>
+    <View style={custom.container}>
+      <View style={custom.margins}>
         <Controller
           name="name"
           control={control}
@@ -82,14 +45,14 @@ export const ServiceItem = ({
           <Text style={{color: theme.colors.error}}>{errors.name.message}</Text>
         )}
       </View>
-
-      <View style={styles.margins}>
+      <View style={custom.margins}>
         <Controller
           name="description"
           control={control}
           rules={{
             required: {value: true, message: 'Required Description'},
-            minLength: {value: 3, message: 'Minumum valid characters: 50'},
+            minLength: {value: 50, message: 'Minumum valid characters: 50'},
+            maxLength: {value: 500, message: 'Maximun valid characters: 500'},
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
@@ -99,6 +62,8 @@ export const ServiceItem = ({
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              multiline
+              numberOfLines={3}
             />
           )}
         />
@@ -112,24 +77,32 @@ export const ServiceItem = ({
             {errors.description.message}
           </Text>
         )}
+        {errors.description?.type === 'maxLength' && (
+          <Text style={{color: theme.colors.error}}>
+            {errors.description.message}
+          </Text>
+        )}
       </View>
-
-      <View style={styles.margins}>
+      <View style={custom.margins}>
         <Controller
           name="price"
           control={control}
           rules={{
             required: {value: true, message: 'Required Price'},
+            pattern: {
+              value: /^\$?\d{1,3}(,\d{3})*(\.\d{2})?$/,
+              message: 'Please enter a valid dollar amount',
+            },
           }}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, onBlur, value = 0}}) => (
             <TextInput
               error={!!errors.price}
               label="Price"
               mode="outlined"
               onBlur={onBlur}
               onChangeText={onChange}
-              keyboardType="decimal-pad"
               value={String(value)}
+              keyboardType="decimal-pad"
             />
           )}
         />
@@ -138,8 +111,16 @@ export const ServiceItem = ({
             {errors.price.message}
           </Text>
         )}
+        {errors.price?.type === 'pattern' && (
+          <Text style={{color: theme.colors.error}}>
+            {errors.price.message}
+          </Text>
+        )}
       </View>
 
+      <View style={custom.margins}>
+        <Text variant="displaySmall">{JSON.stringify(formData)}</Text>
+      </View>
       <Button mode="contained" onPress={handleSubmit(onSubmit)}>
         Save
       </Button>
@@ -147,12 +128,12 @@ export const ServiceItem = ({
   );
 };
 
-const styles = StyleSheet.create({
-  margins: {marginBottom: 15},
+const custom = StyleSheet.create({
   container: {
-    flex: 0,
-    padding: 10,
-    margin: 3,
-    justifyContent: 'center',
+    flex: 1,
+    padding: 20,
+  },
+  margins: {
+    marginBottom: 40,
   },
 });

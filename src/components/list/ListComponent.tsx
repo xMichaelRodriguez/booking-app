@@ -2,17 +2,19 @@
 
 import React from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {List, Text} from 'react-native-paper';
+import {List} from 'react-native-paper';
 
 import {IServiceInput} from '../../interface/service.interface';
 
 const data: IServiceInput[] = [
   {
+    id: 1,
     name: 'First Item',
     description: 'item description',
     price: 10,
   },
   {
+    id: 2,
     name: 'Second Item',
     description: 'item description 2',
     price: 15,
@@ -20,21 +22,15 @@ const data: IServiceInput[] = [
 ];
 export const ListComponent = ({navigation}: {navigation: any}) => {
   const details = (item: IServiceInput) => {
-    const {name, description, price} = item;
     navigation.replace('Root', {
       screen: 'ServiceItem',
       params: {
-        name,
-        description,
-        price,
+        ...item,
       },
     });
   };
   return (
     <List.Section>
-      <List.Subheader>
-        <Text variant="displaySmall">Services List</Text>
-      </List.Subheader>
       <FlatList
         data={data}
         renderItem={({item}) => (
