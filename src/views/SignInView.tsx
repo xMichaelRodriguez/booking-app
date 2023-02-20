@@ -3,6 +3,8 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, TextInput} from 'react-native-paper';
 import {Logo} from '../components/Logo';
+import {useAppDispatch} from '../hooks';
+import {startLogin} from '../slices/auth/thunks';
 import {theme} from '../theme/theme';
 interface IFormInput {
   email: string;
@@ -15,9 +17,9 @@ export const SignInView = ({navigation}: {navigation: any}) => {
     formState: {errors},
   } = useForm<IFormInput>();
   const [isVisible, setIsVisible] = React.useState(false);
-
+  const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<IFormInput> = data => {
-    console.log(data);
+    dispatch(startLogin(data));
   };
 
   return (

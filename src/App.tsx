@@ -15,47 +15,50 @@ import {adaptNavigationTheme} from 'react-native-paper';
 import {SingUpScreen} from './screens/SignUpScreen';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
 import {DrawerComponent} from './components/DrawerComponent';
-// import {useAppSelector} from './hooks/reduxHooks';
+import {useAppSelector} from './hooks';
 const {LightTheme} = adaptNavigationTheme({reactNavigationLight: DefaultTheme});
 const Stack = createNativeStackNavigator();
 
 function App() {
-  // const {isSigned} = useAppSelector(state => state.auth);
+  const {isSigned} = useAppSelector(state => state.auth);
+  if (isSigned) {
+    return (
+      <NavigationContainer theme={LightTheme}>
+        <Stack.Screen
+          name="Root"
+          options={{headerShown: false}}
+          component={DrawerComponent}
+        />
+      </NavigationContainer>
+    );
+  }
   return (
     <NavigationContainer theme={LightTheme}>
       <Stack.Navigator initialRouteName="InitialScreen">
-        {false ? (
+        <Stack.Group>
           <Stack.Screen
-            name="Root"
-            options={{headerShown: false}}
-            component={DrawerComponent}
+            name="Auth"
+            component={InitialScreen}
+            options={{
+              headerShown: false,
+            }}
           />
-        ) : (
-          <Stack.Group>
-            <Stack.Screen
-              name="Auth"
-              component={InitialScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SingUpScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="ResetPasswordScreen"
-              component={ResetPasswordScreen}
-              options={{headerShown: false}}
-            />
-          </Stack.Group>
-        )}
+          <Stack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SingUpScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ResetPasswordScreen"
+            component={ResetPasswordScreen}
+            options={{headerShown: false}}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );

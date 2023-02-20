@@ -3,5 +3,11 @@ export interface IAuthState {
   id: number;
   username: string;
   email: string;
-  isSigned: boolean;
+  isSigned?: boolean;
+  isActive: boolean;
+}
+
+export interface ILoginState {
+  email: string;
+  password: string;
 }
