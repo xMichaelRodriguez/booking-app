@@ -14,19 +14,17 @@ import {SignInScreen} from './screens/SignInScreen';
 import {adaptNavigationTheme} from 'react-native-paper';
 import {SingUpScreen} from './screens/SignUpScreen';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
-import {isSigned} from './constants/auth';
 import {DrawerComponent} from './components/DrawerComponent';
+// import {useAppSelector} from './hooks/reduxHooks';
 const {LightTheme} = adaptNavigationTheme({reactNavigationLight: DefaultTheme});
 const Stack = createNativeStackNavigator();
 
 function App() {
-  React.useEffect(() => {
-    console.log(isSigned());
-  }, []);
+  // const {isSigned} = useAppSelector(state => state.auth);
   return (
     <NavigationContainer theme={LightTheme}>
       <Stack.Navigator initialRouteName="InitialScreen">
-        {isSigned(true) ? (
+        {false ? (
           <Stack.Screen
             name="Root"
             options={{headerShown: false}}
