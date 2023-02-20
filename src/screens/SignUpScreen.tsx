@@ -1,4 +1,5 @@
 import React from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -9,21 +10,32 @@ import {
 import {Button, Checkbox, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Logo} from '../components/Logo';
+import {useAppDispatch} from '../hooks';
+import {startRegister} from '../slices/auth/thunks';
 import {theme} from '../theme/theme';
-import {validEmail} from '../utils/emailRegex';
+import {validEmail, validPassword} from '../utils/emailRegex';
+
+interface IFormInput {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const passwordMessage =
+  'Please choose a more secure password that includes at least one uppercase letter, at least one lowercase letter, at least one of the following special characters: [-, _, *, .] and a length between 8 and 16 characters.';
+
 export const SingUpScreen = ({navigation}: {navigation: any}) => {
-  const [text, onChangeText] = React.useState('');
-  const [textP, onChangeTextP] = React.useState('');
+  const dispatch = useAppDispatch();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<IFormInput>();
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const handleSubmit = () => {
-    if (validEmail.test(text)) {
-      return console.log('ok', {textP});
-    }
-
-    return console.log('NEL');
+  const onSubmit: SubmitHandler<IFormInput> = data => {
+    dispatch(startRegister(data));
   };
-
   return (
     <SafeAreaView style={styles.view}>
       <ScrollView>
@@ -32,28 +44,84 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
             <Logo />
           </View>
           <View style={styles.inputView}>
-            <TextInput
-              mode="outlined"
-              label="Username"
-              onChangeText={onChangeText}
+            <Controller
+              name="username"
+              control={control}
+              rules={{
+                required: {value: true, message: 'Required Name'},
+                minLength: {value: 3, message: 'Minimun characters is 3'},
+                maxLength: {value: 16, message: 'Maximun characters is 16'},
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  error={!!errors.username}
+                  onBlur={onBlur}
+                  mode="outlined"
+                  label="Username"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
             />
+            {errors.username && (
+              <Text style={{color: theme.colors.error}}>
+                {errors.username?.message}.
+              </Text>
+            )}
           </View>
 
           <View style={styles.inputView}>
-            <TextInput
-              mode="outlined"
-              label="Email"
-              onChangeText={onChangeText}
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: {value: true, message: 'Required Email'},
+                pattern: {value: validEmail, message: 'Invalid Email'},
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  error={!!errors.email}
+                  onBlur={onBlur}
+                  mode="outlined"
+                  label="Email"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
             />
+            {errors.email && (
+              <Text style={{color: theme.colors.error}}>
+                {errors.email.message}
+              </Text>
+            )}
           </View>
 
           <View style={styles.inputView}>
-            <TextInput
-              mode="outlined"
-              label="Password"
-              secureTextEntry={!isVisible}
-              onChangeText={onChangeTextP}
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: {value: true, message: 'Required Password'},
+                pattern: {value: validPassword, message: passwordMessage},
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  error={!!errors.password}
+                  mode="outlined"
+                  label="Password"
+                  secureTextEntry={!isVisible}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
             />
+            {errors.password && (
+              <Text style={{color: theme.colors.error}}>
+                {errors.password.message}
+              </Text>
+            )}
+
             <Checkbox.Item
               label="Show Password"
               status={isVisible ? 'checked' : 'unchecked'}
@@ -72,7 +140,10 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
             </TouchableOpacity>
           </View>
 
-          <Button icon="login" mode="contained" onPress={handleSubmit}>
+          <Button
+            icon="login"
+            mode="contained"
+            onPress={handleSubmit(onSubmit)}>
             Sign In
           </Button>
         </View>
