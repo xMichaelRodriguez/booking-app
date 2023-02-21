@@ -23,7 +23,6 @@ export const SignInView = ({navigation}: {navigation: any}) => {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<IFormInput> = data => {
-    console.log(data);
     dispatch(startLogin(data));
   };
 
