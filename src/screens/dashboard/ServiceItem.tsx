@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import {useFocusEffect} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {Button, Text, TextInput} from 'react-native-paper';
-import {BackHandler, StyleSheet, View} from 'react-native/';
-import {IServiceInput} from '../../interface/service.interface';
+import {StyleSheet, View} from 'react-native';
+import {useGoBack} from '../../hooks';
+import {IService} from '../../slices/services/interface/services.interface';
 import {theme} from '../../theme/theme';
 export const ServiceItem = ({
   route,
@@ -13,14 +12,14 @@ export const ServiceItem = ({
   route: any;
   navigation: any;
 }) => {
-  const serviceItem: IServiceInput = route.params;
+  const serviceItem: IService = route.params;
 
   const {
     control,
     handleSubmit,
     formState: {errors},
     setValue,
-  } = useForm<IServiceInput>();
+  } = useForm<IService>();
 
   useEffect(() => {
     if (Object.entries(serviceItem).length > 0) {
@@ -32,26 +31,27 @@ export const ServiceItem = ({
     }
   }, [serviceItem, setValue]);
 
-  const handleGoBack = () => {
-    navigation.replace('Root', {screen: 'Services'});
-    navigation.closeDrawer();
+  useGoBack({navigation, screenName: 'Services'});
+  // const handleGoBack = () => {
+  //   navigation.replace('Root', {screen: 'Services'});
+  //   navigation.closeDrawer();
 
-    return true;
-  };
-  useFocusEffect(
-    React.useCallback(() => {
-      const subscription = BackHandler.addEventListener(
-        'hardwareBackPress',
-        () => {
-          return handleGoBack();
-        },
-      );
+  //   return true;
+  // };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const subscription = BackHandler.addEventListener(
+  //       'hardwareBackPress',
+  //       () => {
+  //         return handleGoBack();
+  //       },
+  //     );
 
-      return () => subscription.remove();
-    }, [handleGoBack]),
-  );
+  //     return () => subscription.remove();
+  //   }, [handleGoBack]),
+  // );
 
-  const onSubmit: SubmitHandler<IServiceInput> = data => {
+  const onSubmit: SubmitHandler<IService> = data => {
     console.log({data});
   };
   return (
@@ -75,10 +75,7 @@ export const ServiceItem = ({
             />
           )}
         />
-        {errors.name?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>{errors.name.message}</Text>
-        )}
-        {errors.name?.type === 'minLength' && (
+        {errors.name && (
           <Text style={{color: theme.colors.error}}>{errors.name.message}</Text>
         )}
       </View>
@@ -102,12 +99,7 @@ export const ServiceItem = ({
             />
           )}
         />
-        {errors.description?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.description.message}
-          </Text>
-        )}
-        {errors.description?.type === 'minLength' && (
+        {errors.description && (
           <Text style={{color: theme.colors.error}}>
             {errors.description.message}
           </Text>
@@ -133,7 +125,7 @@ export const ServiceItem = ({
             />
           )}
         />
-        {errors.price?.type === 'required' && (
+        {errors.price && (
           <Text style={{color: theme.colors.error}}>
             {errors.price.message}
           </Text>

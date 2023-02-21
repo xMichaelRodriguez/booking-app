@@ -1,3 +1,0 @@
-export const isSigned = (value?: boolean) => value;
-export const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzY290dGxvdm9zNTAzQGdtYWlsLmNvbSIsImlzQWN0aXZlIjp0cnVlLCJyb2xlIjp7ImlkIjoxLCJuYW1lIjoiQURNSU4iLCJkZXNjcmlwdGlvbiI6InRoZSBhZG1pbiB1c2VyIHJvbGUifSwiaWF0IjoxNjc2NzQ4OTQxLCJleHAiOjE2NzY4MzUzNDF9.L-vtV67TS-hgeyljhKEM9iCt54XnJVhCtQUsFg43m5o';

@@ -18,6 +18,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
   } = useForm<IFormInput>();
   const [isVisible, setIsVisible] = React.useState(false);
   const dispatch = useAppDispatch();
+
   const onSubmit: SubmitHandler<IFormInput> = data => {
     dispatch(startLogin(data));
   };
@@ -86,19 +87,17 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           <Text style={styles.forgotPassword}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Button icon="login" mode="contained" onPress={handleSubmit(onSubmit)}>
-          Sign In
-        </Button>
+      <Button icon="login" mode="contained" onPress={handleSubmit(onSubmit)}>
+        Sign In
+      </Button>
 
-        <Button mode="text" textColor="#808080" style={styles.googleSignIn}>
-          <Image
-            source={require('../assets/sign-in-google.png')}
-            style={styles.googleIcon}
-          />
-          <Text>{'  '}Sign in with Google</Text>
-        </Button>
-      </View>
+      <Button mode="text" textColor="#808080" style={styles.googleSignIn}>
+        <Image
+          source={require('../assets/sign-in-google.png')}
+          style={styles.googleIcon}
+        />
+        <Text>{'  '}Sign in with Google</Text>
+      </Button>
       <View style={styles.row}>
         <Text style={styles.textColor}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
