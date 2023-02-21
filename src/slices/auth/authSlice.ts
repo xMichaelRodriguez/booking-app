@@ -11,6 +11,7 @@ const initialState: IAuthState = {
   email: null,
   isActive: null,
   role: null,
+  isLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -18,6 +19,9 @@ export const authSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    startLoadingLogin: state => {
+      state.isLoading = true;
+    },
     signIn: (state, action: PayloadAction<IAuthState>) => {
       const {email, id, username, isActive, role} = action.payload;
       state.email = email;
@@ -26,6 +30,7 @@ export const authSlice = createSlice({
       state.isActive = isActive;
       state.role = role;
       state.isSigned = true;
+      state.isLoading = false;
     },
 
     logout: state => {
@@ -35,11 +40,12 @@ export const authSlice = createSlice({
       state.role = null;
       state.username = null;
       state.isSigned = false;
+      state.isLoading = false;
     },
   },
 });
 
-export const {signIn, logout} = authSlice.actions;
+export const {signIn, logout, startLoadingLogin} = authSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAuth = (state: RootState) => state.auth;

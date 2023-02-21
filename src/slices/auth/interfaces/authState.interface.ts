@@ -6,6 +6,7 @@ export interface IAuthState {
   isSigned?: boolean;
   isActive: boolean | null;
   role: IRole | null;
+  isLoading?: boolean;
 }
 
 interface IRole {

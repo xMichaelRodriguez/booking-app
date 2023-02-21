@@ -35,3 +35,14 @@ export async function retrieveUserSession() {
     console.error({error});
   }
 }
+export async function removeUserSession() {
+  try {
+    await EncryptedStorage.clear();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    console.error({error});
+  }
+}

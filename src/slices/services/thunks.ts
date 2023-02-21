@@ -2,6 +2,7 @@ import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../API/backendApi';
 import {AppDispatch, retrieveUserSession} from '../../store';
+import {logout} from '../auth';
 import {ICreateService, IService} from './interface/services.interface';
 import {addService, setServices, startLoadingServices} from './servicesSlice';
 
@@ -33,31 +34,26 @@ export const createService = (service: ICreateService) => {
     const session = await retrieveUserSession();
 
     if (!session) {
-      console.log('NECESITA INICIAR SESSION');
+      return dispatch(logout());
     } else {
       const sessionParsed = JSON.parse(session);
       try {
         // TODO: Make http request
-        const {data, status, statusText} = await backendApi.post<IService>(
-          '/services',
-          service,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${sessionParsed.token}`,
-            },
+        const {data} = await backendApi.post<IService>('/services', service, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionParsed.token}`,
           },
+        });
+
+        ToastAndroid.showWithGravityAndOffset(
+          'Service Created',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
         );
-        console.log({status, statusText});
-        if (status !== 201) {
-          return ToastAndroid.showWithGravityAndOffset(
-            statusText,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-            25,
-            50,
-          );
-        }
+
         dispatch(addService(data));
       } catch (error) {
         if (axios.isAxiosError(error)) {

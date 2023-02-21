@@ -13,10 +13,12 @@ export const CreateService = () => {
     control,
     handleSubmit,
     formState: {errors},
+    reset,
   } = useForm<IService>();
 
   const onSubmit: SubmitHandler<IService> = data => {
     dispatch(createService(data));
+    reset();
   };
   return (
     <View style={custom.container}>

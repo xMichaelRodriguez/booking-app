@@ -1,10 +1,46 @@
 import axios from 'axios';
 import {backendApi} from '../../API/backendApi';
 import {ToastAndroid} from 'react-native';
-import {AppDispatch, storeUserSession} from '../../store';
-import {signIn} from './authSlice';
-import {IAuthLogin, IAuthRegister, ILoginState} from './interfaces';
+import {
+  AppDispatch,
+  removeUserSession,
+  retrieveUserSession,
+  storeUserSession,
+} from '../../store';
+import {logout, signIn, startLoadingLogin} from './authSlice';
+import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
 
+export const checkIsAuthenticated = () => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      dispatch(startLoadingLogin());
+      // TODO: get Token
+      const session = await retrieveUserSession();
+
+      if (!session) {
+        await removeUserSession();
+        return dispatch(logout());
+      }
+
+      const sessionParsed = JSON.parse(session);
+      // TODO: Make http request
+      const {data} = await backendApi.get<IAuthState>('/auth/me', {
+        headers: {
+          Authorization: `Bearer ${sessionParsed.token}`,
+        },
+      });
+
+      dispatch(signIn(data));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData.statusCode === 401) {
+          dispatch(logout());
+        }
+      }
+    }
+  };
+};
 export const startLogin = (login: ILoginState) => {
   return async (dispatch: AppDispatch) => {
     try {
