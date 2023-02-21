@@ -4,8 +4,11 @@ import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, TextInput} from 'react-native-paper';
 import {Logo} from '../components/Logo';
 import {useAppDispatch} from '../hooks';
-import {startLogin} from '../slices/auth/thunks';
+import {passwordMessage} from '../screens/SignUpScreen';
+import {startLogin} from '../slices/auth';
+
 import {theme} from '../theme/theme';
+import {validEmail, validPassword} from '../utils/emailRegex';
 interface IFormInput {
   email: string;
   password: string;
@@ -20,6 +23,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<IFormInput> = data => {
+    console.log(data);
     dispatch(startLogin(data));
   };
 
@@ -32,7 +36,10 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         <Controller
           name="email"
           control={control}
-          rules={{required: true}}
+          rules={{
+            required: {value: true, message: 'Required Email'},
+            pattern: {value: validEmail, message: 'Invalid Email'},
+          }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               error={!!errors.email}
@@ -45,7 +52,9 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           )}
         />
         {errors.email && (
-          <Text style={{color: theme.colors.error}}>This is required.</Text>
+          <Text style={{color: theme.colors.error}}>
+            {errors.email.message}
+          </Text>
         )}
       </View>
 
@@ -53,7 +62,10 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         <Controller
           name="password"
           control={control}
-          rules={{required: true}}
+          rules={{
+            required: {value: true, message: 'Required Password'},
+            pattern: {value: validPassword, message: passwordMessage},
+          }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               error={!!errors.password}
@@ -67,7 +79,9 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           )}
         />
         {errors.password && (
-          <Text style={{color: theme.colors.error}}>This is required.</Text>
+          <Text style={{color: theme.colors.error}}>
+            {errors.password?.message}
+          </Text>
         )}
 
         <Checkbox.Item

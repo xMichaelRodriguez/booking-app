@@ -9,3 +9,9 @@ export interface IService {
   description: string;
   price: number;
 }
+
+export interface ICreateService {
+  name: string;
+  description: string;
+  price: number;
+}

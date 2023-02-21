@@ -1,21 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {View, StyleSheet} from 'react-native';
 
 import {Text, TextInput, Button} from 'react-native-paper';
-import {IServiceInput} from '../../interface/service.interface';
+import {useAppDispatch} from '../../hooks';
+import {IService} from '../../slices/services/interface/services.interface';
+import {createService} from '../../slices/services/thunks';
 import {theme} from '../../theme/theme';
 export const CreateService = () => {
-  const [formData, setFormData] = useState<IServiceInput>();
+  const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
     formState: {errors},
-  } = useForm<IServiceInput>();
+  } = useForm<IService>();
 
-  const onSubmit: SubmitHandler<IServiceInput> = data => {
-    console.log({data});
-    setFormData(data);
+  const onSubmit: SubmitHandler<IService> = data => {
+    dispatch(createService(data));
   };
   return (
     <View style={custom.container}>
@@ -38,10 +39,7 @@ export const CreateService = () => {
             />
           )}
         />
-        {errors.name?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>{errors.name.message}</Text>
-        )}
-        {errors.name?.type === 'minLength' && (
+        {errors.name && (
           <Text style={{color: theme.colors.error}}>{errors.name.message}</Text>
         )}
       </View>
@@ -72,16 +70,6 @@ export const CreateService = () => {
             {errors.description.message}
           </Text>
         )}
-        {errors.description?.type === 'minLength' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.description.message}
-          </Text>
-        )}
-        {errors.description?.type === 'maxLength' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.description.message}
-          </Text>
-        )}
       </View>
       <View style={custom.margins}>
         <Controller
@@ -106,21 +94,14 @@ export const CreateService = () => {
             />
           )}
         />
-        {errors.price?.type === 'required' && (
-          <Text style={{color: theme.colors.error}}>
-            {errors.price.message}
-          </Text>
-        )}
-        {errors.price?.type === 'pattern' && (
+
+        {errors.price && (
           <Text style={{color: theme.colors.error}}>
             {errors.price.message}
           </Text>
         )}
       </View>
 
-      <View style={custom.margins}>
-        <Text variant="displaySmall">{JSON.stringify(formData)}</Text>
-      </View>
       <Button mode="contained" onPress={handleSubmit(onSubmit)}>
         Save
       </Button>

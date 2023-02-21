@@ -21,7 +21,7 @@ interface IFormInput {
   password: string;
 }
 
-const passwordMessage =
+export const passwordMessage =
   'Please choose a more secure password that includes at least one uppercase letter, at least one lowercase letter, at least one of the following special characters: [-, _, *, .] and a length between 8 and 16 characters.';
 
 export const SingUpScreen = ({navigation}: {navigation: any}) => {

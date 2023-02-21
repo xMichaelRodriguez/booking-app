@@ -2,9 +2,10 @@ import React, {useEffect} from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {useGoBack} from '../../hooks';
+import {useAppDispatch, useGoBack} from '../../hooks';
 import {IService} from '../../slices/services/interface/services.interface';
 import {theme} from '../../theme/theme';
+import {updateService} from '../../slices/services/thunks';
 export const ServiceItem = ({
   route,
   navigation,
@@ -13,7 +14,7 @@ export const ServiceItem = ({
   navigation: any;
 }) => {
   const serviceItem: IService = route.params;
-
+  const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
@@ -32,27 +33,9 @@ export const ServiceItem = ({
   }, [serviceItem, setValue]);
 
   useGoBack({navigation, screenName: 'Services'});
-  // const handleGoBack = () => {
-  //   navigation.replace('Root', {screen: 'Services'});
-  //   navigation.closeDrawer();
-
-  //   return true;
-  // };
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const subscription = BackHandler.addEventListener(
-  //       'hardwareBackPress',
-  //       () => {
-  //         return handleGoBack();
-  //       },
-  //     );
-
-  //     return () => subscription.remove();
-  //   }, [handleGoBack]),
-  // );
 
   const onSubmit: SubmitHandler<IService> = data => {
-    console.log({data});
+    dispatch(updateService(data));
   };
   return (
     <View style={styles.container}>
@@ -90,6 +73,8 @@ export const ServiceItem = ({
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
+              multiline
+              numberOfLines={5}
               error={!!errors.description}
               label="Description"
               mode="outlined"

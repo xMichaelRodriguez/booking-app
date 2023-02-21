@@ -7,25 +7,36 @@ import {IAuthLogin, IAuthRegister, ILoginState} from './interfaces';
 
 export const startLogin = (login: ILoginState) => {
   return async (dispatch: AppDispatch) => {
-    const {data, status, statusText} = await backendApi.post<IAuthLogin>(
-      '/auth/local/login',
-      login,
-    );
-
-    if (status !== 201) {
-      ToastAndroid.showWithGravityAndOffset(
-        statusText,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
+    try {
+      const {data} = await backendApi.post<IAuthLogin>(
+        '/auth/local/login',
+        login,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       );
-    }
-    const {user, jwt} = data;
-    const {id, username, email, isActive, role} = user;
-    storeUserSession(jwt.accessToken);
 
-    dispatch(signIn({id, username, email, isActive, role}));
+      const {user, jwt} = data;
+      const {id, username, email, isActive, role} = user;
+      storeUserSession(jwt.accessToken);
+
+      dispatch(signIn({id, username, email, isActive, role}));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData.statusCode !== 200) {
+          return ToastAndroid.showWithGravityAndOffset(
+            errorData.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
+      }
+    }
   };
 };
 
