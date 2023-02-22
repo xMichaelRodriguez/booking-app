@@ -1,6 +1,5 @@
 import React from 'react';
 import {AnimatedFAB} from 'react-native-paper';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -14,26 +13,21 @@ export const FabButton = ({isExtended}: {isExtended: boolean}) => {
     });
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <AnimatedFAB
-        color={colors.primary}
-        label={'Create'}
-        icon={'plus'}
-        extended={isExtended}
-        onPress={handleCreate}
-        visible
-        animateFrom={'right'}
-        iconMode={'dynamic'}
-        style={[styles.fabStyle]}
-      />
-    </SafeAreaView>
+    <AnimatedFAB
+      color={colors.primary}
+      label={'Create'}
+      icon={'plus'}
+      extended={isExtended}
+      onPress={handleCreate}
+      visible
+      animateFrom={'right'}
+      iconMode={'dynamic'}
+      style={[styles.fabStyle]}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
   fabStyle: {
     bottom: 16,
     right: 16,

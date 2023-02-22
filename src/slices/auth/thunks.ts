@@ -32,12 +32,6 @@ export const checkIsAuthenticated = () => {
 
       dispatch(signIn(data));
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData.statusCode === 401) {
-          dispatch(logout());
-        }
-      }
       await removeUserSession();
       return dispatch(logout());
     }

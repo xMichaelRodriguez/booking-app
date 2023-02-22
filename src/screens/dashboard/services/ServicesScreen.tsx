@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, Button, List} from 'react-native-paper';
 import {
@@ -15,10 +15,13 @@ import {getServices} from '../../../slices/services/thunks';
 import {theme} from '../../../theme/theme';
 import {FabButton} from '../../../components/list/FabButton';
 import {ListItemCard} from './components/ListItemCard';
+import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const noDataImage = require('../../../assets/no-data.png');
 
 export const ServicesScreen = ({navigation}: INavigationProps) => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
@@ -43,6 +46,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   };
 
   const openSheet = () => {
+    bottomSheetRef.current?.snapToIndex(1);
     console.log('hola');
   };
 
@@ -72,24 +76,27 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     );
   }
   return (
-    <View style={custom.view}>
-      <List.Section>
-        <FlatList
-          keyboardDismissMode="on-drag"
-          onScroll={onScroll}
-          data={services}
-          renderItem={({item}) => (
-            <ListItemCard
-              handleOpenSheet={openSheet}
-              key={item.id}
-              navigation={navigation}
-              item={item}
-            />
-          )}
-        />
-      </List.Section>
-      <FabButton isExtended={isExtended} />
-    </View>
+    <>
+      <View style={custom.view}>
+        <List.Section>
+          <FlatList
+            keyboardDismissMode="on-drag"
+            onScroll={onScroll}
+            data={services}
+            renderItem={({item}) => (
+              <ListItemCard
+                handleOpenSheet={openSheet}
+                key={item.id}
+                navigation={navigation}
+                item={item}
+              />
+            )}
+          />
+        </List.Section>
+        <FabButton isExtended={isExtended} />
+      </View>
+      <ButtonSheetWrapper bottomSheetRef={bottomSheetRef} />
+    </>
   );
 };
 

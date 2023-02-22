@@ -1,10 +1,16 @@
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../API/backendApi';
-import {AppDispatch, retrieveUserSession} from '../../store';
+import {AppDispatch, retrieveUserSession, RootState} from '../../store';
 import {logout} from '../auth';
 import {ICreateService, IService} from './interface/services.interface';
-import {addService, setServices, startLoadingServices} from './servicesSlice';
+import {
+  activeService,
+  addService,
+  onClearService,
+  setServices,
+  startLoadingServices,
+} from './servicesSlice';
 
 export const getServices = () => {
   return async (dispatch: AppDispatch) => {
@@ -118,6 +124,31 @@ export const updateService = (service: IService) => {
           }
         }
       }
+    }
+  };
+};
+
+export const setActiveService = (service: IService) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(activeService(service));
+  };
+};
+export const clearActiveService = () => {
+  return (dispatch: AppDispatch) => {
+    dispatch(onClearService());
+  };
+};
+
+export const setDeleteService = () => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const {isActiveService} = getState().service;
+    // TODO: get Token
+    const session = await retrieveUserSession();
+
+    if (!session) {
+      console.log('NECESITA INICIAR SESSION');
+    } else {
+      backendApi.delete(`/services/${isActiveService?.id}`, {headers: {}});
     }
   };
 };

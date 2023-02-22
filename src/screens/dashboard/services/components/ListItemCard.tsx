@@ -3,6 +3,8 @@ import {Button, Text, Card, Avatar, Divider} from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
 import {theme} from '../../../../theme/theme';
 import {IService} from '../../../../slices/services/interface/services.interface';
+import {useAppDispatch} from '../../../../hooks';
+import {setActiveService} from '../../../../slices/services/thunks';
 
 interface IProps {
   navigation: any;
@@ -17,6 +19,11 @@ export const ListItemCard = ({item, navigation, handleOpenSheet}: IProps) => {
         ...service,
       },
     });
+  };
+  const dispatch = useAppDispatch();
+  const setActiveOnOpenSheet = () => {
+    dispatch(setActiveService(item));
+    handleOpenSheet();
   };
 
   return (
@@ -37,7 +44,7 @@ export const ListItemCard = ({item, navigation, handleOpenSheet}: IProps) => {
         </View>
         <Divider />
         <View style={custom.cardSpace}>
-          <Button mode="outlined" onPress={handleOpenSheet}>
+          <Button mode="outlined" onPress={setActiveOnOpenSheet}>
             Remove
           </Button>
           <Button mode="contained" onPress={() => details(item)}>

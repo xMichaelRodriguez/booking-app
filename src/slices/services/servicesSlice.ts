@@ -4,6 +4,7 @@ import {IService, IServiceState} from './interface/services.interface';
 const initialState: IServiceState = {
   services: [],
   isLoading: false,
+  isActiveService: null,
 };
 
 export const serviceSlice = createSlice({
@@ -25,7 +26,18 @@ export const serviceSlice = createSlice({
         service.id === action.payload.id ? action.payload : service,
       );
     },
+    activeService: (state, action: PayloadAction<IService>) => {
+      state.isActiveService = action.payload;
+    },
+    onClearService: state => {
+      state.isActiveService = null;
+    },
   },
 });
-export const {startLoadingServices, setServices, addService} =
-  serviceSlice.actions;
+export const {
+  startLoadingServices,
+  setServices,
+  addService,
+  activeService,
+  onClearService,
+} = serviceSlice.actions;

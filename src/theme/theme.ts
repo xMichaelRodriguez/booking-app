@@ -8,7 +8,7 @@ export const theme = {
     primary: '#EE65B3',
     secondary: '#F10F91',
     tertiary: '#EA93C4',
-    subTitle: '#C5C5C5',
+    subTitle: '#9E9E9E',
   },
 
   dropdown1BtnStyle: {

@@ -1,6 +1,7 @@
 export interface IServiceState {
   services: IService[];
   isLoading: boolean;
+  isActiveService: IService | null;
 }
 
 export interface IService {
