@@ -5,9 +5,9 @@ import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {Button, Text, TextInput, IconButton} from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import {BackHandler, StyleSheet, View} from 'react-native/';
-import {token} from '../../constants/auth';
 import {IBooking, IState} from '../../interface/booking.interface';
-import {IServiceInput} from '../../interface/service.interface';
+import {IService} from '../../slices/services/interface/services.interface';
+
 import {theme} from '../../theme/theme';
 
 const urlService = 'https://booking-api-5d1g.onrender.com/api/v1/services';
@@ -19,7 +19,7 @@ export const BookingItemList = ({
   route: any;
   navigation: any;
 }) => {
-  const [services, setServices] = useState<IServiceInput[]>([]);
+  const [services, setServices] = useState<IService[]>([]);
   const [states, setStates] = useState<IState[]>([]);
   const bookingParams: IBooking = route.params;
 
@@ -68,7 +68,7 @@ export const BookingItemList = ({
           method: 'GET',
           headers: {Authorization: `Bearer ${token}`},
         });
-        const data: IServiceInput[] = await response.json();
+        const data: IService[] = await response.json();
         setServices(data);
       } catch (error) {
         if (error instanceof Error) {
@@ -99,7 +99,7 @@ export const BookingItemList = ({
     console.log(data);
   };
 
-  const setTextForSelection = (item: IServiceInput) => item.name;
+  const setTextForSelection = (item: IService) => item.name;
   return (
     <View style={styles.container}>
       <View style={styles.margins}>

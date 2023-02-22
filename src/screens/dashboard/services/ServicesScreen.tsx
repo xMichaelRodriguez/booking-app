@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, Button, List} from 'react-native-paper';
@@ -9,29 +8,29 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {INavigationProps} from '../../interface';
-import {IService} from '../../slices/services/interface/services.interface';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {INavigationProps} from '../../../interface';
 
-import {getServices} from '../../slices/services/thunks';
-import {theme} from '../../theme/theme';
-import {FabButton} from '../../components/list/FabButton';
+import {getServices} from '../../../slices/services/thunks';
+import {theme} from '../../../theme/theme';
+import {FabButton} from '../../../components/list/FabButton';
+import {ListItemCard} from './components/ListItemCard';
 
-const noDataImage = require('../../assets/no-data.png');
+const noDataImage = require('../../../assets/no-data.png');
 
 export const ServicesScreen = ({navigation}: INavigationProps) => {
+  // ref
+  // const refRBSheet = useRef<RBSheet>(null);
+
+  // state
+  // const [selectedItem, setSelectedItem] = useState<IService | null>(null);
+
+  // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
 
   const [isExtended, setIsExtended] = React.useState(true);
-  const details = (item: IService) => {
-    navigation.replace('Root', {
-      screen: 'ServiceItem',
-      params: {
-        ...item,
-      },
-    });
-  };
+
   const createService = () => {
     navigation.replace('Root', {
       screen: 'NewService',
@@ -48,6 +47,12 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
 
     setIsExtended(currentScrollPosition <= 0);
   };
+
+  // const handleDelete = (item: IService) => {
+  //   setSelectedItem(item);
+  //   // refRBSheet.current?.open();
+  //   console.log(selectedItem);
+  // };
 
   if (isLoading) {
     return (
@@ -81,13 +86,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
           onScroll={onScroll}
           data={services}
           renderItem={({item}) => (
-            <List.Item
-              key={item.name}
-              title={item.name}
-              description={`Price: $${item.price}`}
-              onPress={() => details(item)}
-              right={props => <List.Icon {...props} icon="chevron-right" />}
-            />
+            <ListItemCard key={item.id} navigation={navigation} item={item} />
           )}
         />
       </List.Section>
@@ -96,16 +95,60 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   );
 };
 
+// const RenderOnButtonSheet = ({
+//   selectedItem,
+//   refRBSheet,
+//   showDialog,
+// }: {
+//   selectedItem: IService | null;
+//   refRBSheet: RBSheet | null;
+//   showDialog: () => void;
+// }) => {
+//   return (
+//     <ButtonSheet refRBSheet={refRBSheet}>
+//       <View style={custom.activityStyle}>
+//         {selectedItem && (
+//           <View style={custom.margins}>
+//             <Text style={custom.textAlignTitle} variant="headlineSmall">
+//               {selectedItem.name}
+//             </Text>
+//             <Text variant="bodySmall">
+//               {selectedItem.description.slice(0, 150) + '...'}
+//             </Text>
+//             <Badge
+//               size={30}
+//               style={
+//                 custom.badgeCustom
+//               }>{`Price: $${selectedItem.price}`}</Badge>
+
+//             <Button
+//               style={custom.buttonDelete}
+//               mode="contained"
+//               icon="trash-can-outline"
+//               onPress={showDialog}>
+//               Delete
+//             </Button>
+//           </View>
+//         )}
+//       </View>
+//     </ButtonSheet>
+//   );
+// };
+
 const custom = StyleSheet.create({
   activityStyle: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
   },
+
   view: {flex: 1},
   buttonW: {
     width: 300,
+  },
+  margins: {
+    textAlign: 'left',
+    padding: 20,
   },
   image: {
     width: 300,

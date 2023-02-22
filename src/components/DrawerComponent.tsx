@@ -1,16 +1,16 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {ServicesScreen} from '../screens/dashboard/ServicesScreen';
+import {ServicesScreen} from '../screens/dashboard/services/ServicesScreen';
 import {HomeScreen} from '../screens/dashboard/HomeScreen';
 import {BookingScreen} from '../screens/dashboard/BookingScreen';
 import {theme} from '../theme/theme';
 import {DrawerMenu} from './DrawerMenu';
-import {ServiceItem} from '../screens/dashboard/ServiceItem';
+import {ServiceItem} from '../screens/dashboard/services/components/ServiceItem';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton} from 'react-native-paper';
 import {BookingItemList} from '../screens/dashboard/BookingItemList';
-import {CreateService} from './list/CreateService';
+import {CreateService} from '../screens/dashboard/services/components/CreateService';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {

@@ -37,6 +37,9 @@ export const checkIsAuthenticated = () => {
         if (errorData.statusCode === 401) {
           dispatch(logout());
         }
+      } else {
+        await removeUserSession();
+        return dispatch(logout());
       }
     }
   };

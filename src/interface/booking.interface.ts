@@ -1,8 +1,8 @@
-import {IServiceInput} from './service.interface';
+import {IService} from '../slices/services/interface/services.interface';
 
 export interface IBooking {
   id: number;
-  service: IServiceInput;
+  service: IService;
   client: IClient;
   status: IState;
   date: string;

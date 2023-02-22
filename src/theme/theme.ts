@@ -8,7 +8,9 @@ export const theme = {
     primary: '#EE65B3',
     secondary: '#F10F91',
     tertiary: '#EA93C4',
+    subTitle: '#C5C5C5',
   },
+
   dropdown1BtnStyle: {
     width: '80%',
     height: 50,
@@ -27,5 +29,9 @@ export const theme = {
     borderRadius: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#444',
+  },
+
+  cardActionSpace: {
+    justifyContent: 'space-around',
   },
 };
