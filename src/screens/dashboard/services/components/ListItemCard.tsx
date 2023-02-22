@@ -7,12 +7,9 @@ import {IService} from '../../../../slices/services/interface/services.interface
 interface IProps {
   navigation: any;
   item: IService;
+  handleOpenSheet: () => void;
 }
-export const ListItemCard = ({item, navigation}: IProps) => {
-  const handleDelete = () => {
-    console.log(item);
-  };
-
+export const ListItemCard = ({item, navigation, handleOpenSheet}: IProps) => {
   const details = (service: IService) => {
     navigation.replace('Root', {
       screen: 'ServiceItem',
@@ -40,7 +37,7 @@ export const ListItemCard = ({item, navigation}: IProps) => {
         </View>
         <Divider />
         <View style={custom.cardSpace}>
-          <Button mode="outlined" onPress={handleDelete}>
+          <Button mode="outlined" onPress={handleOpenSheet}>
             Remove
           </Button>
           <Button mode="contained" onPress={() => details(item)}>

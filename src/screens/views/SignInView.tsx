@@ -2,13 +2,13 @@ import React from 'react';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, TextInput} from 'react-native-paper';
-import {Logo} from '../components/Logo';
-import {useAppDispatch} from '../hooks';
-import {passwordMessage} from '../screens/SignUpScreen';
-import {startLogin} from '../slices/auth';
+import {Logo} from '../../components/Logo';
+import {useAppDispatch} from '../../hooks';
+import {passwordMessage} from '../SignUpScreen';
+import {startLogin} from '../../slices/auth';
 
-import {theme} from '../theme/theme';
-import {validEmail, validPassword} from '../utils/emailRegex';
+import {theme} from '../../theme/theme';
+import {validEmail, validPassword} from '../../utils/emailRegex';
 interface IFormInput {
   email: string;
   password: string;
@@ -106,7 +106,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
 
       <Button mode="text" textColor="#808080" style={styles.googleSignIn}>
         <Image
-          source={require('../assets/sign-in-google.png')}
+          source={require('../../assets/sign-in-google.png')}
           style={styles.googleIcon}
         />
         <Text>{'  '}Sign in with Google</Text>

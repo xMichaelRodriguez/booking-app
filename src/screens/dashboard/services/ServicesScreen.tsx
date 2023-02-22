@@ -19,12 +19,6 @@ import {ListItemCard} from './components/ListItemCard';
 const noDataImage = require('../../../assets/no-data.png');
 
 export const ServicesScreen = ({navigation}: INavigationProps) => {
-  // ref
-  // const refRBSheet = useRef<RBSheet>(null);
-
-  // state
-  // const [selectedItem, setSelectedItem] = useState<IService | null>(null);
-
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
@@ -48,11 +42,9 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     setIsExtended(currentScrollPosition <= 0);
   };
 
-  // const handleDelete = (item: IService) => {
-  //   setSelectedItem(item);
-  //   // refRBSheet.current?.open();
-  //   console.log(selectedItem);
-  // };
+  const openSheet = () => {
+    console.log('hola');
+  };
 
   if (isLoading) {
     return (
@@ -83,10 +75,16 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     <View style={custom.view}>
       <List.Section>
         <FlatList
+          keyboardDismissMode="on-drag"
           onScroll={onScroll}
           data={services}
           renderItem={({item}) => (
-            <ListItemCard key={item.id} navigation={navigation} item={item} />
+            <ListItemCard
+              handleOpenSheet={openSheet}
+              key={item.id}
+              navigation={navigation}
+              item={item}
+            />
           )}
         />
       </List.Section>
@@ -94,46 +92,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     </View>
   );
 };
-
-// const RenderOnButtonSheet = ({
-//   selectedItem,
-//   refRBSheet,
-//   showDialog,
-// }: {
-//   selectedItem: IService | null;
-//   refRBSheet: RBSheet | null;
-//   showDialog: () => void;
-// }) => {
-//   return (
-//     <ButtonSheet refRBSheet={refRBSheet}>
-//       <View style={custom.activityStyle}>
-//         {selectedItem && (
-//           <View style={custom.margins}>
-//             <Text style={custom.textAlignTitle} variant="headlineSmall">
-//               {selectedItem.name}
-//             </Text>
-//             <Text variant="bodySmall">
-//               {selectedItem.description.slice(0, 150) + '...'}
-//             </Text>
-//             <Badge
-//               size={30}
-//               style={
-//                 custom.badgeCustom
-//               }>{`Price: $${selectedItem.price}`}</Badge>
-
-//             <Button
-//               style={custom.buttonDelete}
-//               mode="contained"
-//               icon="trash-can-outline"
-//               onPress={showDialog}>
-//               Delete
-//             </Button>
-//           </View>
-//         )}
-//       </View>
-//     </ButtonSheet>
-//   );
-// };
 
 const custom = StyleSheet.create({
   activityStyle: {

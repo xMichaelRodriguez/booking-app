@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {theme} from '../theme/theme';
-import {SignInView} from '../views/SignInView';
+import {SignInView} from './views/SignInView';
 
 export const SignInScreen = ({navigation}: {navigation?: any}) => {
   return (
