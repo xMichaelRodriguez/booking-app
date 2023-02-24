@@ -5,17 +5,24 @@ import BottomSheet, {
 import React, {useMemo, RefObject, useCallback} from 'react';
 import {useAppDispatch} from '../hooks';
 import {clearActiveService} from '../slices/services/thunks';
-import {BottonContent} from './BottonContent';
 
 type Props = {
   bottomSheetRef: RefObject<BottomSheet>;
+  children: React.ReactNode;
+  percentage: string;
+  height: number;
 };
 
-export const ButtonSheetWrapper = ({bottomSheetRef}: Props) => {
+export const ButtonSheetWrapper = ({
+  bottomSheetRef,
+  children,
+  percentage,
+  height,
+}: Props) => {
   // variables
   const dispatch = useAppDispatch();
 
-  const snapPoints = useMemo(() => ['1%', '35%'], []);
+  const snapPoints = useMemo(() => ['1%', percentage], [percentage]);
 
   // handlers
   const onClose = () => {
@@ -27,7 +34,8 @@ export const ButtonSheetWrapper = ({bottomSheetRef}: Props) => {
     (props: any) => (
       <BottomSheetBackdrop
         {...props}
-        disappearsOnIndex={1}
+        opacity={1}
+        disappearsOnIndex={0}
         appearsOnIndex={2}
       />
     ),
@@ -40,9 +48,7 @@ export const ButtonSheetWrapper = ({bottomSheetRef}: Props) => {
       backdropComponent={renderBackdrop}
       onClose={onClose}
       enablePanDownToClose={true}>
-      <BottomSheetView>
-        <BottonContent />
-      </BottomSheetView>
+      <BottomSheetView style={{height: height}}>{children}</BottomSheetView>
     </BottomSheet>
   );
 };

@@ -20,7 +20,7 @@ export const getServices = () => {
     const session = await retrieveUserSession();
 
     if (!session) {
-      console.log('NECESITA INICIAR SESSION');
+      dispatch(logout());
     } else {
       const sessionParsed = JSON.parse(session);
       // TODO: Make http request
@@ -85,7 +85,7 @@ export const updateService = (service: IService) => {
     const session = await retrieveUserSession();
 
     if (!session) {
-      console.log('NECESITA INICIAR SESSION');
+      dispatch(logout());
     } else {
       const sessionParsed = JSON.parse(session);
       try {

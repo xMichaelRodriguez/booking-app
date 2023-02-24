@@ -1,13 +1,15 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {View, StyleSheet} from 'react-native';
 
 import {Text, TextInput, Button} from 'react-native-paper';
-import {useAppDispatch} from '../../../../hooks';
+import {useAppDispatch, useGoBack} from '../../../../hooks';
 import {IService} from '../../../../slices/services/interface/services.interface';
 import {createService} from '../../../../slices/services/thunks';
 import {theme} from '../../../../theme/theme';
 export const CreateService = () => {
+  const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const {
     control,
@@ -20,6 +22,8 @@ export const CreateService = () => {
     dispatch(createService(data));
     reset();
   };
+
+  useGoBack({navigation, screenName: 'Services'});
   return (
     <View style={custom.container}>
       <View style={custom.margins}>

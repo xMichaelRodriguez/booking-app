@@ -34,4 +34,11 @@ export const theme = {
   cardActionSpace: {
     justifyContent: 'space-around',
   },
+  bottomSheetContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    gap: 30,
+  },
 };

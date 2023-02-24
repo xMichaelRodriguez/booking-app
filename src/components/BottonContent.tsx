@@ -38,10 +38,11 @@ export const BottonContent = () => {
       <Text variant="bodyLarge">sure you want to eliminate it?</Text>
 
       <Button
+        style={styles.buttonWidth}
         icon="trash-can-outline"
         mode="contained"
         buttonColor={theme.colors.error}>
-        Delete
+        Confirm
       </Button>
     </View>
   );
@@ -50,8 +51,6 @@ const styles = StyleSheet.create({
   bottomSheetContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    height: '100%',
     gap: 30,
   },
 
@@ -71,5 +70,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
+  },
+  buttonWidth: {
+    width: '90%',
   },
 });

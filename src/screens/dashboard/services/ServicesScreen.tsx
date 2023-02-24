@@ -6,6 +6,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
@@ -17,6 +18,7 @@ import {FabButton} from '../../../components/list/FabButton';
 import {ListItemCard} from './components/ListItemCard';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
+import {BottonContent} from '../../../components/BottonContent';
 
 const noDataImage = require('../../../assets/no-data.png');
 
@@ -25,9 +27,10 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
-
   const [isExtended, setIsExtended] = React.useState(true);
 
+  // Get the height of the screen
+  const {height} = useWindowDimensions();
   const createService = () => {
     navigation.replace('Root', {
       screen: 'NewService',
@@ -47,7 +50,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
 
   const openSheet = () => {
     bottomSheetRef.current?.snapToIndex(1);
-    console.log('hola');
   };
 
   if (isLoading) {
@@ -95,7 +97,12 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
         </List.Section>
         <FabButton isExtended={isExtended} />
       </View>
-      <ButtonSheetWrapper bottomSheetRef={bottomSheetRef} />
+      <ButtonSheetWrapper
+        bottomSheetRef={bottomSheetRef}
+        percentage={'35%'}
+        height={height}>
+        <BottonContent />
+      </ButtonSheetWrapper>
     </>
   );
 };
