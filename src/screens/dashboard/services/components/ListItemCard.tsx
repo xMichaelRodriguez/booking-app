@@ -1,25 +1,17 @@
 import React from 'react';
-import {Button, Text, Card, Avatar, Divider} from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
-import {theme} from '../../../../theme/theme';
-import {IService} from '../../../../slices/services/interface/services.interface';
+import {Text, Card} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
+import {IService} from '../../../../store/slices/services/interface/services.interface';
 import {useAppDispatch} from '../../../../hooks';
-import {setActiveService} from '../../../../slices/services/thunks';
+import {setActiveService} from '../../../../store/slices/services/thunks';
 
 interface IProps {
   navigation: any;
   item: IService;
   handleOpenSheet: () => void;
 }
-export const ListItemCard = ({item, navigation, handleOpenSheet}: IProps) => {
-  const details = (service: IService) => {
-    navigation.replace('Root', {
-      screen: 'ServiceItem',
-      params: {
-        ...service,
-      },
-    });
-  };
+
+export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
   const dispatch = useAppDispatch();
   const setActiveOnOpenSheet = () => {
     dispatch(setActiveService(item));
@@ -27,37 +19,45 @@ export const ListItemCard = ({item, navigation, handleOpenSheet}: IProps) => {
   };
 
   return (
-    <Card style={custom.margins} mode="contained">
-      <Card.Content>
-        <View style={custom.container}>
-          <Avatar.Image
-            size={60}
-            style={custom.borderBox}
-            source={require('.././../../../assets/no-data.png')}
-          />
-          <View>
-            <Text variant="titleMedium">{item.name}</Text>
-            <Text variant="bodyMedium" style={{color: theme.colors.subTitle}}>
-              Price: ${item.price}
-            </Text>
-          </View>
-        </View>
-        <Divider />
-        <View style={custom.cardSpace}>
-          <Button mode="outlined" onPress={setActiveOnOpenSheet}>
-            Remove
-          </Button>
-          <Button mode="contained" onPress={() => details(item)}>
-            Details
-          </Button>
-        </View>
+    // <Card style={custom.margins} mode="contained">
+    //   <Card.Content>
+    //     <View style={custom.container}>
+    //       <Avatar.Image
+    //         size={60}
+    //         style={custom.borderBox}
+    //         source={{uri: item.media_url}}
+    //       />
+    //       <View>
+    //         <Text variant="bodyMedium">{item.caption}</Text>
+    //       </View>
+    //     </View>
+    //     <Divider />
+    //     <View style={custom.cardSpace}>
+    //       <Button mode="outlined" onPress={setActiveOnOpenSheet}>
+    //         Remove
+    //       </Button>
+    //       <Button mode="contained" onPress={() => details(item)}>
+    //         Details
+    //       </Button>
+    //     </View>
+    //   </Card.Content>
+    // </Card>
+
+    <Card style={custom.margins} onPress={setActiveOnOpenSheet}>
+      {item.thumbnail_url ? (
+        <Card.Cover source={{uri: item.thumbnail_url}} />
+      ) : (
+        <Card.Cover source={{uri: item.media_url}} />
+      )}
+      <Card.Content style={custom.margins}>
+        <Text variant="titleLarge">{item.caption}</Text>
       </Card.Content>
     </Card>
   );
 };
 
 const custom = StyleSheet.create({
-  margins: {padding: 10, margin: 10},
+  margins: {padding: 10, margin: 10, textAlign: 'left'},
   container: {
     flexDirection: 'row',
     gap: 12,

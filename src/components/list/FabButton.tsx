@@ -2,23 +2,19 @@ import React from 'react';
 import {AnimatedFAB} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 
 export const FabButton = ({isExtended}: {isExtended: boolean}) => {
   const {colors} = useTheme();
-  const navigation = useNavigation();
-  const handleCreate = () => {
-    navigation.navigate('Root', {
-      screen: 'NewService',
-    });
-  };
+  // const navigation = useNavigation();
+
   return (
     <AnimatedFAB
       color={colors.primary}
       label={'Create'}
       icon={'plus'}
       extended={isExtended}
-      onPress={handleCreate}
+      // onPress={handleCreate}
       visible
       animateFrom={'right'}
       iconMode={'dynamic'}

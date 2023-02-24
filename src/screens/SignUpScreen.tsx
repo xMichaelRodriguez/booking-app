@@ -11,7 +11,7 @@ import {Button, Checkbox, Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Logo} from '../components/Logo';
 import {useAppDispatch} from '../hooks';
-import {startRegister} from '../slices/auth/thunks';
+import {startRegister} from '../store/slices/auth/thunks';
 import {theme} from '../theme/theme';
 import {validEmail, validPassword} from '../utils/emailRegex';
 

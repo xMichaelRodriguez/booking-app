@@ -4,7 +4,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import React, {useMemo, RefObject, useCallback} from 'react';
 import {useAppDispatch} from '../hooks';
-import {clearActiveService} from '../slices/services/thunks';
+import {clearActiveService} from '../store/slices/services/thunks';
 
 type Props = {
   bottomSheetRef: RefObject<BottomSheet>;

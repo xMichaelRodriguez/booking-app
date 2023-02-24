@@ -2,17 +2,13 @@ export interface IServiceState {
   services: IService[];
   isLoading: boolean;
   isActiveService: IService | null;
+  next: string;
+  previus: string;
 }
 
 export interface IService {
   id: number;
-  name: string;
-  description: string;
-  price: number;
-}
-
-export interface ICreateService {
-  name: string;
-  description: string;
-  price: number;
+  caption: string;
+  media_url: string;
+  thumbnail_url?: string;
 }

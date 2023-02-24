@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Divider, Text} from 'react-native-paper';
+import {Card, Divider, Text} from 'react-native-paper';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Avatar, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {useAppSelector} from '../hooks';
 import {theme} from '../theme/theme';
-
+import VideoPlayer from 'react-native-video-player';
 export const BottonContent = () => {
   const {isActiveService} = useAppSelector(state => state.service);
 
@@ -22,14 +22,16 @@ export const BottonContent = () => {
   return (
     <View style={styles.bottomSheetContainer}>
       <View style={styles.header}>
-        <Avatar.Image
-          size={60}
-          style={styles.borderBox}
-          source={require('./../assets/no-data.png')}
-        />
+        {isActiveService?.thumbnail_url ? (
+          <VideoPlayer src={{uri: isActiveService.media_url}} />
+        ) : (
+          <Card>
+            <Card.Cover source={{uri: isActiveService?.media_url}} />
+          </Card>
+        )}
+
         <View>
-          <Text variant="headlineSmall">{isActiveService?.name}</Text>
-          <Text variant="bodyLarge">${isActiveService?.price}</Text>
+          <Text variant="headlineSmall">{isActiveService?.caption}</Text>
         </View>
       </View>
 
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 12,
   },
   divider: {

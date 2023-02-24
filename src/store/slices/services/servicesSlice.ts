@@ -5,6 +5,8 @@ const initialState: IServiceState = {
   services: [],
   isLoading: false,
   isActiveService: null,
+  next: '',
+  previus: '',
 };
 
 export const serviceSlice = createSlice({
@@ -18,14 +20,7 @@ export const serviceSlice = createSlice({
       state.isLoading = false;
       state.services = action.payload;
     },
-    addService: (state, action: PayloadAction<IService>) => {
-      state.services.push(action.payload);
-    },
-    updateService: (state, action: PayloadAction<IService>) => {
-      state.services = state.services.map(service =>
-        service.id === action.payload.id ? action.payload : service,
-      );
-    },
+
     activeService: (state, action: PayloadAction<IService>) => {
       state.isActiveService = action.payload;
     },
@@ -37,7 +32,6 @@ export const serviceSlice = createSlice({
 export const {
   startLoadingServices,
   setServices,
-  addService,
   activeService,
   onClearService,
 } = serviceSlice.actions;

@@ -5,7 +5,7 @@ import {Button, Checkbox, TextInput} from 'react-native-paper';
 import {Logo} from '../../components/Logo';
 import {useAppDispatch} from '../../hooks';
 import {passwordMessage} from '../SignUpScreen';
-import {startLogin} from '../../slices/auth';
+import {startLogin} from '../../store/slices/auth';
 
 import {theme} from '../../theme/theme';
 import {validEmail, validPassword} from '../../utils/emailRegex';

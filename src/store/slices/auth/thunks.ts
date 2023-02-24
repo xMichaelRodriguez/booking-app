@@ -1,14 +1,14 @@
 import axios from 'axios';
-import {backendApi} from '../../API/backendApi';
+import {backendApi} from '../../../API/backendApi';
 import {ToastAndroid} from 'react-native';
+import {AppDispatch} from '../../store';
+import {logout, signIn, startLoadingLogin} from './authSlice';
+import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
 import {
-  AppDispatch,
   removeUserSession,
   retrieveUserSession,
   storeUserSession,
-} from '../../store';
-import {logout, signIn, startLoadingLogin} from './authSlice';
-import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
+} from '../../secure-session';
 
 export const checkIsAuthenticated = () => {
   return async (dispatch: AppDispatch) => {
@@ -32,6 +32,7 @@ export const checkIsAuthenticated = () => {
 
       dispatch(signIn(data));
     } catch (error) {
+      console.debug({error});
       await removeUserSession();
       return dispatch(logout());
     }

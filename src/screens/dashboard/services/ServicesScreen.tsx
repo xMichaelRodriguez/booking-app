@@ -1,20 +1,12 @@
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, Button, List} from 'react-native-paper';
-import {
-  Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {ActivityIndicator, List} from 'react-native-paper';
+import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {INavigationProps} from '../../../interface';
 
-import {getServices} from '../../../slices/services/thunks';
+import {getServices} from '../../../store/slices/services/thunks';
 import {theme} from '../../../theme/theme';
-import {FabButton} from '../../../components/list/FabButton';
 import {ListItemCard} from './components/ListItemCard';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -27,26 +19,13 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
-  const [isExtended, setIsExtended] = React.useState(true);
 
   // Get the height of the screen
   const {height} = useWindowDimensions();
-  const createService = () => {
-    navigation.replace('Root', {
-      screen: 'NewService',
-    });
-  };
 
   useEffect(() => {
     dispatch(getServices());
   }, [dispatch]);
-
-  const onScroll = ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const currentScrollPosition =
-      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
-    setIsExtended(currentScrollPosition <= 0);
-  };
 
   const openSheet = () => {
     bottomSheetRef.current?.snapToIndex(1);
@@ -67,13 +46,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
-        <Button
-          icon={'plus'}
-          mode="contained"
-          contentStyle={custom.buttonW}
-          onPress={createService}>
-          Create Service
-        </Button>
       </View>
     );
   }
@@ -83,7 +55,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
         <List.Section>
           <FlatList
             keyboardDismissMode="on-drag"
-            onScroll={onScroll}
             data={services}
             renderItem={({item}) => (
               <ListItemCard
@@ -95,11 +66,10 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
             )}
           />
         </List.Section>
-        <FabButton isExtended={isExtended} />
       </View>
       <ButtonSheetWrapper
         bottomSheetRef={bottomSheetRef}
-        percentage={'35%'}
+        percentage={'60%'}
         height={height}>
         <BottonContent />
       </ButtonSheetWrapper>

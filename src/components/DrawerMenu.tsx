@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Avatar, Divider, IconButton, Text} from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../hooks';
-import {logout} from '../slices/auth';
+import {logout} from '../store/slices/auth';
 
 export const DrawerMenu = ({props}: {props: any}) => {
   const {username, email} = useAppSelector(state => state.auth);

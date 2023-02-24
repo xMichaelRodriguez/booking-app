@@ -30,6 +30,8 @@
     "react-native-screens": "^3.20.0",
     "react-native-select-dropdown": "^3.2.1",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-video": "^5.2.1",
+    "react-native-video-player": "^0.14.0",
     "react-redux": "^8.0.5"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
+    "@types/react-native-video-player": "^0.10.3",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",

@@ -16,7 +16,7 @@ import {SingUpScreen} from './screens/SignUpScreen';
 import {DrawerComponent} from './components/DrawerComponent';
 import {useAppDispatch, useAppSelector} from './hooks';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
-import {checkIsAuthenticated} from './slices/auth';
+import {checkIsAuthenticated} from './store/slices/auth';
 import {StyleSheet} from 'react-native';
 import {theme} from './theme/theme';
 const {LightTheme} = adaptNavigationTheme({reactNavigationLight: DefaultTheme});
