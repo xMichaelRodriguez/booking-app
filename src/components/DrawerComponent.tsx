@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -6,8 +7,9 @@ import {HomeScreen} from '../screens/dashboard/HomeScreen';
 import {BookingScreen} from '../screens/dashboard/booking/BookingScreen';
 import {DrawerMenu} from './DrawerMenu';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {IconButton, useTheme} from 'react-native-paper';
+import {IconButton, useTheme, Text} from 'react-native-paper';
 import {BookingItemList} from '../screens/dashboard/booking/BookingItemList';
+import {CreateOrUpdateBooking} from '../screens/dashboard/booking/CreateOrUpdateBooking';
 
 const Drawer = createDrawerNavigator();
 
@@ -78,6 +80,29 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
             },
           }}
           component={BookingItemList}
+        />
+
+        <Drawer.Screen
+          name="BookCake"
+          component={CreateOrUpdateBooking}
+          options={{
+            title: 'Book Cake',
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => handleGoBack('Services')}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <IconButton icon="chevron-left" />
+                <Text>Back</Text>
+              </TouchableOpacity>
+            ),
+
+            drawerItemStyle: {
+              display: 'none',
+            },
+          }}
         />
       </Drawer.Group>
     </Drawer.Navigator>

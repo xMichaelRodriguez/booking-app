@@ -1,12 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text, useTheme} from 'react-native-paper';
+import {Text, useTheme, Button} from 'react-native-paper';
 import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../hooks';
+import {useNavigation} from '@react-navigation/native';
 
 export const BottonContent = () => {
   const {isActiveService} = useAppSelector(state => state.service);
   const theme = useTheme();
+  const navigation = useNavigation();
+  const onBook = () => {
+    navigation.navigate('Root', {
+      screen: 'BookCake',
+      params: {
+        ...isActiveService,
+      },
+    });
+  };
 
   if (!isActiveService) {
     return (
@@ -27,8 +37,13 @@ export const BottonContent = () => {
           source={{uri: isActiveService?.media_url}}
         />
       </View>
-      <View>
-        <Text variant="headlineSmall">{isActiveService?.caption}</Text>
+      <View style={{padding: 10}}>
+        <Text variant="bodyLarge">{isActiveService?.caption}</Text>
+      </View>
+      <View style={{width: '80%'}}>
+        <Button mode="contained" onPress={onBook}>
+          Book
+        </Button>
       </View>
     </View>
   );
@@ -49,8 +64,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   containerImage: {
-    height: 350,
-    width: 350,
+    height: 180,
+    width: 180,
+    marginVertical: 20,
   },
   divider: {
     marginVertical: 12,

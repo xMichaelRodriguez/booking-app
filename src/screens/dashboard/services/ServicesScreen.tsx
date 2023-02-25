@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, List, useTheme} from 'react-native-paper';
@@ -54,6 +55,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
       <View style={custom.view}>
         <List.Section>
           <FlatList
+            style={{paddingHorizontal: 10}}
             keyboardDismissMode="on-drag"
             data={services}
             renderItem={({item}) => (
@@ -69,7 +71,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
       </View>
       <ButtonSheetWrapper
         bottomSheetRef={bottomSheetRef}
-        percentage={'60%'}
+        percentage={'50%'}
         height={height}>
         <BottonContent />
       </ButtonSheetWrapper>
