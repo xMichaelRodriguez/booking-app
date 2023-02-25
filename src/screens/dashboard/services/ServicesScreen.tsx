@@ -82,9 +82,10 @@ const custom = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
+    flex: 1,
   },
 
-  view: {flex: 1},
+  view: {flex: 1, padding: 15},
   buttonW: {
     width: 300,
   },
@@ -95,17 +96,5 @@ const custom = StyleSheet.create({
   image: {
     width: 300,
     height: 300,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    margin: 16,
-    backgroundColor: 'blue',
-    borderRadius: 50,
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

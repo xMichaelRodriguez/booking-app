@@ -1,11 +1,12 @@
 import {backendApi} from '../../../API/backendApi';
 import {retrieveUserSession} from '../../secure-session';
 import {AppDispatch} from '../../store';
-import {logout} from '../auth';
+import {authLogout} from '../auth';
 import {IService} from './interface/services.interface';
 import {
   activeService,
   onClearService,
+  setClearServices,
   setServices,
   startLoadingServices,
 } from './servicesSlice';
@@ -18,7 +19,7 @@ export const getServices = () => {
     const session = await retrieveUserSession();
 
     if (!session) {
-      dispatch(logout());
+      dispatch(authLogout());
     } else {
       const sessionParsed = JSON.parse(session);
       // TODO: Make http request
@@ -29,7 +30,10 @@ export const getServices = () => {
           Authorization: `Bearer ${sessionParsed.token}`,
         },
       });
-      dispatch(setServices(services));
+      const newServicesList = services.filter(
+        service => !service.thumbnail_url,
+      );
+      dispatch(setServices(newServicesList));
     }
   };
 };
@@ -42,5 +46,10 @@ export const setActiveService = (service: IService) => {
 export const clearActiveService = () => {
   return (dispatch: AppDispatch) => {
     dispatch(onClearService());
+  };
+};
+export const clearServices = () => {
+  return (dispatch: AppDispatch) => {
+    dispatch(setClearServices());
   };
 };

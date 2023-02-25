@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   Avatar,
@@ -8,8 +9,9 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {theme} from '../../../theme/theme';
 import {IBooking} from '../../../interface/booking.interface';
+import {useTheme} from '@react-navigation/native';
+import {theme} from '../../../theme/theme';
 
 interface IProps {
   booking: IBooking;
@@ -24,6 +26,7 @@ const statesOfBooking = {
 };
 
 export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
+  const themeHook = useTheme();
   const iconColor =
     statesOfBooking[booking.status.name as keyof typeof statesOfBooking] ||
     'black';
@@ -32,7 +35,14 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
     handleOpenSheet();
   };
   return (
-    <Card style={custom.margins} mode="contained">
+    <Card
+      style={[
+        custom.margins,
+        {
+          backgroundColor: themeHook.dark ? themeHook.colors.card : '#fbfbfb',
+          shadowColor: '#fbfbfb',
+        },
+      ]}>
       <Card.Content>
         <View style={custom.container}>
           <Avatar.Image
@@ -41,8 +51,10 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
             source={require('./../../../assets/no-data.png')}
           />
           <View>
-            <Text variant="titleMedium">{booking.service.name}</Text>
-            <Text variant="bodyMedium" style={{color: theme.colors.subTitle}}>
+            <Text variant="titleMedium" style={{color: themeHook.colors.text}}>
+              {booking.service.name}
+            </Text>
+            <Text variant="bodyMedium" style={{color: themeHook.colors.text}}>
               Price: ${booking.service.price}
             </Text>
           </View>
@@ -54,21 +66,23 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
               icon={'calendar-month-outline'}
               iconColor={theme.colors.primary}
             />
-            <Text>{booking.date}</Text>
+            <Text style={{color: themeHook.colors.text}}>{booking.date}</Text>
           </View>
           <View style={custom.dataSchedule}>
             <IconButton
               icon={'clock-time-seven-outline'}
               iconColor={theme.colors.primary}
             />
-            <Text>{booking.hour}</Text>
+            <Text style={{color: themeHook.colors.text}}>{booking.hour}</Text>
           </View>
           <View style={custom.dataSchedule}>
             <IconButton
               icon={'wall-sconce-flat-variant-outline'}
               iconColor={iconColor}
             />
-            <Text>{booking.status.name}</Text>
+            <Text style={{color: themeHook.colors.text}}>
+              {booking.status.name}
+            </Text>
           </View>
         </View>
         <View style={custom.cardSpace}>
@@ -109,7 +123,7 @@ const custom = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   inlineContianer: {
-    marginHorizontal: -10,
+    marginHorizontal: -20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',

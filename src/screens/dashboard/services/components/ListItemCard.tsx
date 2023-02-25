@@ -1,9 +1,10 @@
 import React from 'react';
-import {Text, Card} from 'react-native-paper';
+import {Card, useTheme} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 import {IService} from '../../../../store/slices/services/interface/services.interface';
 import {useAppDispatch} from '../../../../hooks';
 import {setActiveService} from '../../../../store/slices/services/thunks';
+import {theme} from '../../../../theme/theme';
 
 interface IProps {
   navigation: any;
@@ -12,52 +13,33 @@ interface IProps {
 }
 
 export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
+  const themeHook = useTheme();
+
   const dispatch = useAppDispatch();
   const setActiveOnOpenSheet = () => {
+    console.log(themeHook.dark, themeHook.colors.surface);
     dispatch(setActiveService(item));
     handleOpenSheet();
   };
-
   return (
-    // <Card style={custom.margins} mode="contained">
-    //   <Card.Content>
-    //     <View style={custom.container}>
-    //       <Avatar.Image
-    //         size={60}
-    //         style={custom.borderBox}
-    //         source={{uri: item.media_url}}
-    //       />
-    //       <View>
-    //         <Text variant="bodyMedium">{item.caption}</Text>
-    //       </View>
-    //     </View>
-    //     <Divider />
-    //     <View style={custom.cardSpace}>
-    //       <Button mode="outlined" onPress={setActiveOnOpenSheet}>
-    //         Remove
-    //       </Button>
-    //       <Button mode="contained" onPress={() => details(item)}>
-    //         Details
-    //       </Button>
-    //     </View>
-    //   </Card.Content>
-    // </Card>
-
-    <Card style={custom.margins} onPress={setActiveOnOpenSheet}>
-      {item.thumbnail_url ? (
-        <Card.Cover source={{uri: item.thumbnail_url}} />
-      ) : (
-        <Card.Cover source={{uri: item.media_url}} />
-      )}
-      <Card.Content style={custom.margins}>
-        <Text variant="titleLarge">{item.caption}</Text>
+    <Card
+      onPress={setActiveOnOpenSheet}
+      mode="contained"
+      style={[custom.margins]}>
+      <Card.Content>
+        <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
+        <Card.Title title={item.caption} accessibilityIgnoresInvertColors />
       </Card.Content>
     </Card>
   );
 };
 
 const custom = StyleSheet.create({
-  margins: {padding: 10, margin: 10, textAlign: 'left'},
+  margins: {
+    margin: 5,
+    borderRadius: 20,
+    backgroundColor: theme.dark ? '#282828' : '#fbfbfb',
+  },
   container: {
     flexDirection: 'row',
     gap: 12,
@@ -72,6 +54,19 @@ const custom = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
+  },
+  inlineContianer: {
+    marginHorizontal: -20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  dataSchedule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buttonSize: {
+    width: '40%',
   },
 });

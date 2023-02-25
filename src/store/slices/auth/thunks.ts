@@ -9,6 +9,7 @@ import {
   retrieveUserSession,
   storeUserSession,
 } from '../../secure-session';
+import {clearServices} from '../services/thunks';
 
 export const checkIsAuthenticated = () => {
   return async (dispatch: AppDispatch) => {
@@ -19,7 +20,7 @@ export const checkIsAuthenticated = () => {
 
       if (!session) {
         await removeUserSession();
-        return dispatch(logout());
+        return dispatch(authLogout());
       }
 
       const sessionParsed = JSON.parse(session);
@@ -32,9 +33,8 @@ export const checkIsAuthenticated = () => {
 
       dispatch(signIn(data));
     } catch (error) {
-      console.debug({error});
       await removeUserSession();
-      return dispatch(logout());
+      return dispatch(authLogout());
     }
   };
 };
@@ -57,9 +57,11 @@ export const startLogin = (login: ILoginState) => {
 
       dispatch(signIn({id, username, email, isActive, role}));
     } catch (error) {
+      removeUserSession();
       if (axios.isAxiosError(error)) {
+        console.debug(error);
         const errorData = error.response && error.response.data;
-        if (errorData.statusCode !== 200) {
+        if (errorData?.statusCode !== 200) {
           return ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
@@ -99,5 +101,12 @@ export const startRegister = (register: IAuthRegister) => {
         }
       }
     }
+  };
+};
+
+export const authLogout = () => {
+  return (dispatch: AppDispatch) => {
+    dispatch(clearServices());
+    dispatch(logout());
   };
 };

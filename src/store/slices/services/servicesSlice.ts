@@ -27,6 +27,13 @@ export const serviceSlice = createSlice({
     onClearService: state => {
       state.isActiveService = null;
     },
+    setClearServices: state => {
+      state.isActiveService = null;
+      state.isLoading = false;
+      state.next = '';
+      state.previus = '';
+      state.services = [];
+    },
   },
 });
 export const {
@@ -34,4 +41,5 @@ export const {
   setServices,
   activeService,
   onClearService,
+  setClearServices,
 } = serviceSlice.actions;

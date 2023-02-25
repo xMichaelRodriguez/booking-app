@@ -7,24 +7,28 @@
 
 import React, {useEffect} from 'react';
 
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {InitialScreen} from './screens/InitialScreen';
 import {SignInScreen} from './screens/SignInScreen';
-import {adaptNavigationTheme, ActivityIndicator} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native-paper';
 import {SingUpScreen} from './screens/SignUpScreen';
 import {DrawerComponent} from './components/DrawerComponent';
 import {useAppDispatch, useAppSelector} from './hooks';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
 import {checkIsAuthenticated} from './store/slices/auth';
-import {StyleSheet} from 'react-native';
-import {theme} from './theme/theme';
-const {LightTheme} = adaptNavigationTheme({reactNavigationLight: DefaultTheme});
+import {StyleSheet, useColorScheme} from 'react-native';
 const Stack = createNativeStackNavigator();
 
 function App() {
   const {isSigned, isLoading} = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? DarkTheme : DefaultTheme;
 
   useEffect(() => {
     dispatch(checkIsAuthenticated());
@@ -43,7 +47,7 @@ function App() {
 
   if (!isSigned) {
     return (
-      <NavigationContainer theme={LightTheme}>
+      <NavigationContainer>
         <Stack.Navigator initialRouteName="InitialScreen">
           <Stack.Group>
             <Stack.Screen
@@ -74,7 +78,7 @@ function App() {
     );
   }
   return (
-    <NavigationContainer theme={LightTheme}>
+    <NavigationContainer theme={theme}>
       <Stack.Navigator>
         <Stack.Screen
           name="Root"

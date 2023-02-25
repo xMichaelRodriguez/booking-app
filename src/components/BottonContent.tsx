@@ -1,11 +1,9 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Card, Divider, Text} from 'react-native-paper';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Button} from 'react-native-paper';
+import {Text} from 'react-native-paper';
+import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../hooks';
 import {theme} from '../theme/theme';
-import VideoPlayer from 'react-native-video-player';
+
 export const BottonContent = () => {
   const {isActiveService} = useAppSelector(state => state.service);
 
@@ -21,31 +19,16 @@ export const BottonContent = () => {
   }
   return (
     <View style={styles.bottomSheetContainer}>
-      <View style={styles.header}>
-        {isActiveService?.thumbnail_url ? (
-          <VideoPlayer src={{uri: isActiveService.media_url}} />
-        ) : (
-          <Card>
-            <Card.Cover source={{uri: isActiveService?.media_url}} />
-          </Card>
-        )}
-
-        <View>
-          <Text variant="headlineSmall">{isActiveService?.caption}</Text>
-        </View>
+      <View style={styles.containerImage}>
+        <Image
+          style={[styles.image, {borderRadius: 10}]}
+          resizeMode="contain"
+          source={{uri: isActiveService?.media_url}}
+        />
       </View>
-
-      <Divider style={{width: '90%'}} />
-
-      <Text variant="bodyLarge">sure you want to eliminate it?</Text>
-
-      <Button
-        style={styles.buttonWidth}
-        icon="trash-can-outline"
-        mode="contained"
-        buttonColor={theme.colors.error}>
-        Confirm
-      </Button>
+      <View>
+        <Text variant="headlineSmall">{isActiveService?.caption}</Text>
+      </View>
     </View>
   );
 };
@@ -53,16 +36,20 @@ const styles = StyleSheet.create({
   bottomSheetContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 30,
   },
 
+  image: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+  },
   borderBox: {
     borderRadius: 10,
     overflow: 'hidden',
   },
-  header: {
-    flexDirection: 'column',
-    gap: 12,
+  containerImage: {
+    height: 350,
+    width: 350,
   },
   divider: {
     marginVertical: 12,
@@ -70,8 +57,6 @@ const styles = StyleSheet.create({
   activityStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    height: '100%',
   },
   buttonWidth: {
     width: '90%',

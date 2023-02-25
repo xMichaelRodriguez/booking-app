@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
+import {useTheme} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Avatar, Divider, IconButton, Text} from 'react-native-paper';
@@ -7,6 +8,7 @@ import {useAppDispatch, useAppSelector} from '../hooks';
 import {logout} from '../store/slices/auth';
 
 export const DrawerMenu = ({props}: {props: any}) => {
+  const themeHook = useTheme();
   const {username, email} = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
@@ -16,10 +18,14 @@ export const DrawerMenu = ({props}: {props: any}) => {
     <View style={styles.mainContainer}>
       <View style={styles.profileContainer}>
         <Avatar.Image source={require('../assets/candy-logo.jpg')} />
-        <Text variant="titleLarge" style={styles.titleUser}>
+        <Text
+          variant="titleLarge"
+          style={[styles.titleUser, {color: themeHook.colors.text}]}>
           {username && username}
         </Text>
-        <Text variant="bodyMedium">{email && email}</Text>
+        <Text variant="bodyMedium" style={{color: themeHook.colors.text}}>
+          {email && email}
+        </Text>
       </View>
       <DrawerItemList {...props} />
       <Divider />

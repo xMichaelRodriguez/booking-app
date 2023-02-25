@@ -82,8 +82,9 @@ export const BookingScreen = () => {
   const openSheet = () => {
     bottomSheetRef.current?.snapToIndex(1);
   };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, padding: 10}}>
       <List.Section>
         <FlatList
           keyboardDismissMode="on-drag"
@@ -128,5 +129,17 @@ const custom = StyleSheet.create({
   },
   buttonWidth: {
     width: '90%',
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    margin: 16,
+    backgroundColor: 'blue',
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
