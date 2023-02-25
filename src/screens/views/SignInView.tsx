@@ -1,19 +1,19 @@
 import React from 'react';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
-import {Button, Checkbox, TextInput} from 'react-native-paper';
+import {Button, Checkbox, TextInput, useTheme} from 'react-native-paper';
 import {Logo} from '../../components/Logo';
 import {useAppDispatch} from '../../hooks';
 import {passwordMessage} from '../SignUpScreen';
 import {startLogin} from '../../store/slices/auth';
 
-import {theme} from '../../theme/theme';
 import {validEmail, validPassword} from '../../utils/emailRegex';
 interface IFormInput {
   email: string;
   password: string;
 }
 export const SignInView = ({navigation}: {navigation: any}) => {
+  const theme = useTheme();
   const {
     control,
     handleSubmit,
@@ -94,10 +94,12 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           }}
         />
       </View>
-      <View style={styles.forgotPassword}>
+      <View style={[styles.forgotPassword]}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}>
-          <Text style={styles.forgotPassword}>Forgot your password?</Text>
+          <Text style={[styles.forgotPassword, {color: theme.colors.primary}]}>
+            Forgot your password?
+          </Text>
         </TouchableOpacity>
       </View>
       <Button icon="login" mode="contained" onPress={handleSubmit(onSubmit)}>
@@ -114,7 +116,10 @@ export const SignInView = ({navigation}: {navigation: any}) => {
       <View style={styles.row}>
         <Text style={styles.textColor}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
-          <Text style={styles.link}> Sign Up</Text>
+          <Text style={[styles.link, {color: theme.colors.primary}]}>
+            {' '}
+            Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -133,13 +138,11 @@ const styles = StyleSheet.create({
   },
   link: {
     fontWeight: 'bold',
-    color: theme.colors.primary,
   },
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',
     marginBottom: 24,
-    color: theme.colors.secondary,
   },
   logoView: {
     justifyContent: 'center',

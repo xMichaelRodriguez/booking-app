@@ -1,12 +1,11 @@
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, List} from 'react-native-paper';
+import {ActivityIndicator, List, useTheme} from 'react-native-paper';
 import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {INavigationProps} from '../../../interface';
 
 import {getServices} from '../../../store/slices/services/thunks';
-import {theme} from '../../../theme/theme';
 import {ListItemCard} from './components/ListItemCard';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -15,6 +14,7 @@ import {BottonContent} from '../../../components/BottonContent';
 const noDataImage = require('../../../assets/no-data.png');
 
 export const ServicesScreen = ({navigation}: INavigationProps) => {
+  const theme = useTheme();
   const bottomSheetRef = useRef<BottomSheet>(null);
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
@@ -85,7 +85,7 @@ const custom = StyleSheet.create({
     flex: 1,
   },
 
-  view: {flex: 1, padding: 15},
+  view: {flex: 1},
   buttonW: {
     width: 300,
   },

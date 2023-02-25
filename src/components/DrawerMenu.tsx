@@ -1,14 +1,15 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
-import {useTheme} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Divider, IconButton, Text} from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../hooks';
 import {logout} from '../store/slices/auth';
 
 export const DrawerMenu = ({props}: {props: any}) => {
-  const themeHook = useTheme();
+  const colorScheme = useColorScheme();
+  const isDarkTheme = colorScheme === 'dark';
   const {username, email} = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
@@ -20,10 +21,15 @@ export const DrawerMenu = ({props}: {props: any}) => {
         <Avatar.Image source={require('../assets/candy-logo.jpg')} />
         <Text
           variant="titleLarge"
-          style={[styles.titleUser, {color: themeHook.colors.text}]}>
+          style={[
+            styles.titleUser,
+            {color: isDarkTheme ? '#fbfbfb' : '#282828'},
+          ]}>
           {username && username}
         </Text>
-        <Text variant="bodyMedium" style={{color: themeHook.colors.text}}>
+        <Text
+          variant="bodyMedium"
+          style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
           {email && email}
         </Text>
       </View>
@@ -48,6 +54,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     padding: 10,
     lineHeight: 20,
+    margin: 20,
   },
   titleUser: {
     fontWeight: 'bold',

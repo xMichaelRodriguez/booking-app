@@ -1,10 +1,10 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Card, useTheme} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, useColorScheme} from 'react-native';
 import {IService} from '../../../../store/slices/services/interface/services.interface';
 import {useAppDispatch} from '../../../../hooks';
 import {setActiveService} from '../../../../store/slices/services/thunks';
-import {theme} from '../../../../theme/theme';
 
 interface IProps {
   navigation: any;
@@ -13,22 +13,30 @@ interface IProps {
 }
 
 export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
-  const themeHook = useTheme();
-
+  const theme = useTheme();
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
   const dispatch = useAppDispatch();
   const setActiveOnOpenSheet = () => {
-    console.log(themeHook.dark, themeHook.colors.surface);
+    console.log(theme.dark, theme.colors.surface);
     dispatch(setActiveService(item));
     handleOpenSheet();
   };
   return (
     <Card
       onPress={setActiveOnOpenSheet}
-      mode="contained"
-      style={[custom.margins]}>
+      style={[
+        custom.margins,
+        {backgroundColor: isDark ? '#353740' : '#fbfbfb'},
+      ]}>
       <Card.Content>
         <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
-        <Card.Title title={item.caption} accessibilityIgnoresInvertColors />
+        <Card.Title
+          title={item.caption}
+          titleStyle={{
+            color: isDark ? '#fbfbfb' : '#282828',
+          }}
+        />
       </Card.Content>
     </Card>
   );
@@ -38,7 +46,6 @@ const custom = StyleSheet.create({
   margins: {
     margin: 5,
     borderRadius: 20,
-    backgroundColor: theme.dark ? '#282828' : '#fbfbfb',
   },
   container: {
     flexDirection: 'row',

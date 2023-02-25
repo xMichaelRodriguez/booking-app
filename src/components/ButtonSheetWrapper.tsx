@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -48,7 +49,12 @@ export const ButtonSheetWrapper = ({
       backdropComponent={renderBackdrop}
       onClose={onClose}
       enablePanDownToClose={true}>
-      <BottomSheetView style={{height: height}}>{children}</BottomSheetView>
+      <BottomSheetView
+        style={{
+          height: height,
+        }}>
+        {children}
+      </BottomSheetView>
     </BottomSheet>
   );
 };

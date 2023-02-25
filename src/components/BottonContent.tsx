@@ -1,11 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../hooks';
-import {theme} from '../theme/theme';
 
 export const BottonContent = () => {
   const {isActiveService} = useAppSelector(state => state.service);
+  const theme = useTheme();
 
   if (!isActiveService) {
     return (

@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {theme} from '../theme/theme';
 import {SignInView} from './views/SignInView';
 
 export const SignInScreen = ({navigation}: {navigation?: any}) => {
@@ -25,19 +24,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
   },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 24,
-    color: theme.colors.secondary,
-  },
-  logoView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textColor: {color: '#282828'},
 });

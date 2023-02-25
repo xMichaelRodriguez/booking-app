@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useRef} from 'react';
-import {List, Button, Text} from 'react-native-paper';
+import {List, Button, Text, useTheme} from 'react-native-paper';
 import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {IBooking} from '../../../interface/booking.interface';
 import {BookingItemCard} from './BookingItemCard';
 import {useNavigation} from '@react-navigation/native';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
-import {theme} from '../../../theme/theme';
 
 const data: IBooking[] = [
   {
@@ -74,6 +73,7 @@ const data: IBooking[] = [
 ];
 
 export const BookingScreen = () => {
+  const theme = useTheme();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const navigation = useNavigation();
 

@@ -8,10 +8,8 @@ import {
   Divider,
   IconButton,
 } from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, useColorScheme, View} from 'react-native';
 import {IBooking} from '../../../interface/booking.interface';
-import {useTheme} from '@react-navigation/native';
-import {theme} from '../../../theme/theme';
 
 interface IProps {
   booking: IBooking;
@@ -26,7 +24,9 @@ const statesOfBooking = {
 };
 
 export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
-  const themeHook = useTheme();
+  const colorScheme = useColorScheme();
+  const isDarkTheme = colorScheme === 'dark';
+
   const iconColor =
     statesOfBooking[booking.status.name as keyof typeof statesOfBooking] ||
     'black';
@@ -36,11 +36,11 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   };
   return (
     <Card
+      mode="contained"
       style={[
         custom.margins,
         {
-          backgroundColor: themeHook.dark ? themeHook.colors.card : '#fbfbfb',
-          shadowColor: '#fbfbfb',
+          backgroundColor: isDarkTheme ? '#353740' : '#eee',
         },
       ]}>
       <Card.Content>
@@ -51,10 +51,14 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
             source={require('./../../../assets/no-data.png')}
           />
           <View>
-            <Text variant="titleMedium" style={{color: themeHook.colors.text}}>
+            <Text
+              variant="titleMedium"
+              style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
               {booking.service.name}
             </Text>
-            <Text variant="bodyMedium" style={{color: themeHook.colors.text}}>
+            <Text
+              variant="bodyMedium"
+              style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
               Price: ${booking.service.price}
             </Text>
           </View>
@@ -64,23 +68,27 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
           <View style={custom.dataSchedule}>
             <IconButton
               icon={'calendar-month-outline'}
-              iconColor={theme.colors.primary}
+              iconColor={isDarkTheme ? '#fbfbfb' : '#282828'}
             />
-            <Text style={{color: themeHook.colors.text}}>{booking.date}</Text>
+            <Text style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
+              {booking.date}
+            </Text>
           </View>
           <View style={custom.dataSchedule}>
             <IconButton
               icon={'clock-time-seven-outline'}
-              iconColor={theme.colors.primary}
+              iconColor={isDarkTheme ? '#fbfbfb' : '#282828'}
             />
-            <Text style={{color: themeHook.colors.text}}>{booking.hour}</Text>
+            <Text style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
+              {booking.hour}
+            </Text>
           </View>
           <View style={custom.dataSchedule}>
             <IconButton
               icon={'wall-sconce-flat-variant-outline'}
               iconColor={iconColor}
             />
-            <Text style={{color: themeHook.colors.text}}>
+            <Text style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
               {booking.status.name}
             </Text>
           </View>

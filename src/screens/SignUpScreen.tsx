@@ -7,12 +7,11 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {Button, Checkbox, Text, TextInput} from 'react-native-paper';
+import {Button, Checkbox, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Logo} from '../components/Logo';
 import {useAppDispatch} from '../hooks';
 import {startRegister} from '../store/slices/auth/thunks';
-import {theme} from '../theme/theme';
 import {validEmail, validPassword} from '../utils/emailRegex';
 
 interface IFormInput {
@@ -25,6 +24,7 @@ export const passwordMessage =
   'Please choose a more secure password that includes at least one uppercase letter, at least one lowercase letter, at least one of the following special characters: [-, _, *, .] and a length between 8 and 16 characters.';
 
 export const SingUpScreen = ({navigation}: {navigation: any}) => {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const {
     control,
@@ -136,7 +136,9 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
           <View style={styles.row}>
             <Text>Already have an account? </Text>
             <TouchableOpacity onPress={() => navigation.replace('SignIn')}>
-              <Text style={styles.link}>Sign In</Text>
+              <Text style={[styles.link, {color: theme.colors.primary}]}>
+                Sign In
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -173,7 +175,6 @@ const styles = StyleSheet.create({
   },
   link: {
     fontWeight: 'bold',
-    color: theme.colors.primary,
   },
   checkbox: {marginLeft: -20},
   container: {paddingTop: 30},
