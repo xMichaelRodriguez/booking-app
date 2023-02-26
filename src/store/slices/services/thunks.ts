@@ -48,6 +48,7 @@ export const clearActiveService = () => {
     dispatch(onClearService());
   };
 };
+
 export const clearServices = () => {
   return (dispatch: AppDispatch) => {
     dispatch(setClearServices());

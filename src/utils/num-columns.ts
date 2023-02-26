@@ -1,1 +1,1 @@
-export const NUM_COLUMN = 6;
+export const NUM_COLUMN = 4;
