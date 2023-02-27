@@ -46,3 +46,23 @@ export async function removeUserSession() {
     console.error({error});
   }
 }
+
+export const getUserSessionParsed = async () => {
+  try {
+    const session = await retrieveUserSession();
+
+    if (!session) {
+      throw new Error('session not found');
+    }
+    const sessionParsed = JSON.parse(session);
+
+    return sessionParsed.token;
+  } catch (error) {
+    removeUserSession();
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    console.error({error});
+  }
+};

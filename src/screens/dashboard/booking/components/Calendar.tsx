@@ -9,12 +9,14 @@ import {
   View,
 } from 'react-native';
 import {Button, TextInput, useTheme} from 'react-native-paper';
-import {useAppSelector} from '../../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {HeaderBook} from './HeaderBook';
 import {CalendarSection} from './CalendarSection';
 import {TimeSection} from './TimeSection';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {ICreateBook} from '../interface/createBook.interface';
+import {createBook} from '../../../../store/slices/bookings/thunks';
+import {IBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 
 const INITIAL_DATE = '2023-01-01';
 
@@ -56,9 +58,14 @@ export const CalendarComponent = () => {
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
+  const {id} = useAppSelector(state => state.auth);
   const theme = useTheme();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+
+  // TODO hook dispatch
+  const dispatch = useAppDispatch();
+
   // handler for item selected
   const handlePress = useMemo(
     () => (time: string) => {
@@ -114,8 +121,13 @@ export const CalendarComponent = () => {
       });
     }
     clearErrors('hour');
-    console.debug({errors});
-    console.debug(data);
+
+    const payload: IBook = {
+      ...data,
+      service: isActiveService,
+      client: id,
+    };
+    dispatch(createBook(payload));
   };
 
   if (!isActiveService) {

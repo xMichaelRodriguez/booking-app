@@ -1,5 +1,5 @@
 import {backendApi} from '../../../API/backendApi';
-import {retrieveUserSession} from '../../secure-session';
+import {removeUserSession, retrieveUserSession} from '../../secure-session';
 import {AppDispatch} from '../../store';
 import {authLogout} from '../auth';
 import {IService} from './interface/services.interface';
@@ -19,6 +19,7 @@ export const getServices = () => {
     const session = await retrieveUserSession();
 
     if (!session) {
+      removeUserSession();
       dispatch(authLogout());
     } else {
       const sessionParsed = JSON.parse(session);

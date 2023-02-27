@@ -1,15 +1,45 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {IBookState} from './interface/bookin.interface';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {IBook, IBookState} from './interface/bookin.interface';
 
 const initialState: IBookState = {
-  client: null,
-  service: null,
-  date: null,
-  hour: null,
+  bookings: [],
+  isLoading: false,
+  isBookingActive: null,
 };
 export const bookingSlice = createSlice({
   name: 'booking',
   initialState,
-  reducers: {},
+  reducers: {
+    startLoadingBookings: state => {
+      state.isLoading = true;
+    },
+    setBookings: (state, action: PayloadAction<IBook[]>) => {
+      state.isLoading = false;
+      state.bookings = action.payload;
+    },
+
+    onAddBook: (state, action: PayloadAction<IBook>) => {
+      state.bookings.push(action.payload);
+    },
+
+    activeBook: (state, action: PayloadAction<IBook>) => {
+      state.isBookingActive = action.payload;
+    },
+
+    onClearActiveBooking: state => {
+      state.isBookingActive = null;
+    },
+    setClearBookings: state => {
+      state.isBookingActive = null;
+      state.isLoading = false;
+      state.bookings = [];
+    },
+  },
 });
-export const {} = bookingSlice.actions;
+export const {
+  startLoadingBookings,
+  setBookings,
+  activeBook,
+  setClearBookings,
+  onAddBook,
+} = bookingSlice.actions;
