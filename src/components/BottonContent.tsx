@@ -34,7 +34,7 @@ export const BottonContent = () => {
         <Image
           style={[styles.image, {borderRadius: 10}]}
           resizeMode="contain"
-          source={{uri: isActiveService?.media_url}}
+          source={{uri: isActiveService?.mediaUrl}}
         />
       </View>
       <View style={{padding: 10}}>

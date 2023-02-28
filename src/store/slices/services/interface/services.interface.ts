@@ -2,13 +2,21 @@ export interface IServiceState {
   services: IService[];
   isLoading: boolean;
   isActiveService: IService | null;
-  next: string;
-  previus: string;
+  nextPage: string | null;
+  prevPage: string | null;
+  total: number;
 }
 
 export interface IService {
   id: number;
+  igPostId: string;
   caption: string;
-  media_url: string;
-  thumbnail_url?: string;
+  mediaUrl: string;
+}
+
+export interface IServiceSerializer {
+  data: IService[];
+  nextPage: string | null;
+  prevPage: string | null;
+  total: number;
 }

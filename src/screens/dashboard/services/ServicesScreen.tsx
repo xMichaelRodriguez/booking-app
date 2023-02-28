@@ -6,11 +6,12 @@ import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {INavigationProps} from '../../../interface';
 
-import {getServices} from '../../../store/slices/services/thunks';
 import {ListItemCard} from './components/ListItemCard';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {BottonContent} from '../../../components/BottonContent';
+import {useInfinityScroll} from '../../../hooks/useInfinityScroll';
+import {getServices} from '../../../store/slices/services/thunks';
 
 const noDataImage = require('../../../assets/no-data.png');
 
@@ -20,6 +21,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
   const dispatch = useAppDispatch();
+  const {isLoading: hookIsLoading, loadMore} = useInfinityScroll();
 
   // Get the height of the screen
   const {height} = useWindowDimensions();
@@ -42,7 +44,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
       />
     );
   }
-
   if (services === undefined) {
     return (
       <View style={custom.activityStyle}>
@@ -50,6 +51,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
       </View>
     );
   }
+
   return (
     <>
       <View style={custom.view}>
@@ -57,6 +59,11 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
           <FlatList
             style={{paddingHorizontal: 10}}
             keyboardDismissMode="on-drag"
+            onEndReached={() => {
+              console.debug(hookIsLoading);
+              loadMore();
+            }}
+            onEndReachedThreshold={0.5}
             data={services}
             renderItem={({item}) => (
               <ListItemCard
@@ -66,6 +73,16 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
                 item={item}
               />
             )}
+            ListFooterComponent={
+              !hookIsLoading ? (
+                <ActivityIndicator
+                  style={custom.activityStyle}
+                  animating={true}
+                  color={theme.colors.primary}
+                  size="large"
+                />
+              ) : null
+            }
           />
         </List.Section>
       </View>

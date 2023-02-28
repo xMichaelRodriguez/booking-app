@@ -1,12 +1,17 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IService, IServiceState} from './interface/services.interface';
+import {
+  IService,
+  IServiceSerializer,
+  IServiceState,
+} from './interface/services.interface';
 
 const initialState: IServiceState = {
   services: [],
   isLoading: false,
   isActiveService: null,
-  next: '',
-  previus: '',
+  nextPage: null,
+  prevPage: null,
+  total: 0,
 };
 
 export const serviceSlice = createSlice({
@@ -16,9 +21,19 @@ export const serviceSlice = createSlice({
     startLoadingServices: state => {
       state.isLoading = true;
     },
-    setServices: (state, action: PayloadAction<IService[]>) => {
+    setServices: (state, action: PayloadAction<IServiceSerializer>) => {
       state.isLoading = false;
-      state.services = action.payload;
+      state.services = action.payload.data;
+      state.total = action.payload.total;
+      state.prevPage = action.payload.prevPage;
+      state.nextPage = action.payload.nextPage;
+    },
+    setNewServices: (state, action: PayloadAction<IServiceSerializer>) => {
+      state.isLoading = false;
+      state.services = action.payload.data;
+      state.total = action.payload.total;
+      state.prevPage = action.payload.prevPage;
+      state.nextPage = action.payload.nextPage;
     },
 
     activeService: (state, action: PayloadAction<IService>) => {
@@ -30,8 +45,8 @@ export const serviceSlice = createSlice({
     setClearServices: state => {
       state.isActiveService = null;
       state.isLoading = false;
-      state.next = '';
-      state.previus = '';
+      state.nextPage = null;
+      state.prevPage = null;
       state.services = [];
     },
   },
@@ -41,5 +56,6 @@ export const {
   setServices,
   activeService,
   onClearService,
+  setNewServices,
   setClearServices,
 } = serviceSlice.actions;

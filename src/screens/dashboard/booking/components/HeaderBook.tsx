@@ -10,7 +10,7 @@ export const HeaderBook = () => {
   return (
     <View style={styles.profileContainer}>
       <Avatar.Image
-        source={{uri: isActiveService?.media_url && isActiveService.media_url}}
+        source={{uri: isActiveService?.mediaUrl && isActiveService.mediaUrl}}
       />
       <View>
         <Text
