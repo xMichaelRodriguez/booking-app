@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Card, useTheme} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import {StyleSheet, useColorScheme} from 'react-native';
 import {IService} from '../../../../store/slices/services/interface/services.interface';
 import {useAppDispatch} from '../../../../hooks';
@@ -13,12 +13,10 @@ interface IProps {
 }
 
 export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
-  const theme = useTheme();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const dispatch = useAppDispatch();
   const setActiveOnOpenSheet = () => {
-    console.log(theme.dark, theme.colors.surface);
     dispatch(setActiveService(item));
     handleOpenSheet();
   };

@@ -3,7 +3,7 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, TextInput, useTheme} from 'react-native-paper';
 import {Logo} from '../../components/Logo';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {passwordMessage} from '../SignUpScreen';
 import {startLogin} from '../../store/slices/auth';
 
@@ -13,6 +13,7 @@ interface IFormInput {
   password: string;
 }
 export const SignInView = ({navigation}: {navigation: any}) => {
+  const {isLoading} = useAppSelector(state => state.ui);
   const theme = useTheme();
   const {
     control,
@@ -102,7 +103,11 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <Button icon="login" mode="contained" onPress={handleSubmit(onSubmit)}>
+      <Button
+        icon="login"
+        mode="contained"
+        onPress={handleSubmit(onSubmit)}
+        loading={isLoading}>
         Sign In
       </Button>
 

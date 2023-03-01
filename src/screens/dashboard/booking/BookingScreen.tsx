@@ -1,86 +1,44 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {List, Button, Text, useTheme} from 'react-native-paper';
 import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
-import {IBooking} from '../../../interface/booking.interface';
 import {BookingItemCard} from './BookingItemCard';
 import {useNavigation} from '@react-navigation/native';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
-
-const data: IBooking[] = [
-  {
-    id: 1,
-    service: {
-      id: 1,
-      name: 'Service 1',
-      description: 'item description',
-      price: 10,
-    },
-    client: {
-      id: 1,
-      username: 'JohnDoe',
-      email: 'johndoe@example.com',
-    },
-    status: {
-      id: 1,
-      name: 'Reservado',
-    },
-    date: '01/14/2023',
-    hour: '12:00 AM',
-  },
-
-  {
-    id: 2,
-    service: {
-      id: 2,
-      name: 'Service 2',
-      description: 'item description',
-      price: 12,
-    },
-    client: {
-      id: 1,
-      username: 'JohnDoe',
-      email: 'johndoe@example.com',
-    },
-    status: {
-      id: 2,
-      name: 'Cancelado',
-    },
-    date: '01/14/2023',
-    hour: '01:00 PM',
-  },
-  {
-    id: 3,
-    service: {
-      id: 3,
-      name: 'Service 3',
-      description: 'item description',
-      price: 13,
-    },
-    client: {
-      id: 1,
-      username: 'JohnDoe',
-      email: 'johndoe@example.com',
-    },
-    status: {
-      id: 3,
-      name: 'Entregado',
-    },
-    date: '01/14/2023',
-    hour: '01:00 PM',
-  },
-];
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {
+  getBookings,
+  onDeleteBook,
+  setActiveBooking,
+} from '../../../store/slices/bookings/thunks';
+import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
 
 export const BookingScreen = () => {
   const theme = useTheme();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const navigation = useNavigation();
+  const {bookings} = useAppSelector(state => state.bookings);
+  const {isLoading} = useAppSelector(state => state.ui);
 
+  const dispatch = useAppDispatch();
   // Get the height of the screen
   const {height} = useWindowDimensions();
-  const openSheet = () => {
+  const openSheet = (item: IBook) => {
+    dispatch(setActiveBooking(item));
     bottomSheetRef.current?.snapToIndex(1);
+  };
+
+  useEffect(() => {
+    dispatch(getBookings());
+  }, [dispatch]);
+
+  const handleDeleteBooking = () => {
+    dispatch(
+      onDeleteBook(
+        (result: boolean) => result && bottomSheetRef.current?.snapToIndex(0),
+      ),
+    );
   };
 
   return (
@@ -88,7 +46,7 @@ export const BookingScreen = () => {
       <List.Section>
         <FlatList
           keyboardDismissMode="on-drag"
-          data={data}
+          data={bookings}
           renderItem={({item}) => (
             <BookingItemCard
               key={item.id}
@@ -112,7 +70,9 @@ export const BookingScreen = () => {
             style={custom.buttonWidth}
             mode="contained"
             icon="trash-can-outline"
-            buttonColor={theme.colors.error}>
+            buttonColor={theme.colors.error}
+            onPress={handleDeleteBooking}
+            loading={isLoading}>
             Confirm
           </Button>
         </View>

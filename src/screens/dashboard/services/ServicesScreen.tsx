@@ -60,7 +60,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
             style={{paddingHorizontal: 10}}
             keyboardDismissMode="on-drag"
             onEndReached={() => {
-              console.debug(hookIsLoading);
               loadMore();
             }}
             onEndReachedThreshold={0.5}

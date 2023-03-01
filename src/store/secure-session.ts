@@ -59,10 +59,5 @@ export const getUserSessionParsed = async () => {
     return sessionParsed.token;
   } catch (error) {
     removeUserSession();
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-
-    console.error({error});
   }
 };

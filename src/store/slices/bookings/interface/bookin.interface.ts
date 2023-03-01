@@ -1,4 +1,3 @@
-import {IAuthState} from '../../auth/interfaces';
 import {IService} from '../../services/interface/services.interface';
 
 export interface IBookState {
@@ -8,8 +7,20 @@ export interface IBookState {
 }
 
 export interface IBook {
-  client: IAuthState | number | null;
-  service: IService | null;
+  id: number;
+  clientId: IUser | number | null;
+  serviceId: IService | null;
+  statusId: IState;
   date: string | null;
   hour: string | null;
+}
+interface IUser {
+  id: number;
+  username: string;
+  email: string;
+}
+
+interface IState {
+  id: number;
+  name: string;
 }

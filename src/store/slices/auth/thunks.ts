@@ -5,29 +5,24 @@ import {AppDispatch} from '../../store';
 import {logout, signIn, startLoadingLogin} from './authSlice';
 import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
 import {
+  getUserSessionParsed,
   removeUserSession,
-  retrieveUserSession,
   storeUserSession,
 } from '../../secure-session';
 import {clearServices} from '../services/thunks';
+import {setClearBookings} from '../bookings/bookingSlice';
+import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 
 export const checkIsAuthenticated = () => {
   return async (dispatch: AppDispatch) => {
     try {
       dispatch(startLoadingLogin());
-      // TODO: get Token
-      const session = await retrieveUserSession();
+      const token = await getUserSessionParsed();
 
-      if (!session) {
-        await removeUserSession();
-        return dispatch(authLogout());
-      }
-
-      const sessionParsed = JSON.parse(session);
       // TODO: Make http request
       const {data} = await backendApi.get<IAuthState>('/auth/me', {
         headers: {
-          Authorization: `Bearer ${sessionParsed.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -40,6 +35,7 @@ export const checkIsAuthenticated = () => {
 };
 export const startLogin = (login: ILoginState) => {
   return async (dispatch: AppDispatch) => {
+    dispatch(startLoadingUI());
     try {
       const {data} = await backendApi.post<IAuthLogin>(
         '/auth/local/login',
@@ -53,13 +49,14 @@ export const startLogin = (login: ILoginState) => {
 
       const {user, jwt} = data;
       const {id, username, email, isActive, role} = user;
-      storeUserSession(jwt.accessToken);
+      await storeUserSession(jwt.accessToken);
 
+      dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
     } catch (error) {
+      dispatch(onCancelLoadingUI());
       removeUserSession();
       if (axios.isAxiosError(error)) {
-        console.debug(error);
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {
           return ToastAndroid.showWithGravityAndOffset(
@@ -106,7 +103,9 @@ export const startRegister = (register: IAuthRegister) => {
 
 export const authLogout = () => {
   return (dispatch: AppDispatch) => {
+    dispatch(setClearBookings());
     dispatch(clearServices());
+    removeUserSession();
     dispatch(logout());
   };
 };

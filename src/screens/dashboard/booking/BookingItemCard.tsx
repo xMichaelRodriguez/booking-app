@@ -9,12 +9,12 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {StyleSheet, useColorScheme, View} from 'react-native';
-import {IBooking} from '../../../interface/booking.interface';
+import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
 
 interface IProps {
-  booking: IBooking;
+  booking: IBook;
   navigation: any;
-  handleOpenSheet: () => void;
+  handleOpenSheet: (item: IBook) => void;
 }
 
 const statesOfBooking = {
@@ -28,11 +28,11 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   const isDarkTheme = colorScheme === 'dark';
 
   const iconColor =
-    statesOfBooking[booking.status.name as keyof typeof statesOfBooking] ||
+    statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
     'black';
 
   const setActiveOnOpenSheet = () => {
-    handleOpenSheet();
+    handleOpenSheet(booking);
   };
   return (
     <Card
@@ -45,21 +45,13 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
       ]}>
       <Card.Content>
         <View style={custom.container}>
-          <Avatar.Image
-            size={60}
-            style={custom.borderBox}
-            source={require('./../../../assets/no-data.png')}
-          />
-          <View>
+          <Avatar.Image size={60} source={{uri: booking.serviceId?.mediaUrl}} />
+          <View style={{maxWidth: '75%', overflow: 'hidden'}}>
             <Text
-              variant="titleMedium"
+              numberOfLines={5}
+              variant="titleSmall"
               style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-              {booking.service.name}
-            </Text>
-            <Text
-              variant="bodyMedium"
-              style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-              Price: ${booking.service.price}
+              {booking.serviceId?.caption}
             </Text>
           </View>
         </View>
@@ -89,7 +81,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
               iconColor={iconColor}
             />
             <Text style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-              {booking.status.name}
+              {booking.statusId.name}
             </Text>
           </View>
         </View>
@@ -119,10 +111,7 @@ const custom = StyleSheet.create({
     gap: 12,
     marginBottom: 20,
   },
-  borderBox: {
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
+
   cardSpace: {
     marginTop: 10,
     flexDirection: 'row',

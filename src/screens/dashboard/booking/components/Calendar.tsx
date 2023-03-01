@@ -1,22 +1,13 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useMemo, useEffect, useState} from 'react';
 
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import {Button, TextInput, useTheme} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../../hooks';
-import {HeaderBook} from './HeaderBook';
-import {CalendarSection} from './CalendarSection';
-import {TimeSection} from './TimeSection';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {StyleSheet} from 'react-native';
 import {ICreateBook} from '../interface/createBook.interface';
 import {createBook} from '../../../../store/slices/bookings/thunks';
-import {IBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {useNavigation, useTheme} from '@react-navigation/native';
+import {BookVIew} from '../views/BookVIew';
 
 const INITIAL_DATE = '2023-01-01';
 
@@ -54,15 +45,12 @@ const weeKendTimes = [
 ];
 
 export const CalendarComponent = () => {
+  const navigation = useNavigation();
   const [selected, setSelected] = useState(INITIAL_DATE);
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
-  const {id} = useAppSelector(state => state.auth);
   const theme = useTheme();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
-
   // TODO hook dispatch
   const dispatch = useAppDispatch();
 
@@ -81,6 +69,7 @@ export const CalendarComponent = () => {
     setValue,
     setError,
     clearErrors,
+    reset,
   } = useForm<ICreateBook>();
 
   // set date
@@ -103,6 +92,7 @@ export const CalendarComponent = () => {
     clearErrors('hour');
     setValue('hour', activeItem);
   }, [activeItem, clearErrors, setValue]);
+
   useEffect(() => {
     const currentDate = new Date(selected);
     const isWeekennd = currentDate.getDay() === 5 || currentDate.getDay() === 6;
@@ -121,13 +111,16 @@ export const CalendarComponent = () => {
       });
     }
     clearErrors('hour');
-
-    const payload: IBook = {
-      ...data,
-      service: isActiveService,
-      client: id,
-    };
-    dispatch(createBook(payload));
+    setActiveItem(null);
+    dispatch(
+      createBook(data, (result: boolean) => {
+        if (result) {
+          reset();
+          return navigation.goBack();
+        }
+        reset();
+      }),
+    );
   };
 
   if (!isActiveService) {
@@ -141,86 +134,23 @@ export const CalendarComponent = () => {
     );
   }
   return (
-    <>
-      <View>
-        <HeaderBook />
-      </View>
-      <View>
-        <CalendarSection selected={selected} setSelected={setSelected} />
-        {errors.date && (
-          <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
-            {errors.date.message}
-          </Text>
-        )}
-      </View>
-      <View>
-        <TimeSection
-          activeItem={activeItem}
-          handlePress={handlePress}
-          timeState={timeState}
-        />
-        {errors.hour && (
-          <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
-            {errors.hour.message}
-          </Text>
-        )}
-      </View>
-      <View style={styles.margins}>
-        <Controller
-          name="note"
-          control={control}
-          rules={{
-            required: {value: true, message: 'Required Note'},
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              multiline
-              numberOfLines={3}
-              error={!!errors.note}
-              onBlur={onBlur}
-              mode="outlined"
-              label="Note"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
-        {errors.note && (
-          <Text style={{color: isDark ? '#FF2727' : theme.colors.error}}>
-            {errors.note.message}
-          </Text>
-        )}
-      </View>
-
-      <Button mode="contained" onPress={handleSubmit(onSubmit)}>
-        Confirm
-      </Button>
-    </>
+    <BookVIew
+      activeItem={activeItem}
+      control={control}
+      errors={errors}
+      handlePress={handlePress}
+      handleSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      selected={selected}
+      setSelected={setSelected}
+      timeState={timeState}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  margins: {
-    margin: 20,
-  },
   activityStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  timeContainer: {
-    flexDirection: 'row',
-    gap: 20,
-    flexWrap: 'wrap',
-  },
-  container: {
-    padding: 5,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  listContainer: {
-    padding: 10,
   },
 });

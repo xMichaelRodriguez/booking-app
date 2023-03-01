@@ -1,11 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import React, {useMemo, RefObject, useCallback} from 'react';
 import {useAppDispatch} from '../hooks';
-import {clearActiveService} from '../store/slices/services/thunks';
+import {onCloseSheetBooton} from '../store/slices/ui/thunks';
 
 type Props = {
   bottomSheetRef: RefObject<BottomSheet>;
@@ -27,7 +26,7 @@ export const ButtonSheetWrapper = ({
 
   // handlers
   const onClose = () => {
-    dispatch(clearActiveService());
+    dispatch(onCloseSheetBooton());
   };
 
   // renders
