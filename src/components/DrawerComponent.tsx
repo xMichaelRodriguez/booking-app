@@ -8,8 +8,8 @@ import {BookingScreen} from '../screens/dashboard/booking/BookingScreen';
 import {DrawerMenu} from './DrawerMenu';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton, useTheme, Text} from 'react-native-paper';
-import {BookingItemList} from '../screens/dashboard/booking/BookingItemList';
 import {CreateOrUpdateBooking} from '../screens/dashboard/booking/CreateOrUpdateBooking';
+import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
 
 const Drawer = createDrawerNavigator();
 
@@ -66,21 +66,6 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
             ),
           }}
         />
-        <Drawer.Screen
-          name="BookingItem"
-          options={{
-            title: 'Details',
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => handleGoBack('Bookings')}>
-                <IconButton icon="chevron-left" />
-              </TouchableOpacity>
-            ),
-            drawerItemStyle: {
-              display: 'none',
-            },
-          }}
-          component={BookingItemList}
-        />
 
         <Drawer.Screen
           name="BookCake"
@@ -93,9 +78,35 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  margin: 0,
                 }}>
-                <IconButton icon="chevron-left" />
-                <Text>Back</Text>
+                <IconButton iconColor="#fbfbfb" icon="chevron-left" />
+                <Text style={{color: '#fbfbfb'}}>Back</Text>
+              </TouchableOpacity>
+            ),
+
+            drawerItemStyle: {
+              display: 'none',
+            },
+          }}
+        />
+        <Drawer.Screen
+          name="EditBook"
+          component={CalendarToUpdate}
+          options={{
+            title: 'Edit Book',
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => handleGoBack('Bookings')}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  margin: 0,
+                }}>
+                <IconButton iconColor="#fbfbfb" icon="chevron-left" />
+                <Text style={{color: '#fbfbfb'}}>Back</Text>
               </TouchableOpacity>
             ),
 

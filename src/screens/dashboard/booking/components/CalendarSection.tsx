@@ -13,6 +13,7 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
   const theme = useTheme();
+
   return (
     <>
       <Text
@@ -23,10 +24,13 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
         Pick a Day
       </Text>
       <Calendar
-        onDayPress={day => setSelected(day.dateString)}
-        markedDates={{
-          [selected]: {selected: true},
+        onDayPress={day => {
+          setSelected(day.dateString);
         }}
+        markedDates={{
+          [selected]: {selected: true, marked: true},
+        }}
+        initialDate={selected}
         theme={{
           'stylesheet.calendar.header': {
             headerContainer: {
@@ -52,9 +56,9 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
           textDayFontWeight: '300',
           textMonthFontWeight: '400',
           textDayHeaderFontWeight: '400',
-          textDayFontSize: 16,
-          textMonthFontSize: 16,
-          textDayHeaderFontSize: 18,
+          textDayFontSize: 12,
+          textMonthFontSize: 12,
+          textDayHeaderFontSize: 14,
         }}
         hideExtraDays
         enableSwipeMonths
@@ -62,19 +66,3 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
     </>
   );
 };
-
-// const styles = StyleSheet.create({
-//   weekHeader: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     alignItems: 'center',
-//     backgroundColor: '#eee',
-//     borderRadius: 12,
-//     height: 50,
-//   },
-//   dayText: {
-//     fontWeight: 'bold',
-//     fontSize: 18,
-//     color: '#333',
-//   },
-// });

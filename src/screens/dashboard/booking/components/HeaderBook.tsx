@@ -2,21 +2,21 @@
 import React from 'react';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
-import {useAppSelector} from '../../../../hooks';
-export const HeaderBook = () => {
+type Prop = {
+  mediaUrl?: string;
+  caption?: string;
+};
+export const HeaderBook = ({mediaUrl, caption}: Prop) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
-  const {isActiveService} = useAppSelector(state => state.service);
   return (
     <View style={styles.profileContainer}>
-      <Avatar.Image
-        source={{uri: isActiveService?.mediaUrl && isActiveService.mediaUrl}}
-      />
+      <Avatar.Image source={{uri: mediaUrl}} />
       <View>
         <Text
           variant="titleLarge"
           style={[{color: isDarkTheme ? '#fbfbfb' : '#282828'}]}>
-          {isActiveService?.caption}
+          {caption}
         </Text>
       </View>
     </View>

@@ -25,6 +25,8 @@ interface IProps {
   onSubmit: SubmitHandler<ICreateBook>;
   control: Control<ICreateBook, any>;
   handleSubmit: UseFormHandleSubmit<ICreateBook>;
+  mediaUrl?: string;
+  caption?: string;
 }
 export const BookVIew = ({
   selected,
@@ -36,15 +38,18 @@ export const BookVIew = ({
   onSubmit,
   control,
   handleSubmit,
+  mediaUrl,
+  caption,
 }: IProps) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const {isLoading} = useAppSelector(state => state.ui);
+
   return (
-    <>
+    <View style={{margin: 10}}>
       <View>
-        <HeaderBook />
+        <HeaderBook mediaUrl={mediaUrl} caption={caption} />
       </View>
       <View>
         <CalendarSection selected={selected} setSelected={setSelected} />
@@ -99,7 +104,7 @@ export const BookVIew = ({
         loading={isLoading}>
         Confirm
       </Button>
-    </>
+    </View>
   );
 };
 

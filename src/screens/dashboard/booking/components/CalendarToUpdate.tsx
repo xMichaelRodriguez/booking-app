@@ -1,15 +1,20 @@
-import React, {useMemo, useEffect, useState} from 'react';
-
-import {ActivityIndicator} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../../../../hooks';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {StyleSheet} from 'react-native';
-import {ICreateBook} from '../interface/createBook.interface';
-import {createBook} from '../../../../store/slices/bookings/thunks';
 import {useNavigation, useTheme} from '@react-navigation/native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import {StyleSheet} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ActivityIndicator} from 'react-native-paper';
+import {useAppSelector, useAppDispatch} from '../../../../hooks';
+import {createBook} from '../../../../store/slices/bookings/thunks';
+import {ICreateBook} from '../interface/createBook.interface';
 import {BookVIew} from '../views/BookVIew';
 
-const INITIAL_DATE = '2023-01-01';
+const today = new Date();
+
+const year = today.getFullYear();
+const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 al mes ya que los meses en JavaScript van de 0 a 11
+const day = today.getDate().toString().padStart(2, '0');
+const INITIAL_DATE = `${year}-${month}-${day}`;
 
 const times = [
   '8:00',
@@ -43,13 +48,12 @@ const weeKendTimes = [
   '11:30',
   '12:00',
 ];
-
-export const CalendarComponent = () => {
+export const CalendarToUpdate = () => {
   const navigation = useNavigation();
   const [selected, setSelected] = useState(INITIAL_DATE);
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const {isActiveService} = useAppSelector(state => state.service);
+  const {isBookingActive} = useAppSelector(state => state.bookings);
   const theme = useTheme();
   // TODO hook dispatch
   const dispatch = useAppDispatch();
@@ -72,6 +76,30 @@ export const CalendarComponent = () => {
     reset,
   } = useForm<ICreateBook>();
 
+  //   set values
+  useEffect(() => {
+    if (isBookingActive) {
+      let {date, hour, note} = isBookingActive;
+
+      if (!date || !hour) {
+        return;
+      }
+      hour = hour.split(' ')[0];
+      setActiveItem(hour);
+      console.log({activeItem});
+
+      const splitDate = date.replace(/\//g, '-').split('-');
+      const formatDate = `${splitDate[2]}-${splitDate[0]}-${splitDate[1]}`;
+      setSelected(formatDate);
+      setValue('date', formatDate);
+      setValue('hour', hour);
+      setValue('note', !note ? undefined : note);
+      return;
+    } else {
+      setSelected(INITIAL_DATE);
+    }
+  }, [isBookingActive, setValue, setActiveItem, activeItem]);
+
   // set date
   useEffect(() => {
     if (!selected) {
@@ -80,7 +108,9 @@ export const CalendarComponent = () => {
         message: 'You must select a Date',
       });
     }
+
     clearErrors('date');
+
     setValue('date', selected);
   }, [clearErrors, selected, setError, setValue]);
 
@@ -93,6 +123,7 @@ export const CalendarComponent = () => {
     setValue('hour', activeItem);
   }, [activeItem, clearErrors, setValue]);
 
+  // set list hour
   useEffect(() => {
     const currentDate = new Date(selected);
     const isWeekennd = currentDate.getDay() === 5 || currentDate.getDay() === 6;
@@ -123,7 +154,7 @@ export const CalendarComponent = () => {
     );
   };
 
-  if (!isActiveService) {
+  if (!isBookingActive) {
     return (
       <ActivityIndicator
         style={styles.activityStyle}
@@ -133,26 +164,32 @@ export const CalendarComponent = () => {
       />
     );
   }
+
   return (
-    <BookVIew
-      caption={isActiveService.caption}
-      mediaUrl={isActiveService.caption}
-      activeItem={activeItem}
-      control={control}
-      errors={errors}
-      handlePress={handlePress}
-      handleSubmit={handleSubmit}
-      onSubmit={onSubmit}
-      selected={selected}
-      setSelected={setSelected}
-      timeState={timeState}
-    />
+    <ScrollView style={styles.container}>
+      <BookVIew
+        mediaUrl={isBookingActive.serviceId?.mediaUrl}
+        caption={isBookingActive.serviceId?.caption}
+        activeItem={activeItem}
+        control={control}
+        errors={errors}
+        handlePress={handlePress}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        selected={selected}
+        setSelected={setSelected}
+        timeState={timeState}
+      />
+    </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   activityStyle: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    padding: 10,
   },
 });

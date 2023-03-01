@@ -13,6 +13,7 @@ export interface IBook {
   statusId: IState;
   date: string | null;
   hour: string | null;
+  note: string | null;
 }
 interface IUser {
   id: number;

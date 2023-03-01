@@ -10,6 +10,9 @@ import {
 } from 'react-native-paper';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
+import {useAppDispatch} from '../../../hooks';
+import {setActiveBooking} from '../../../store/slices/bookings/thunks';
+import {useNavigation} from '@react-navigation/native';
 
 interface IProps {
   booking: IBook;
@@ -26,13 +29,21 @@ const statesOfBooking = {
 export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
-
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
   const iconColor =
     statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
     'black';
 
   const setActiveOnOpenSheet = () => {
     handleOpenSheet(booking);
+  };
+
+  const handleEditBook = () => {
+    dispatch(setActiveBooking(booking));
+    navigation.navigate('Root', {
+      screen: 'EditBook',
+    });
   };
   return (
     <Card
@@ -95,7 +106,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
           <Button
             style={custom.buttonSize}
             mode="contained"
-            onPress={() => console.log('HOLA2')}>
+            onPress={handleEditBook}>
             Edit
           </Button>
         </View>
