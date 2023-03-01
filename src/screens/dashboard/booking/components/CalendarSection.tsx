@@ -28,6 +28,13 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
           [selected]: {selected: true},
         }}
         theme={{
+          'stylesheet.calendar.header': {
+            headerContainer: {
+              flexDirection: 'row',
+              backgroundColor: '#eee',
+              borderRadius: 12,
+            },
+          },
           calendarBackground: isDarkTheme ? '#282828' : '#fbfbfbfb',
           textSectionTitleColor: theme.colors.primary,
           textSectionTitleDisabledColor: '#fbfbfb',
@@ -43,11 +50,11 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
           monthTextColor: theme.colors.primary,
           indicatorColor: theme.colors.primary,
           textDayFontWeight: '300',
-          textMonthFontWeight: '600',
+          textMonthFontWeight: '400',
           textDayHeaderFontWeight: '400',
           textDayFontSize: 16,
           textMonthFontSize: 16,
-          textDayHeaderFontSize: 20,
+          textDayHeaderFontSize: 18,
         }}
         hideExtraDays
         enableSwipeMonths
@@ -57,29 +64,17 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
 };
 
 // const styles = StyleSheet.create({
-//   themeCalendar: {
-//     calendarBackground: '#ffffff',
-//     textSectionTitleColor: '#b6c1cd',
-//     textSectionTitleDisabledColor: '#d9e1e8',
-//     selectedDayBackgroundColor: '#00bfff',
-//     selectedDayTextColor: '#ffffff',
-//     todayTextColor: '#00bfff',
-//     dayTextColor: '#2d4150',
-//     textDisabledColor: '#d9e1e8',
-//     dotColor: '#00bfff',
-//     selectedDotColor: '#ffffff',
-//     arrowColor: '#00bfff',
-//     disabledArrowColor: '#d9e1e8',
-//     monthTextColor: '#00bfff',
-//     indicatorColor: '#00bfff',
-//     textDayFontFamily: 'monospace',
-//     textMonthFontFamily: 'monospace',
-//     textDayHeaderFontFamily: 'monospace',
-//     textDayFontWeight: '300',
-//     textMonthFontWeight: 'bold',
-//     textDayHeaderFontWeight: '300',
-//     textDayFontSize: 16,
-//     textMonthFontSize: 16,
-//     textDayHeaderFontSize: 16,
+//   weekHeader: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     alignItems: 'center',
+//     backgroundColor: '#eee',
+//     borderRadius: 12,
+//     height: 50,
+//   },
+//   dayText: {
+//     fontWeight: 'bold',
+//     fontSize: 18,
+//     color: '#333',
 //   },
 // });
