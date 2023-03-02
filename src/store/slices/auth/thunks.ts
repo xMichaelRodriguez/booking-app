@@ -72,6 +72,38 @@ export const startLogin = (login: ILoginState) => {
   };
 };
 
+export const starLoginGoogle = (accessToken: string) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(startLoadingUI());
+    try {
+      const {data} = await backendApi.get<IAuthLogin>(
+        `/auth/google-accesses?access_token=${accessToken}`,
+      );
+
+      const {user, jwt} = data;
+      const {id, username, email, isActive, role} = user;
+      await storeUserSession(jwt.accessToken);
+
+      dispatch(onCancelLoadingUI());
+      dispatch(signIn({id, username, email, isActive, role}));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData?.statusCode !== 200) {
+          return ToastAndroid.showWithGravityAndOffset(
+            errorData.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+          // console.error({errorData});
+        }
+      }
+    }
+  };
+};
+
 export const startRegister = (register: IAuthRegister) => {
   return async () => {
     try {
@@ -102,7 +134,8 @@ export const startRegister = (register: IAuthRegister) => {
 };
 
 export const authLogout = () => {
-  return (dispatch: AppDispatch) => {
+  return async (dispatch: AppDispatch) => {
+    await removeUserSession();
     dispatch(setClearBookings());
     dispatch(clearServices());
     removeUserSession();

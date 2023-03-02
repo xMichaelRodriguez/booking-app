@@ -1,14 +1,19 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
+  useColorScheme,
   ScrollView,
   View,
 } from 'react-native';
 import {Button, Checkbox, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import DividerWithOr from '../components/DividerWIthOr';
+import {GoogleButton} from '../components/GoogleButton';
+
 import {Logo} from '../components/Logo';
 import {useAppDispatch} from '../hooks';
 import {startRegister} from '../store/slices/auth/thunks';
@@ -25,6 +30,8 @@ export const passwordMessage =
 
 export const SingUpScreen = ({navigation}: {navigation: any}) => {
   const theme = useTheme();
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
   const dispatch = useAppDispatch();
   const {
     control,
@@ -54,6 +61,8 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
               }}
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
+                  // eslint-disable-next-line react-native/no-inline-styles
+                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
                   error={!!errors.username}
                   onBlur={onBlur}
                   mode="outlined"
@@ -80,6 +89,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
               }}
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
+                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
                   error={!!errors.email}
                   onBlur={onBlur}
                   mode="outlined"
@@ -106,6 +116,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
               }}
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
+                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
                   error={!!errors.password}
                   mode="outlined"
                   label="Password"
@@ -148,6 +159,9 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
             onPress={handleSubmit(onSubmit)}>
             Sign In
           </Button>
+
+          <DividerWithOr />
+          <GoogleButton />
         </View>
       </ScrollView>
     </SafeAreaView>

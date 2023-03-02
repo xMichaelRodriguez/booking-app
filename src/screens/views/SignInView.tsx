@@ -1,6 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
-import {StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native';
 import {Button, Checkbox, TextInput, useTheme} from 'react-native-paper';
 import {Logo} from '../../components/Logo';
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -8,6 +15,8 @@ import {passwordMessage} from '../SignUpScreen';
 import {startLogin} from '../../store/slices/auth';
 
 import {validEmail, validPassword} from '../../utils/emailRegex';
+import {GoogleButton} from '../../components/GoogleButton';
+
 interface IFormInput {
   email: string;
   password: string;
@@ -15,6 +24,8 @@ interface IFormInput {
 export const SignInView = ({navigation}: {navigation: any}) => {
   const {isLoading} = useAppSelector(state => state.ui);
   const theme = useTheme();
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
   const {
     control,
     handleSubmit,
@@ -42,6 +53,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
+              textColor={isDark ? '#fbfbfb' : '#282828'}
               error={!!errors.email}
               onBlur={onBlur}
               mode="outlined"
@@ -57,7 +69,6 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           </Text>
         )}
       </View>
-
       <View style={styles.inputView}>
         <Controller
           name="password"
@@ -68,6 +79,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
+              textColor={isDark ? '#fbfbfb' : '#282828'}
               error={!!errors.password}
               mode="outlined"
               label="Password"
@@ -88,13 +100,17 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           label="Show Password"
           status={isVisible ? 'checked' : 'unchecked'}
           position="leading"
-          style={styles.checkbox}
-          labelStyle={styles.labelCheckbox}
+          style={[styles.checkbox]}
+          labelStyle={[
+            {color: isDark ? '#fbfbfb' : '#282828'},
+            styles.labelCheckbox,
+          ]}
           onPress={() => {
             setIsVisible(!isVisible);
           }}
         />
       </View>
+
       <View style={[styles.forgotPassword]}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}>
@@ -110,16 +126,12 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         loading={isLoading}>
         Sign In
       </Button>
+      <GoogleButton />
 
-      <Button mode="text" textColor="#808080" style={styles.googleSignIn}>
-        <Image
-          source={require('../../assets/sign-in-google.png')}
-          style={styles.googleIcon}
-        />
-        <Text>{'  '}Sign in with Google</Text>
-      </Button>
       <View style={styles.row}>
-        <Text style={styles.textColor}>Don't have an account?</Text>
+        <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
+          Don't have an account?
+        </Text>
         <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
           <Text style={[styles.link, {color: theme.colors.primary}]}>
             {' '}
@@ -131,9 +143,6 @@ export const SignInView = ({navigation}: {navigation: any}) => {
   );
 };
 const styles = StyleSheet.create({
-  googleSignIn: {
-    marginTop: 10,
-  },
   inputView: {
     margin: 10,
   },
@@ -153,15 +162,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textColor: {color: '#282828'},
+
   labelCheckbox: {
     position: 'absolute',
     marginLeft: 50,
   },
   checkbox: {marginLeft: -20},
-  googleIcon: {
-    height: 25,
-    width: 25,
-    padding: 3,
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    padding: 10,
+    borderRadius: 10,
   },
 });

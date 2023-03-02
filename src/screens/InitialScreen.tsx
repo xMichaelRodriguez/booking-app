@@ -14,7 +14,7 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
         labelStyle={styles.text}
         contentStyle={styles.buttomStyle}
         style={[styles.buttonMargin, {borderColor: theme.colors.primary}]}
-        mode="contained"
+        mode="outlined"
         onPress={() => navigation.navigate('SignIn')}>
         Sign In
       </Button>
@@ -22,7 +22,7 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
       <Button
         labelStyle={styles.text}
         contentStyle={styles.buttomStyle}
-        mode="outlined"
+        mode="contained"
         style={[styles.buttonMargin, {borderColor: theme.colors.primary}]}
         onPress={() => navigation.navigate('SignUp')}>
         Sign up

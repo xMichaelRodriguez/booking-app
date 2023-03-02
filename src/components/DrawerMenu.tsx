@@ -5,7 +5,7 @@ import React from 'react';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Divider, IconButton, Text} from 'react-native-paper';
 import {useAppDispatch, useAppSelector} from '../hooks';
-import {logout} from '../store/slices/auth';
+import {authLogout} from '../store/slices/auth';
 
 export const DrawerMenu = ({props}: {props: any}) => {
   const colorScheme = useColorScheme();
@@ -13,7 +13,7 @@ export const DrawerMenu = ({props}: {props: any}) => {
   const {username, email} = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(authLogout());
   };
   return (
     <View style={styles.mainContainer}>
