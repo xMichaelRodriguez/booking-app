@@ -27,6 +27,7 @@ interface IProps {
   handleSubmit: UseFormHandleSubmit<ICreateBook>;
   mediaUrl?: string;
   caption?: string;
+  buttonName: string;
 }
 export const BookVIew = ({
   selected,
@@ -40,6 +41,7 @@ export const BookVIew = ({
   handleSubmit,
   mediaUrl,
   caption,
+  buttonName = 'Confirm',
 }: IProps) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
@@ -80,6 +82,7 @@ export const BookVIew = ({
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
+              textColor={isDark ? '#fbfbfb' : '#282828'}
               multiline
               numberOfLines={3}
               error={!!errors.note}
@@ -102,7 +105,7 @@ export const BookVIew = ({
         mode="contained"
         onPress={handleSubmit(onSubmit)}
         loading={isLoading}>
-        Confirm
+        {buttonName}
       </Button>
     </View>
   );

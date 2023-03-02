@@ -9,6 +9,7 @@ type Prop = {
 export const HeaderBook = ({mediaUrl, caption}: Prop) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
+
   return (
     <View style={styles.profileContainer}>
       <Avatar.Image source={{uri: mediaUrl}} />

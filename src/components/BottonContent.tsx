@@ -9,12 +9,9 @@ export const BottonContent = () => {
   const {isActiveService} = useAppSelector(state => state.service);
   const theme = useTheme();
   const navigation = useNavigation();
-  const onBook = () => {
+  const onSchedule = () => {
     navigation.navigate('Root', {
       screen: 'BookCake',
-      params: {
-        ...isActiveService,
-      },
     });
   };
 
@@ -41,8 +38,8 @@ export const BottonContent = () => {
         <Text variant="bodyLarge">{isActiveService?.caption}</Text>
       </View>
       <View style={{width: '80%'}}>
-        <Button mode="contained" onPress={onBook}>
-          Book
+        <Button mode="contained" onPress={onSchedule}>
+          Schedule
         </Button>
       </View>
     </View>

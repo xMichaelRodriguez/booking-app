@@ -10,9 +10,10 @@ import {
 } from 'react-native-paper';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
-import {useAppDispatch} from '../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {setActiveBooking} from '../../../store/slices/bookings/thunks';
 import {useNavigation} from '@react-navigation/native';
+import {startLoadingUI} from '../../../store/slices/ui/uiSlice';
 
 interface IProps {
   booking: IBook;
@@ -30,6 +31,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
   const dispatch = useAppDispatch();
+  const {isLoading} = useAppSelector(state => state.ui);
   const navigation = useNavigation();
   const iconColor =
     statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
@@ -39,8 +41,10 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
     handleOpenSheet(booking);
   };
 
-  const handleEditBook = () => {
-    dispatch(setActiveBooking(booking));
+  const handleEditBook = async () => {
+    dispatch(startLoadingUI());
+    await dispatch(setActiveBooking(booking));
+
     navigation.navigate('Root', {
       screen: 'EditBook',
     });
@@ -106,7 +110,8 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
           <Button
             style={custom.buttonSize}
             mode="contained"
-            onPress={handleEditBook}>
+            onPress={handleEditBook}
+            loading={isLoading}>
             Edit
           </Button>
         </View>

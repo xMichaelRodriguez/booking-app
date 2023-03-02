@@ -22,6 +22,14 @@ export const bookingSlice = createSlice({
       state.bookings.push(action.payload);
     },
 
+    onUpdateBooking: (state, action: PayloadAction<IBook>) => {
+      const index = state.bookings.findIndex(
+        booking => booking.id === action.payload.id,
+      );
+      if (index !== -1) {
+        state.bookings[index] = action.payload;
+      }
+    },
     activeBook: (state, action: PayloadAction<IBook>) => {
       state.isBookingActive = action.payload;
     },
@@ -47,6 +55,7 @@ export const {
   activeBook,
   setClearBookings,
   onAddBook,
+  onUpdateBooking,
   onClearActiveBooking,
   removeBook,
 } = bookingSlice.actions;

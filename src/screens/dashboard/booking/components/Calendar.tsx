@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {ICreateBook} from '../interface/createBook.interface';
-import {createBook} from '../../../../store/slices/bookings/thunks';
+import {createBooking} from '../../../../store/slices/bookings/thunks';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {BookVIew} from '../views/BookVIew';
 
@@ -113,7 +113,7 @@ export const CalendarComponent = () => {
     clearErrors('hour');
     setActiveItem(null);
     dispatch(
-      createBook(data, (result: boolean) => {
+      createBooking(data, (result: boolean) => {
         if (result) {
           reset();
           return navigation.goBack();
@@ -136,7 +136,7 @@ export const CalendarComponent = () => {
   return (
     <BookVIew
       caption={isActiveService.caption}
-      mediaUrl={isActiveService.caption}
+      mediaUrl={isActiveService.mediaUrl}
       activeItem={activeItem}
       control={control}
       errors={errors}
@@ -146,6 +146,7 @@ export const CalendarComponent = () => {
       selected={selected}
       setSelected={setSelected}
       timeState={timeState}
+      buttonName={'Confirm Booking'}
     />
   );
 };

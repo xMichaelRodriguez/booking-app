@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, List, useTheme} from 'react-native-paper';
+import {ActivityIndicator, List, useTheme, Text} from 'react-native-paper';
 import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {INavigationProps} from '../../../interface';
@@ -48,6 +48,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
+        <Text>No Data</Text>
       </View>
     );
   }

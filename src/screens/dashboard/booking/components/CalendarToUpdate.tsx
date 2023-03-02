@@ -1,11 +1,11 @@
 import {useNavigation, useTheme} from '@react-navigation/native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
 import {useAppSelector, useAppDispatch} from '../../../../hooks';
-import {createBook} from '../../../../store/slices/bookings/thunks';
+import {updateBooking} from '../../../../store/slices/bookings/thunks';
 import {ICreateBook} from '../interface/createBook.interface';
 import {BookVIew} from '../views/BookVIew';
 
@@ -63,6 +63,7 @@ export const CalendarToUpdate = () => {
     () => (time: string) => {
       setActiveItem(time);
     },
+
     [],
   );
 
@@ -76,30 +77,27 @@ export const CalendarToUpdate = () => {
     reset,
   } = useForm<ICreateBook>();
 
-  //   set values
+  // set Value to hour by active booking
   useEffect(() => {
-    if (isBookingActive) {
-      let {date, hour, note} = isBookingActive;
+    const hourOk = isBookingActive?.hour?.split(' ')[0];
+    setActiveItem(hourOk ?? null);
+    setValue('hour', hourOk ?? '');
+  }, [isBookingActive, setValue]);
 
-      if (!date || !hour) {
-        return;
-      }
-      hour = hour.split(' ')[0];
-      setActiveItem(hour);
-      console.log({activeItem});
-
-      const splitDate = date.replace(/\//g, '-').split('-');
+  // set value to date by active booking
+  useEffect(() => {
+    if (isBookingActive && isBookingActive.date) {
+      const splitDate = isBookingActive.date.replace(/\//g, '-').split('-');
       const formatDate = `${splitDate[2]}-${splitDate[0]}-${splitDate[1]}`;
       setSelected(formatDate);
       setValue('date', formatDate);
-      setValue('hour', hour);
-      setValue('note', !note ? undefined : note);
-      return;
-    } else {
-      setSelected(INITIAL_DATE);
     }
-  }, [isBookingActive, setValue, setActiveItem, activeItem]);
+  }, [isBookingActive, setValue]);
 
+  // set note by active booking
+  useEffect(() => {
+    setValue('note', isBookingActive?.note ?? '');
+  }, [isBookingActive, setValue]);
   // set date
   useEffect(() => {
     if (!selected) {
@@ -113,15 +111,6 @@ export const CalendarToUpdate = () => {
 
     setValue('date', selected);
   }, [clearErrors, selected, setError, setValue]);
-
-  // setHour
-  useEffect(() => {
-    if (!activeItem) {
-      return;
-    }
-    clearErrors('hour');
-    setValue('hour', activeItem);
-  }, [activeItem, clearErrors, setValue]);
 
   // set list hour
   useEffect(() => {
@@ -141,15 +130,17 @@ export const CalendarToUpdate = () => {
         message: 'You must select a time',
       });
     }
+    clearErrors('date');
     clearErrors('hour');
-    setActiveItem(null);
+
+    setValue('hour', activeItem ?? '');
+    setValue('date', selected);
     dispatch(
-      createBook(data, (result: boolean) => {
+      updateBooking(data, (result: boolean) => {
         if (result) {
           reset();
           return navigation.goBack();
         }
-        reset();
       }),
     );
   };
@@ -179,17 +170,20 @@ export const CalendarToUpdate = () => {
         selected={selected}
         setSelected={setSelected}
         timeState={timeState}
+        buttonName={'ReSchedule'}
       />
     </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   activityStyle: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   container: {
     flex: 1,
     padding: 10,
+    marginBottom: 20,
   },
 });

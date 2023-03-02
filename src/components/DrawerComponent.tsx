@@ -71,7 +71,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="BookCake"
           component={CreateOrUpdateBooking}
           options={{
-            title: 'Book Cake',
+            title: 'Schedule Order',
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => handleGoBack('Services')}
