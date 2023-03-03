@@ -1,3 +1,4 @@
+/* eslint-disable no-sparse-arrays */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
@@ -138,19 +139,15 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
               status={isVisible ? 'checked' : 'unchecked'}
               position="leading"
               style={styles.checkbox}
-              labelStyle={styles.labelCheckbox}
+              labelStyle={[
+                {color: isDark ? '#fbfbfb' : '#282828'},
+                ,
+                styles.labelCheckbox,
+              ]}
               onPress={() => {
                 setIsVisible(!isVisible);
               }}
             />
-          </View>
-          <View style={styles.row}>
-            <Text>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.replace('SignIn')}>
-              <Text style={[styles.link, {color: theme.colors.primary}]}>
-                Sign In
-              </Text>
-            </TouchableOpacity>
           </View>
 
           <Button
@@ -159,7 +156,16 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
             onPress={handleSubmit(onSubmit)}>
             Sign In
           </Button>
-
+          <View style={styles.row}>
+            <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
+              Already have an account?{' '}
+            </Text>
+            <TouchableOpacity onPress={() => navigation.replace('SignIn')}>
+              <Text style={[styles.link, {color: theme.colors.primary}]}>
+                Sign In
+              </Text>
+            </TouchableOpacity>
+          </View>
           <DividerWithOr />
           <GoogleButton />
         </View>

@@ -16,6 +16,7 @@ import {startLogin} from '../../store/slices/auth';
 
 import {validEmail, validPassword} from '../../utils/emailRegex';
 import {GoogleButton} from '../../components/GoogleButton';
+import DividerWithOr from '../../components/DividerWIthOr';
 
 interface IFormInput {
   email: string;
@@ -126,8 +127,6 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         loading={isLoading}>
         Sign In
       </Button>
-      <GoogleButton />
-
       <View style={styles.row}>
         <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
           Don't have an account?
@@ -139,6 +138,8 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <DividerWithOr />
+      <GoogleButton />
     </View>
   );
 };

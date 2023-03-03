@@ -2,6 +2,7 @@ import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../../API/backendApi';
 import {ICreateBook} from '../../../screens/dashboard/booking/interface/createBook.interface';
+import {COMPLETED_STATE_ID} from '../../../utils/state-id';
 import {getUserSessionParsed} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {clearActiveService} from '../services/thunks';
@@ -181,6 +182,52 @@ export const setActiveBooking = (booking: IBook) => {
   return async (dispatch: AppDispatch) => {
     dispatch(activeBook(booking));
     dispatch(onCancelLoadingUI());
+  };
+};
+
+export const setCompleteBookingState = () => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const {isBookingActive} = getState().bookings;
+    try {
+      dispatch(startLoadingUI());
+      const token = await getUserSessionParsed();
+
+      await backendApi.patch(
+        `/bookings/${isBookingActive?.id}/update-states`,
+        {stateId: COMPLETED_STATE_ID},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Completed Booking',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+      await dispatch(getBookings());
+      dispatch(onClearActiveBooking());
+      dispatch(clearActiveService());
+      dispatch(onCancelLoadingUI());
+    } catch (error) {
+      dispatch(onCancelLoadingUI());
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        console.debug({errorData});
+        ToastAndroid.showWithGravityAndOffset(
+          errorData.message,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+      }
+    }
   };
 };
 

@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   activityStyle: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },

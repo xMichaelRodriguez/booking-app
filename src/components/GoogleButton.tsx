@@ -26,7 +26,6 @@ export const GoogleButton = () => {
 
       await GoogleSignin.signOut();
     } catch (error) {
-      console.log({ERROR: error});
       if (error instanceof Error) {
         if (error.message === 'DEVELOPER_ERROR') {
           console.log('User cancelled the sign-in flow');

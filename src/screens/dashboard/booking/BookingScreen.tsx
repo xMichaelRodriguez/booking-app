@@ -1,7 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef} from 'react';
-import {List, Button, Text, useTheme} from 'react-native-paper';
-import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
+import {List, Button, Text, useTheme, Dialog, Portal} from 'react-native-paper';
+import {
+  Image,
+  FlatList,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  useColorScheme,
+  // ActivityIndicator,
+} from 'react-native';
 import {BookingItemCard} from './BookingItemCard';
 import {useNavigation} from '@react-navigation/native';
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
@@ -11,16 +19,22 @@ import {
   getBookings,
   onDeleteBook,
   setActiveBooking,
+  setCompleteBookingState,
 } from '../../../store/slices/bookings/thunks';
 import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
-
+import {onClearActiveBooking} from '../../../store/slices/bookings/bookingSlice';
+const noDataImage = require('../../../assets/no-data.png');
 export const BookingScreen = () => {
   const theme = useTheme();
+
+  const [visible, setVisible] = React.useState(false);
+
   const bottomSheetRef = useRef<BottomSheet>(null);
   const navigation = useNavigation();
-  const {bookings} = useAppSelector(state => state.bookings);
+  const {bookings, isBookingActive} = useAppSelector(state => state.bookings);
   const {isLoading} = useAppSelector(state => state.ui);
-
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
   const dispatch = useAppDispatch();
   // Get the height of the screen
   const {height} = useWindowDimensions();
@@ -28,10 +42,19 @@ export const BookingScreen = () => {
     dispatch(setActiveBooking(item));
     bottomSheetRef.current?.snapToIndex(1);
   };
-
   useEffect(() => {
     dispatch(getBookings());
   }, [dispatch]);
+
+  const showDialog = (item: IBook) => {
+    dispatch(setActiveBooking(item));
+    setVisible(true);
+  };
+
+  const hideDialog = () => {
+    dispatch(onClearActiveBooking());
+    setVisible(false);
+  };
 
   const handleDeleteBooking = () => {
     dispatch(
@@ -40,7 +63,23 @@ export const BookingScreen = () => {
       ),
     );
   };
+  const handleComplete = () => {
+    dispatch(setCompleteBookingState());
+    hideDialog();
+  };
 
+  if (bookings === undefined) {
+    return (
+      <View style={custom.activityStyle}>
+        <Image style={custom.image} source={noDataImage} />
+        <Text
+          style={{color: isDark ? '#fbfbfb' : '#282828'}}
+          variant="titleLarge">
+          No Data
+        </Text>
+      </View>
+    );
+  }
   return (
     <View style={{flex: 1, padding: 10}}>
       <List.Section>
@@ -53,10 +92,34 @@ export const BookingScreen = () => {
               booking={item}
               handleOpenSheet={openSheet}
               navigation={navigation}
+              onShowDialog={showDialog}
             />
           )}
         />
       </List.Section>
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>
+            {isBookingActive && isBookingActive.serviceId?.caption}
+          </Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">
+              do you want to complete this booking?
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions style={custom.containerChildren}>
+            <Button
+              mode="outlined"
+              style={custom.buttonWidth}
+              onPress={hideDialog}>
+              Cancel
+            </Button>
+            <Button onPress={handleComplete} mode="contained">
+              yes, to complete
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
       <ButtonSheetWrapper
         bottomSheetRef={bottomSheetRef}
         percentage={'20%'}
@@ -101,5 +164,15 @@ const custom = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  activityStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+  },
+  image: {
+    width: 300,
+    height: 300,
   },
 });

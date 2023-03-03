@@ -2,7 +2,13 @@
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, List, useTheme, Text} from 'react-native-paper';
-import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  useColorScheme,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {INavigationProps} from '../../../interface';
 
@@ -17,6 +23,8 @@ const noDataImage = require('../../../assets/no-data.png');
 
 export const ServicesScreen = ({navigation}: INavigationProps) => {
   const theme = useTheme();
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
   const bottomSheetRef = useRef<BottomSheet>(null);
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
@@ -48,7 +56,11 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
-        <Text>No Data</Text>
+        <Text
+          style={{color: isDark ? '#fbfbfb' : '#282828'}}
+          variant="titleLarge">
+          No Data
+        </Text>
       </View>
     );
   }

@@ -9,8 +9,12 @@ import {createBooking} from '../../../../store/slices/bookings/thunks';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {BookVIew} from '../views/BookVIew';
 
-const INITIAL_DATE = '2023-01-01';
+const today = new Date();
 
+const year = today.getFullYear();
+const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 al mes ya que los meses en JavaScript van de 0 a 11
+const day = today.getDate().toString().padStart(2, '0');
+const INITIAL_DATE = `${year}-${month}-${day}`;
 const times = [
   '8:00',
   '8:30',
