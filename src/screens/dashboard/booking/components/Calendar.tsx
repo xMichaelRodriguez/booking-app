@@ -4,49 +4,12 @@ import {ActivityIndicator} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
-import {ICreateBook} from '../interface/createBook.interface';
-import {createBooking} from '../../../../store/slices/bookings/thunks';
+
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {BookVIew} from '../views/BookVIew';
-
-const today = new Date();
-
-const year = today.getFullYear();
-const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 al mes ya que los meses en JavaScript van de 0 a 11
-const day = today.getDate().toString().padStart(2, '0');
-const INITIAL_DATE = `${year}-${month}-${day}`;
-const times = [
-  '8:00',
-  '8:30',
-  '9:00',
-  '9:30',
-  '10:00',
-  '10:30',
-  '11:00',
-  '11:30',
-  '12:00',
-  '12:30',
-  '13:00',
-  '13:30',
-  '14:00',
-  '14:30',
-  '15:00',
-  '15:30',
-  '16:00',
-];
-const weeKendTimes = [
-  '7:00',
-  '7:30',
-  '8:00',
-  '8:30',
-  '9:00',
-  '9:30',
-  '10:00',
-  '10:30',
-  '11:00',
-  '11:30',
-  '12:00',
-];
+import {INITIAL_DATE, times, weeKendTimes} from '../../../../constants/times';
+import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {createBooking} from '../../../../store/slices/bookings/thunks';
 
 export const CalendarComponent = () => {
   const navigation = useNavigation();
@@ -99,7 +62,7 @@ export const CalendarComponent = () => {
 
   useEffect(() => {
     const currentDate = new Date(selected);
-    const isWeekennd = currentDate.getDay() === 5 || currentDate.getDay() === 6;
+    const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
     if (isWeekennd) {
       return setTimeState(weeKendTimes);
     } else {
@@ -115,10 +78,10 @@ export const CalendarComponent = () => {
       });
     }
     clearErrors('hour');
-    setActiveItem(null);
     dispatch(
       createBooking(data, (result: boolean) => {
         if (result) {
+          setActiveItem(null);
           reset();
           return navigation.goBack();
         }

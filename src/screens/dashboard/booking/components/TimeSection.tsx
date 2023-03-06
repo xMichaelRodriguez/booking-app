@@ -26,7 +26,13 @@ export const TimeSection = React.memo(
       <View style={styles.container}>
         <Text
           variant="bodyLarge"
-          style={[{color: isDarkTheme ? '#fbfbfb' : '#282828'}]}>
+          style={[
+            {
+              color: isDarkTheme ? '#fbfbfb' : '#282828',
+              fontWeight: '800',
+              marginBottom: 25,
+            },
+          ]}>
           Pick a Time
         </Text>
 

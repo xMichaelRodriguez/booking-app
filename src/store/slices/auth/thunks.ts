@@ -9,7 +9,7 @@ import {
   removeUserSession,
   storeUserSession,
 } from '../../secure-session';
-import {clearServices} from '../services/thunks';
+import {clearServices, getServices} from '../services/thunks';
 import {setClearBookings} from '../bookings/bookingSlice';
 import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 
@@ -26,7 +26,9 @@ export const checkIsAuthenticated = () => {
         },
       });
 
+      dispatch(startLoadingLogin());
       dispatch(signIn(data));
+      dispatch(getServices());
     } catch (error) {
       await removeUserSession();
       return dispatch(authLogout());
@@ -53,12 +55,13 @@ export const startLogin = (login: ILoginState) => {
 
       dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
+      dispatch(getServices());
     } catch (error) {
-      dispatch(onCancelLoadingUI());
       removeUserSession();
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {
+          dispatch(onCancelLoadingUI());
           return ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
@@ -87,6 +90,7 @@ export const starLoginGoogle = (accessToken: string) => {
       dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
     } catch (error) {
+      dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {

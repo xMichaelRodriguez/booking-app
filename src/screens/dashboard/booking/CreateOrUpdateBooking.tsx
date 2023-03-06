@@ -1,7 +1,8 @@
 import React from 'react';
-import {CalendarComponent} from './components/Calendar';
+import {StyleSheet, View} from 'react-native';
 
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native';
+import {CalendarComponent} from './components/Calendar';
 
 interface propsObj {
   [key: string]: JSX.Element;

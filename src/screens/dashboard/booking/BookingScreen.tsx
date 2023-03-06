@@ -68,7 +68,7 @@ export const BookingScreen = () => {
     hideDialog();
   };
 
-  if (bookings === undefined) {
+  if (Object.entries(bookings).length === 0) {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />

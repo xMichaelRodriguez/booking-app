@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../../API/backendApi';
-import {ICreateBook} from '../../../screens/dashboard/booking/interface/createBook.interface';
+import {parserDate} from '../../../constants/dateParser';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
 import {getUserSessionParsed} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
@@ -17,7 +17,7 @@ import {
   setBookings,
   startLoadingBookings,
 } from './bookingSlice';
-import {IBook} from './interface/bookin.interface';
+import {IBook, ICreateBook} from './interface/bookin.interface';
 
 export const getBookings = () => {
   return async (dispatch: AppDispatch) => {
@@ -48,14 +48,6 @@ export const getBookings = () => {
   };
 };
 
-const parsedDateToSave = async (booking: ICreateBook) => {
-  const token = await getUserSessionParsed();
-  const {date, hour} = booking;
-  const newDate = new Date(`${date}T${hour}`);
-  const parsedDate = newDate.toISOString();
-  return {parsedDate, token};
-};
-
 export const createBooking = (
   booking: ICreateBook,
   cb: (result: boolean) => void,
@@ -69,7 +61,9 @@ export const createBooking = (
     try {
       const token = await getUserSessionParsed();
       const {date, hour} = booking;
-      const newDate = new Date(`${date}T${hour}`);
+
+      const dateParsed = parserDate(date);
+      const newDate = new Date(`${dateParsed}T${hour}`);
       const parsedDate = newDate.toISOString();
       const payload = {
         clientId,
@@ -90,10 +84,10 @@ export const createBooking = (
         25,
         50,
       );
-      dispatch(onAddBook(data));
       dispatch(onClearActiveBooking());
       dispatch(clearActiveService());
       dispatch(onCancelLoadingUI());
+      dispatch(onAddBook(data));
       cb(true);
     } catch (error) {
       cb(false);
@@ -119,8 +113,10 @@ export const updateBooking = (
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       dispatch(startLoadingUI());
-      const {parsedDate, token} = await parsedDateToSave(booking);
+      const parsedDate = parserDate(booking.date);
+      const token = await getUserSessionParsed();
 
+      const newDate = new Date(`${parsedDate}T${booking.hour}`);
       const {
         auth: {id: clientId},
         bookings: {isBookingActive},
@@ -128,7 +124,7 @@ export const updateBooking = (
       const payload = {
         clientId,
         serviceId: isBookingActive?.serviceId?.id,
-        date: parsedDate,
+        date: newDate,
       };
       await backendApi.patch<IBook>(
         `/bookings/${isBookingActive?.id}`,
@@ -140,7 +136,6 @@ export const updateBooking = (
           },
         },
       );
-
       ToastAndroid.showWithGravityAndOffset(
         'Booking Reschedule',
         ToastAndroid.LONG,
@@ -148,10 +143,12 @@ export const updateBooking = (
         25,
         50,
       );
+      cb(true);
+
       if (isBookingActive) {
         const payloadToSave: IBook = {
           ...isBookingActive,
-          date: booking.date,
+          date: parsedDate,
           hour: booking.hour,
           note: booking.note ?? '',
         };
@@ -160,7 +157,6 @@ export const updateBooking = (
       dispatch(onClearActiveBooking());
       dispatch(clearActiveService());
       dispatch(onCancelLoadingUI());
-      cb(true);
     } catch (error) {
       cb(false);
       dispatch(onCancelLoadingUI());
@@ -180,7 +176,8 @@ export const updateBooking = (
 
 export const setActiveBooking = (booking: IBook) => {
   return async (dispatch: AppDispatch) => {
-    dispatch(activeBook(booking));
+    dispatch(startLoadingBookings());
+    await dispatch(activeBook(booking));
     dispatch(onCancelLoadingUI());
   };
 };
@@ -218,7 +215,6 @@ export const setCompleteBookingState = () => {
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
-        console.debug({errorData});
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,

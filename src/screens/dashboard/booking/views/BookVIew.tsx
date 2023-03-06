@@ -10,14 +10,14 @@ import {
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Text, Button, TextInput, useTheme} from 'react-native-paper';
 import {useAppSelector} from '../../../../hooks';
+import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {CalendarSection} from '../components/CalendarSection';
 import {HeaderBook} from '../components/HeaderBook';
 import {TimeSection} from '../components/TimeSection';
-import {ICreateBook} from '../interface/createBook.interface';
 
 interface IProps {
-  selected: string;
-  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  selected: Date;
+  setSelected: React.Dispatch<React.SetStateAction<Date>>;
   errors: FieldErrors<ICreateBook>;
   activeItem: string | null;
   timeState: string[];
@@ -53,7 +53,7 @@ export const BookVIew = ({
       <View>
         <HeaderBook mediaUrl={mediaUrl} caption={caption} />
       </View>
-      <View>
+      <View style={{marginTop: 10}}>
         <CalendarSection selected={selected} setSelected={setSelected} />
         {errors.date && (
           <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
@@ -78,7 +78,10 @@ export const BookVIew = ({
           name="note"
           control={control}
           rules={{
-            required: {value: true, message: 'Required Note'},
+            maxLength: {
+              value: 500,
+              message: 'Only a maximum of 500 characters are allowed',
+            },
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput

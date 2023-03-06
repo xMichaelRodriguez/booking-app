@@ -1,11 +1,7 @@
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../../API/backendApi';
-import {
-  getUserSessionParsed,
-  removeUserSession,
-  retrieveUserSession,
-} from '../../secure-session';
+import {getUserSessionParsed, removeUserSession} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {authLogout} from '../auth';
 import {IService, IServiceSerializer} from './interface/services.interface';
@@ -21,22 +17,20 @@ import {
 export const getServices = () => {
   return async (dispatch: AppDispatch) => {
     dispatch(startLoadingServices());
-
-    // TODO: get Token
-    const session = await retrieveUserSession();
-
-    if (!session) {
-      removeUserSession();
-      dispatch(authLogout());
-    } else {
-      const sessionParsed = JSON.parse(session);
+    try {
+      // TODO: get Token
+      const token = await getUserSessionParsed();
       // TODO: Make http request
       const {data} = await backendApi.get<IServiceSerializer>('/services', {
         headers: {
-          Authorization: `Bearer ${sessionParsed.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
+
       dispatch(setServices(data));
+    } catch (error) {
+      removeUserSession();
+      dispatch(authLogout());
     }
   };
 };
@@ -46,7 +40,6 @@ export const getNewServices = (url: string = '') => {
     const {services} = getState().service;
     try {
       const token = await getUserSessionParsed();
-      url = url.replace('localhost', '192.168.1.10');
       const {data} = await axios.get<IServiceSerializer>(url, {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,68 +1,60 @@
 /* eslint-disable react-native/no-inline-styles */
-import {useTheme} from '@react-navigation/native';
 import React from 'react';
-import {useColorScheme} from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import {StyleSheet, useColorScheme} from 'react-native';
+import CalendarStrip from 'react-native-calendar-strip';
 import {Text} from 'react-native-paper';
 
 interface IProps {
-  selected: string;
-  setSelected: (day: string) => void;
+  selected: Date;
+  setSelected: (day: Date) => void;
 }
+
 export const CalendarSection = ({selected, setSelected}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
-  const theme = useTheme();
 
   return (
     <>
       <Text
         variant="bodyLarge"
         style={[
-          {color: isDarkTheme ? '#fbfbfb' : '#282828', marginVertical: 10},
+          {
+            color: isDarkTheme ? '#fbfbfb' : '#282828',
+            marginVertical: 5,
+            fontWeight: '800',
+          },
         ]}>
         Pick a Day
       </Text>
-      <Calendar
-        onDayPress={day => {
-          setSelected(day.dateString);
+      <CalendarStrip
+        highlightDateContainerStyle={styles.highlightDateContainer}
+        highlightDateNameStyle={styles.highlightDateStyle}
+        highlightDateNumberStyle={styles.highlightDateStyle}
+        iconContainer={{flex: 0.1}}
+        iconLeftStyle={{
+          tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
-        markedDates={{
-          [selected]: {selected: true, marked: true},
+        startingDate={selected}
+        iconRightStyle={{
+          tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
-        initialDate={selected}
-        theme={{
-          'stylesheet.calendar.header': {
-            headerContainer: {
-              flexDirection: 'row',
-              backgroundColor: '#eee',
-              borderRadius: 12,
-            },
-          },
-          calendarBackground: isDarkTheme ? '#282828' : '#fbfbfbfb',
-          textSectionTitleColor: theme.colors.primary,
-          textSectionTitleDisabledColor: '#fbfbfb',
-          selectedDayBackgroundColor: theme.colors.primary,
-          selectedDayTextColor: '#ffffff',
-          todayTextColor: theme.colors.primary,
-          dayTextColor: isDarkTheme ? '#fbfbfbfb' : '#282828',
-          textDisabledColor: '#fbfbfb',
-          dotColor: theme.colors.primary,
-          selectedDotColor: '#ffffff',
-          arrowColor: theme.colors.primary,
-          disabledArrowColor: '#fbfbfb',
-          monthTextColor: theme.colors.primary,
-          indicatorColor: theme.colors.primary,
-          textDayFontWeight: '300',
-          textMonthFontWeight: '400',
-          textDayHeaderFontWeight: '400',
-          textDayFontSize: 12,
-          textMonthFontSize: 12,
-          textDayHeaderFontSize: 14,
-        }}
-        hideExtraDays
-        enableSwipeMonths
+        minDate={new Date('2022-12-31')}
+        onDateSelected={currentDay => setSelected(currentDay.toDate())}
+        scrollable
+        selectedDate={selected}
+        style={styles.calendarContainer}
       />
     </>
   );
 };
+const styles = StyleSheet.create({
+  calendarContainer: {height: 110},
+  highlightDateContainer: {
+    backgroundColor: '#EE65B3',
+    shadowColor: '#fbfbfb',
+    borderRadius: 10,
+  },
+  highlightDateStyle: {
+    color: '#fbfbfb',
+  },
+});

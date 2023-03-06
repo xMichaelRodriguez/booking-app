@@ -25,3 +25,8 @@ interface IState {
   id: number;
   name: string;
 }
+export interface ICreateBook {
+  date: Date;
+  hour: string;
+  note?: string;
+}

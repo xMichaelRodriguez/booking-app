@@ -27,8 +27,7 @@ export const HeaderBook = ({mediaUrl, caption}: Prop) => {
 const styles = StyleSheet.create({
   profileContainer: {
     lineHeight: 20,
-    flexDirection: 'column',
-
-    gap: 10,
+    flexDirection: 'row',
+    gap: 20,
   },
 });

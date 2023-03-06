@@ -11,7 +11,6 @@ export const useInfinityScroll = () => {
     if (!nextPage || isLoading) {
       return;
     }
-
     dispatch(getNewServices(nextPage));
     setIsLoading(false);
   }, [dispatch, isLoading, nextPage]);
