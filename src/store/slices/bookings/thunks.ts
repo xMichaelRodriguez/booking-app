@@ -63,7 +63,7 @@ export const createBooking = (
       const {date, hour} = booking;
 
       const dateParsed = parserDate(date);
-      const newDate = new Date(`${dateParsed}T${hour}`);
+      const newDate = new Date(`${dateParsed}T${hour}Z`);
       const parsedDate = newDate.toISOString();
       const payload = {
         clientId,
@@ -116,7 +116,7 @@ export const updateBooking = (
       const parsedDate = parserDate(booking.date);
       const token = await getUserSessionParsed();
 
-      const newDate = new Date(`${parsedDate}T${booking.hour}`);
+      const newDate = new Date(`${parsedDate}T${booking.hour}Z`);
       const {
         auth: {id: clientId},
         bookings: {isBookingActive},

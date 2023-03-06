@@ -30,7 +30,10 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
         highlightDateContainerStyle={styles.highlightDateContainer}
         highlightDateNameStyle={styles.highlightDateStyle}
         highlightDateNumberStyle={styles.highlightDateStyle}
-        iconContainer={{flex: 0.1}}
+        dateNumberStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        dateNameStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        calendarHeaderStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        iconContainer={{flex: 0}}
         iconLeftStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
@@ -48,7 +51,7 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
   );
 };
 const styles = StyleSheet.create({
-  calendarContainer: {height: 110},
+  calendarContainer: {height: 110, color: '#282828'},
   highlightDateContainer: {
     backgroundColor: '#EE65B3',
     shadowColor: '#fbfbfb',

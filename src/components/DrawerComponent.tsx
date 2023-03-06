@@ -26,6 +26,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
       initialRouteName="Home"
       backBehavior="history"
       screenOptions={{
+        swipeEnabled: false,
         drawerStyle: {
           backgroundColor: theme.colors.background,
         },
