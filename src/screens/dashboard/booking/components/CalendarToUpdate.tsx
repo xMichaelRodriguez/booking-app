@@ -4,7 +4,7 @@ import {useForm, SubmitHandler} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
-import {INITIAL_DATE, times, weeKendTimes} from '../../../../constants/times';
+import {times, weeKendTimes} from '../../../../constants/times';
 import {useAppSelector, useAppDispatch} from '../../../../hooks';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {updateBooking} from '../../../../store/slices/bookings/thunks';
@@ -12,7 +12,6 @@ import {BookVIew} from '../views/BookVIew';
 
 export const CalendarToUpdate = () => {
   const navigation = useNavigation();
-  const [selected, setSelected] = useState(INITIAL_DATE);
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isBookingActive} = useAppSelector(state => state.bookings);
@@ -34,6 +33,7 @@ export const CalendarToUpdate = () => {
     handleSubmit,
     formState: {errors},
     setValue,
+    getValues,
     setError,
     clearErrors,
     reset,
@@ -51,10 +51,8 @@ export const CalendarToUpdate = () => {
   useEffect(() => {
     if (isBookingActive && isBookingActive.date) {
       const {date} = isBookingActive;
-      const isoDateString = date.split('/').reverse().join('-');
-      const formatedDate = new Date(isoDateString);
-      setSelected(formatedDate);
-      setValue('date', formatedDate);
+
+      setValue('date', new Date(date));
     }
   }, [isBookingActive, setValue]);
 
@@ -65,24 +63,19 @@ export const CalendarToUpdate = () => {
 
   // set list hour
   useEffect(() => {
-    const currentDate = new Date(selected);
+    const currentDate = new Date(getValues().date);
     const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
     if (isWeekennd) {
       return setTimeState(weeKendTimes);
     } else {
       return setTimeState(times);
     }
-  }, [selected]);
+  }, [getValues]);
 
   // observer activeItem
   useEffect(() => {
     setValue('hour', activeItem ?? '');
   }, [activeItem, setValue]);
-
-  // observer change selected
-  useEffect(() => {
-    setValue('date', selected);
-  }, [selected, setValue]);
 
   const onSubmit: SubmitHandler<ICreateBook> = data => {
     if (!data.hour) {
@@ -92,15 +85,14 @@ export const CalendarToUpdate = () => {
       });
     }
     clearErrors('hour');
-    setValue('hour', activeItem ?? '');
-    if (!selected) {
+    if (!data.date) {
       return setError('date', {
         type: 'required',
-        message: 'You must select a Date',
+        message: 'You must select a date',
       });
     }
     clearErrors('date');
-    setValue('date', selected);
+
     dispatch(
       updateBooking(data, (result: boolean) => {
         if (result) {
@@ -133,8 +125,6 @@ export const CalendarToUpdate = () => {
         handlePress={handlePress}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
-        selected={selected}
-        setSelected={setSelected}
         timeState={timeState}
         buttonName={'ReSchedule'}
       />

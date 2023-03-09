@@ -17,7 +17,7 @@ import {
   setBookings,
   startLoadingBookings,
 } from './bookingSlice';
-import {IBook, ICreateBook} from './interface/bookin.interface';
+import {IBook, IBookDB, ICreateBook} from './interface/bookin.interface';
 
 export const getBookings = () => {
   return async (dispatch: AppDispatch) => {
@@ -26,13 +26,18 @@ export const getBookings = () => {
     const token = await getUserSessionParsed();
     try {
       // TOO: Make http request
-      const {data} = await backendApi.get<IBook[]>('/bookings', {
+      const {data} = await backendApi.get<IBookDB[]>('/bookings', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      dispatch(setBookings(data));
+      const bookings: IBook[] = data.map(item => {
+        let [date, hour] = item.date.split('T');
+        hour = hour.slice(0, 5);
+        return {...item, date, hour};
+      });
+      dispatch(setBookings(bookings));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
@@ -117,6 +122,7 @@ export const updateBooking = (
       const token = await getUserSessionParsed();
 
       const newDate = new Date(`${parsedDate}T${booking.hour}Z`);
+      console.debug(newDate);
       const {
         auth: {id: clientId},
         bookings: {isBookingActive},

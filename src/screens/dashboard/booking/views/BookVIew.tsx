@@ -16,8 +16,6 @@ import {HeaderBook} from '../components/HeaderBook';
 import {TimeSection} from '../components/TimeSection';
 
 interface IProps {
-  selected: Date;
-  setSelected: React.Dispatch<React.SetStateAction<Date>>;
   errors: FieldErrors<ICreateBook>;
   activeItem: string | null;
   timeState: string[];
@@ -30,8 +28,6 @@ interface IProps {
   buttonName: string;
 }
 export const BookVIew = ({
-  selected,
-  setSelected,
   errors,
   activeItem,
   timeState,
@@ -54,7 +50,11 @@ export const BookVIew = ({
         <HeaderBook mediaUrl={mediaUrl} caption={caption} />
       </View>
       <View style={{marginTop: 10}}>
-        <CalendarSection selected={selected} setSelected={setSelected} />
+        <Controller
+          control={control}
+          name="date"
+          render={() => <CalendarSection control={control} name="date" />}
+        />
         {errors.date && (
           <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
             {errors.date.message}

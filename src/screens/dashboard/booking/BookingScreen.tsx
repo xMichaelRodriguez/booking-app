@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   View,
   useColorScheme,
+  ActivityIndicator,
   // ActivityIndicator,
 } from 'react-native';
 import {BookingItemCard} from './BookingItemCard';
@@ -31,8 +32,10 @@ export const BookingScreen = () => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const navigation = useNavigation();
-  const {bookings, isBookingActive} = useAppSelector(state => state.bookings);
-  const {isLoading} = useAppSelector(state => state.ui);
+  const {bookings, isBookingActive, isLoading} = useAppSelector(
+    state => state.bookings,
+  );
+  const {isLoading: uiLoading} = useAppSelector(state => state.ui);
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
   const dispatch = useAppDispatch();
@@ -68,7 +71,17 @@ export const BookingScreen = () => {
     hideDialog();
   };
 
-  if (Object.entries(bookings).length === 0) {
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        style={custom.activityStyle}
+        animating={true}
+        color={theme.colors.primary}
+        size="large"
+      />
+    );
+  }
+  if (bookings === undefined) {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
@@ -135,7 +148,7 @@ export const BookingScreen = () => {
             icon="trash-can-outline"
             buttonColor={theme.colors.error}
             onPress={handleDeleteBooking}
-            loading={isLoading}>
+            loading={uiLoading}>
             Confirm
           </Button>
         </View>

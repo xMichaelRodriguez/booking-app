@@ -9,7 +9,7 @@ import {
   removeUserSession,
   storeUserSession,
 } from '../../secure-session';
-import {clearServices, getServices} from '../services/thunks';
+import {clearServices} from '../services/thunks';
 import {setClearBookings} from '../bookings/bookingSlice';
 import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 
@@ -20,6 +20,7 @@ export const checkIsAuthenticated = () => {
       const token = await getUserSessionParsed();
 
       // TODO: Make http request
+
       const {data} = await backendApi.get<IAuthState>('/auth/me', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +29,6 @@ export const checkIsAuthenticated = () => {
 
       dispatch(startLoadingLogin());
       dispatch(signIn(data));
-      dispatch(getServices());
     } catch (error) {
       await removeUserSession();
       return dispatch(authLogout());
@@ -55,7 +55,6 @@ export const startLogin = (login: ILoginState) => {
 
       dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
-      dispatch(getServices());
     } catch (error) {
       removeUserSession();
       if (axios.isAxiosError(error)) {

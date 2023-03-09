@@ -11,10 +11,19 @@ export interface IBook {
   clientId: IUser | number | null;
   serviceId: IService | null;
   statusId: IState;
-  date: string | null;
-  hour: string | null;
+  date: string;
+  hour: string;
   note: string | null;
 }
+export interface IBookDB extends IBook {
+  id: number;
+  clientId: IUser | number | null;
+  serviceId: IService | null;
+  statusId: IState;
+  date: string;
+  note: string | null;
+}
+
 interface IUser {
   id: number;
   username: string;

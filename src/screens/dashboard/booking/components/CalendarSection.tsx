@@ -1,17 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {Control, useController} from 'react-hook-form';
 import {StyleSheet, useColorScheme} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {Text} from 'react-native-paper';
+import {INITIAL_DATE} from '../../../../constants/times';
+import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 
 interface IProps {
-  selected: Date;
-  setSelected: (day: Date) => void;
+  control: Control<ICreateBook, any>;
+  name: 'date';
 }
 
-export const CalendarSection = ({selected, setSelected}: IProps) => {
+export const CalendarSection = ({control, name}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
+
+  const {field} = useController({control, name});
 
   return (
     <>
@@ -37,14 +42,14 @@ export const CalendarSection = ({selected, setSelected}: IProps) => {
         iconLeftStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
-        startingDate={selected}
         iconRightStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
+        startingDate={field.value ? field.value : INITIAL_DATE}
         minDate={new Date('2022-12-31')}
-        onDateSelected={currentDay => setSelected(currentDay.toDate())}
+        onDateSelected={currentDay => field.onChange(currentDay.toDate())}
         scrollable
-        selectedDate={selected}
+        selectedDate={field.value ? field.value : INITIAL_DATE}
         style={styles.calendarContainer}
       />
     </>
