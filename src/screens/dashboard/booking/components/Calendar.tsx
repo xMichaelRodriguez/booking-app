@@ -7,13 +7,12 @@ import {StyleSheet} from 'react-native';
 
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {BookVIew} from '../views/BookVIew';
-import {INITIAL_DATE, times, weeKendTimes} from '../../../../constants/times';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {createBooking} from '../../../../store/slices/bookings/thunks';
+import {times, weeKendTimes} from '../../../../constants/times';
 
 export const CalendarComponent = () => {
   const navigation = useNavigation();
-  const [selected, setSelected] = useState(INITIAL_DATE);
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
@@ -35,21 +34,10 @@ export const CalendarComponent = () => {
     formState: {errors},
     setValue,
     setError,
+    getValues,
     clearErrors,
     reset,
   } = useForm<ICreateBook>();
-
-  // set date
-  useEffect(() => {
-    if (!selected) {
-      return setError('date', {
-        type: 'required',
-        message: 'You must select a Date',
-      });
-    }
-    clearErrors('date');
-    setValue('date', selected);
-  }, [clearErrors, selected, setError, setValue]);
 
   // setHour
   useEffect(() => {
@@ -61,14 +49,14 @@ export const CalendarComponent = () => {
   }, [activeItem, clearErrors, setValue]);
 
   useEffect(() => {
-    const currentDate = new Date(selected);
+    const currentDate = new Date(getValues().date);
     const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
     if (isWeekennd) {
       return setTimeState(weeKendTimes);
     } else {
       return setTimeState(times);
     }
-  }, [selected]);
+  }, [getValues]);
 
   const onSubmit: SubmitHandler<ICreateBook> = data => {
     if (!data.hour) {
@@ -110,8 +98,6 @@ export const CalendarComponent = () => {
       handlePress={handlePress}
       handleSubmit={handleSubmit}
       onSubmit={onSubmit}
-      selected={selected}
-      setSelected={setSelected}
       timeState={timeState}
       buttonName={'Confirm Booking'}
     />

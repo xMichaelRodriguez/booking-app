@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, List, useTheme, Text} from 'react-native-paper';
 import {
@@ -16,7 +16,9 @@ import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {BottonContent} from '../../../components/BottonContent';
 import {useInfinityScroll} from '../../../hooks/useInfinityScroll';
-import {useAppSelector} from '../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {getServices} from '../../../store/slices/services/thunks';
+import {onClearService} from '../../../store/slices/services/servicesSlice';
 
 const noDataImage = require('../../../assets/no-data.png');
 
@@ -24,6 +26,8 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   const theme = useTheme();
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
+
+  const dispatch = useAppDispatch();
   const bottomSheetRef = useRef<BottomSheet>(null);
   // store
   const {services, isLoading} = useAppSelector(state => state.service);
@@ -31,6 +35,14 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
 
   // Get the height of the screen
   const {height} = useWindowDimensions();
+
+  // load services
+  useEffect(() => {
+    dispatch(getServices());
+    return () => {
+      dispatch(onClearService());
+    };
+  }, [dispatch]);
 
   const openSheet = () => {
     bottomSheetRef.current?.snapToIndex(1);
@@ -96,7 +108,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
         bottomSheetRef={bottomSheetRef}
         percentage={'50%'}
         height={height}>
-        <BottonContent />
+        <BottonContent bottomSheetRef={bottomSheetRef} />
       </ButtonSheetWrapper>
     </>
   );

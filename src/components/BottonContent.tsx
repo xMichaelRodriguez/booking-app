@@ -4,8 +4,11 @@ import {Text, useTheme, Button} from 'react-native-paper';
 import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../hooks';
 import {useNavigation} from '@react-navigation/native';
-
-export const BottonContent = () => {
+import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+type Prop = {
+  bottomSheetRef: React.RefObject<BottomSheetMethods>;
+};
+export const BottonContent = ({bottomSheetRef}: Prop) => {
   const {isActiveService} = useAppSelector(state => state.service);
   const theme = useTheme();
   const navigation = useNavigation();
@@ -13,6 +16,7 @@ export const BottonContent = () => {
     navigation.navigate('Root', {
       screen: 'BookCake',
     });
+    bottomSheetRef?.current?.snapToIndex(0);
   };
 
   if (!isActiveService) {
