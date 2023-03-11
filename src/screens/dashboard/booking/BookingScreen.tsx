@@ -51,7 +51,6 @@ export const BookingScreen = () => {
 
   const showDialog = (item: IBook) => {
     dispatch(setActiveBooking(item));
-    setVisible(true);
   };
 
   const hideDialog = () => {

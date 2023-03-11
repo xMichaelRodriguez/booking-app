@@ -37,6 +37,7 @@ export const CalendarToUpdate = () => {
     setError,
     clearErrors,
     reset,
+    watch,
   } = useForm<ICreateBook>();
 
   // set Value to hour by active booking
@@ -61,6 +62,7 @@ export const CalendarToUpdate = () => {
     setValue('note', isBookingActive?.note ?? '');
   }, [isBookingActive, setValue]);
 
+  const selec = watch('date');
   // set list hour
   useEffect(() => {
     const currentDate = new Date(getValues().date);
@@ -70,7 +72,7 @@ export const CalendarToUpdate = () => {
     } else {
       return setTimeState(times);
     }
-  }, [getValues]);
+  }, [getValues, selec]);
 
   // observer activeItem
   useEffect(() => {
