@@ -136,6 +136,35 @@ export const startRegister = (register: IAuthRegister) => {
   };
 };
 
+export const requestResetPasswordToken = (data: {email: string}) => {
+  return async () => {
+    try {
+      await backendApi.patch('/auth/request-reset-password', data);
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Email has been sent to reset password',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData.statusCode !== 201) {
+          ToastAndroid.showWithGravityAndOffset(
+            errorData.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
+      }
+    }
+  };
+};
+
 export const authLogout = () => {
   return async (dispatch: AppDispatch) => {
     await removeUserSession();
