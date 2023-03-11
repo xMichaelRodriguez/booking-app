@@ -44,6 +44,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Home"
           component={HomeScreen}
           options={{
+            headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="home-outline" size={size} />
             ),
@@ -53,6 +54,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Services"
           component={ServicesScreen}
           options={{
+            headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
             ),
@@ -62,6 +64,8 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Bookings"
           component={BookingScreen}
           options={{
+            title: 'Booking List',
+            headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="calendar-clock-outline" size={size} />
             ),
@@ -73,6 +77,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           component={CreateOrUpdateBooking}
           options={{
             title: 'Schedule Order',
+            headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => handleGoBack('Services')}
@@ -97,6 +102,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           component={CalendarToUpdate}
           options={{
             title: 'Edit Book',
+            headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => handleGoBack('Bookings')}
