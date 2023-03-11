@@ -11,6 +11,7 @@ import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 import {
   activeBook,
   onAddBook,
+  onCancelLoading,
   onClearActiveBooking,
   onUpdateBooking,
   removeBook,
@@ -33,11 +34,13 @@ export const getBookings = () => {
       });
 
       const bookings: IBook[] = data.map(item => {
+        item = {...item, date: new Date(item.date).toISOString()};
         let [date, hour] = item.date.split('T');
         hour = hour.slice(0, 5);
         return {...item, date, hour};
       });
       dispatch(setBookings(bookings));
+      dispatch(onCancelLoading());
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
@@ -122,7 +125,6 @@ export const updateBooking = (
       const token = await getUserSessionParsed();
 
       const newDate = new Date(`${parsedDate}T${booking.hour}Z`);
-      console.debug(newDate);
       const {
         auth: {id: clientId},
         bookings: {isBookingActive},
@@ -182,7 +184,6 @@ export const updateBooking = (
 
 export const setActiveBooking = (booking: IBook) => {
   return async (dispatch: AppDispatch) => {
-    dispatch(startLoadingBookings());
     await dispatch(activeBook(booking));
     dispatch(onCancelLoadingUI());
   };

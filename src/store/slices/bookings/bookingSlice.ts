@@ -15,7 +15,9 @@ export const bookingSlice = createSlice({
     },
     setBookings: (state, action: PayloadAction<IBook[]>) => {
       state.isLoading = false;
-      state.bookings = action.payload;
+      state.bookings = action.payload.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      );
     },
 
     onAddBook: (state, action: PayloadAction<IBook>) => {
@@ -47,6 +49,9 @@ export const bookingSlice = createSlice({
       state.isLoading = false;
       state.bookings = [];
     },
+    onCancelLoading: state => {
+      state.isLoading = false;
+    },
   },
 });
 export const {
@@ -58,4 +63,5 @@ export const {
   onUpdateBooking,
   onClearActiveBooking,
   removeBook,
+  onCancelLoading,
 } = bookingSlice.actions;
