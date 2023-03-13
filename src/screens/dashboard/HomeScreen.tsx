@@ -1,29 +1,113 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import React, {useEffect, useRef, useState} from 'react';
 
-import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {useColorScheme} from 'react-native';
-import {useAppSelector} from '../../hooks';
+import {StyleSheet, useWindowDimensions, View} from 'react-native';
+import {Button, Text, useTheme} from 'react-native-paper';
+import {ButtonSheetWrapper} from '../../components/ButtonSheetWrapper';
+import {BookingList} from '../../components/calendar/BookingList';
+import {CalendarHeader} from '../../components/calendar/CalendarHeader';
+import {NotData} from '../../components/ui/NotData';
+import {INITIAL_DATE} from '../../constants/times';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
+import {
+  getBookings,
+  onDeleteBook,
+  setActiveBooking,
+} from '../../store/slices/bookings/thunks';
 
 export const HomeScreen = () => {
-  const color = useColorScheme();
-  const isDark = color === 'dark';
-  const {username} = useAppSelector(state => state.auth);
+  const {isLoading} = useAppSelector(state => state.ui);
+  const {bookings} = useAppSelector(state => state.bookings);
+  const theme = useTheme();
+  const {height} = useWindowDimensions();
+  const [selectedDate, setSelectedDate] = useState(INITIAL_DATE);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const dispatch = useAppDispatch();
+  const openSheet = (item: IBook) => {
+    dispatch(setActiveBooking(item));
+    bottomSheetRef.current?.snapToIndex(1);
+  };
+
+  const handleDeleteBooking = () => {
+    dispatch(
+      onDeleteBook(
+        (result: boolean) => result && bottomSheetRef.current?.snapToIndex(0),
+      ),
+    );
+  };
+
+  useEffect(() => {
+    dispatch(getBookings());
+  }, [dispatch]);
+
   return (
-    <View style={styles.container}>
-      <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
-        Welcome Back {username}
-      </Text>
+    <View style={{flex: 1}}>
+      <View style={{margin: 5}}>
+        <CalendarHeader
+          selected={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+      </View>
+      {bookings ? (
+        <BookingList handleOpenSheet={openSheet} selectedDate={selectedDate} />
+      ) : (
+        <NotData />
+      )}
+
+      <ButtonSheetWrapper
+        bottomSheetRef={bottomSheetRef}
+        percentage={'20%'}
+        height={height}>
+        <View style={custom.containerChildren}>
+          <Text variant="titleLarge">
+            Sure you wish to cancel the reservation?
+          </Text>
+
+          <Button
+            style={custom.buttonWidth}
+            mode="contained"
+            icon="trash-can-outline"
+            buttonColor={theme.colors.error}
+            onPress={handleDeleteBooking}
+            loading={isLoading}>
+            Confirm
+          </Button>
+        </View>
+      </ButtonSheetWrapper>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+const custom = StyleSheet.create({
+  containerChildren: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    gap: 25,
+  },
+  buttonWidth: {
+    width: '90%',
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    margin: 16,
+    backgroundColor: 'blue',
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activityStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+  },
+  image: {
+    width: 300,
+    height: 300,
   },
 });

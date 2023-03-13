@@ -10,7 +10,6 @@ import {onCloseSheetBooton} from '../ui/thunks';
 import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 import {
   activeBook,
-  onAddBook,
   onCancelLoading,
   onClearActiveBooking,
   onUpdateBooking,
@@ -39,6 +38,7 @@ export const getBookings = () => {
         hour = hour.slice(0, 5);
         return {...item, date, hour};
       });
+
       dispatch(setBookings(bookings));
       dispatch(onCancelLoading());
     } catch (error) {
@@ -85,6 +85,12 @@ export const createBooking = (
         },
       });
 
+      const resp: IBook = {...data, date: new Date(data.date).toISOString()};
+      const [isoDate, isoHour] = resp.date.split('T');
+
+      const newHour = isoHour.slice(0, 5);
+      const newBooking = {...resp, date: isoDate, hour: newHour};
+      console.debug({newBooking});
       ToastAndroid.showWithGravityAndOffset(
         'Booking Confirmed',
         ToastAndroid.LONG,
@@ -95,7 +101,7 @@ export const createBooking = (
       dispatch(onClearActiveBooking());
       dispatch(clearActiveService());
       dispatch(onCancelLoadingUI());
-      dispatch(onAddBook(data));
+      dispatch(getBookings());
       cb(true);
     } catch (error) {
       cb(false);

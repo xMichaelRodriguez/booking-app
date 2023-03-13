@@ -50,6 +50,7 @@ export const BookingScreen = () => {
   }, [dispatch]);
 
   const showDialog = (item: IBook) => {
+    setVisible(true);
     dispatch(setActiveBooking(item));
   };
 

@@ -32,5 +32,4 @@ export const weeKendTimes = [
 ];
 
 const today = new Date();
-
 export const INITIAL_DATE = today;

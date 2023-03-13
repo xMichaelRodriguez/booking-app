@@ -15,8 +15,8 @@ import {setActiveBooking} from '../../../store/slices/bookings/thunks';
 import {useNavigation} from '@react-navigation/native';
 import {startLoadingUI} from '../../../store/slices/ui/uiSlice';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
+import {ROLE_ADMIN} from '../../../constants/roles';
 
-const ROLE_ADMIN = 1;
 interface IProps {
   booking: IBook;
   navigation: any;
