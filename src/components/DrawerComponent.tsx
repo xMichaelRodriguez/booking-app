@@ -10,6 +10,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton, useTheme, Text} from 'react-native-paper';
 import {CreateOrUpdateBooking} from '../screens/dashboard/booking/CreateOrUpdateBooking';
 import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
+import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
 
 const Drawer = createDrawerNavigator();
 
@@ -54,6 +55,17 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Services"
           component={ServicesScreen}
           options={{
+            headerTitleAlign: 'center',
+            drawerIcon: ({size}) => (
+              <IconButton icon="store-cog-outline" size={size} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="newService"
+          component={ServiceManager}
+          options={{
+            title: 'Edit Service',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />

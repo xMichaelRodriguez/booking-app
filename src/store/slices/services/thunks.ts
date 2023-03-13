@@ -35,6 +35,42 @@ export const getServices = () => {
   };
 };
 
+export const addNewService = (service: any) => {
+  return async () => {
+    const formData = new FormData();
+    formData.append('name', service.name);
+    formData.append('description', service.description);
+    formData.append('price', service.price);
+    formData.append('image', service.image);
+
+    try {
+      // const token = await getUserSessionParsed();
+      // await backendApi.post('/services', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+
+      console.debug(formData.getAll());
+      console.debug(service);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData?.statusCode !== 200) {
+          return ToastAndroid.showWithGravityAndOffset(
+            errorData.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
+      }
+    }
+  };
+};
+
 export const getNewServices = (url: string = '') => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const {services} = getState().service;

@@ -6146,6 +6146,11 @@ react-native-gradle-plugin@^0.71.14:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.14.tgz#cc399662f04fbfcc0e352d03eae1d3efbd5f635a"
   integrity sha512-nnLawTZEPPRAKq92UqDkzoGgCBl9aa9zAihFHMwmwzn4WRVdK4O6Cd4XYiyoNOiQzx3Hh9k5WOckHE80C92ivQ==
 
+react-native-image-picker@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-5.3.0.tgz#ba6d07222c22d20d6e2f4a49c7b616e403fdb1c7"
+  integrity sha512-VOsPUPLEkz1gqHqdgep5D1E8urJur/+aysIFBmHM64ECroZVff/sfy5Y1ZSNxwxvkpxK2HMSN0RvEVBKuIOIug==
+
 react-native-modal-datetime-picker@^14.0.1:
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-14.0.1.tgz#d9c6df4ff85bf1cfbe108c756dc26dcca4cc5f2f"
