@@ -7,11 +7,10 @@ import {
 
 const initialState: IServiceState = {
   services: [],
-  isLoading: false,
+  isLoadingService: false,
   isActiveService: null,
-  nextPage: null,
-  prevPage: null,
-  total: 0,
+  nextPage: '',
+  prevPage: '',
 };
 
 export const serviceSlice = createSlice({
@@ -19,19 +18,17 @@ export const serviceSlice = createSlice({
   initialState,
   reducers: {
     startLoadingServices: state => {
-      state.isLoading = true;
+      state.isLoadingService = true;
     },
     setServices: (state, action: PayloadAction<IServiceSerializer>) => {
-      state.isLoading = false;
+      state.isLoadingService = false;
       state.services = action.payload.data;
-      state.total = action.payload.total;
       state.prevPage = action.payload.prevPage;
       state.nextPage = action.payload.nextPage;
     },
     setNewServices: (state, action: PayloadAction<IServiceSerializer>) => {
-      state.isLoading = false;
+      state.isLoadingService = false;
       state.services = action.payload.data;
-      state.total = action.payload.total;
       state.prevPage = action.payload.prevPage;
       state.nextPage = action.payload.nextPage;
     },
@@ -40,14 +37,17 @@ export const serviceSlice = createSlice({
       state.isActiveService = action.payload;
     },
     onClearService: state => {
-      state.isActiveService = null;
+      state.isActiveService = null as unknown as IService;
     },
     setClearServices: state => {
       state.isActiveService = null;
-      state.isLoading = false;
-      state.nextPage = null;
-      state.prevPage = null;
+      state.isLoadingService = false;
+      state.nextPage = '';
+      state.prevPage = '';
       state.services = [];
+    },
+    onAddService: (state, action: PayloadAction<IService>) => {
+      state.services.push(action.payload);
     },
   },
 });

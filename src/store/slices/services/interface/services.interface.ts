@@ -1,22 +1,22 @@
-export interface IServiceState {
-  services: IService[];
-  isLoading: boolean;
-  isActiveService: IService | null;
-  nextPage: string | null;
-  prevPage: string | null;
-  total: number;
-}
-
 export interface IService {
   id: number;
-  igPostId: string;
-  caption: string;
-  mediaUrl: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
 }
 
 export interface IServiceSerializer {
   data: IService[];
-  nextPage: string | null;
-  prevPage: string | null;
+  nextPage: string;
+  prevPage: string;
   total: number;
+}
+
+export interface IServiceState {
+  isLoadingService: boolean;
+  services: IService[];
+  isActiveService: IService | null;
+  nextPage: string;
+  prevPage: string;
 }

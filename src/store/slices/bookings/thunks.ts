@@ -78,19 +78,19 @@ export const createBooking = (
         serviceId: isActiveService?.id,
         date: parsedDate,
       };
-      const {data} = await backendApi.post<IBook>('/bookings', payload, {
+      await backendApi.post<IBook>('/bookings', payload, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const resp: IBook = {...data, date: new Date(data.date).toISOString()};
-      const [isoDate, isoHour] = resp.date.split('T');
+      // const resp: IBook = {...data, date: new Date(data.date).toISOString()};
+      // const [isoDate, isoHour] = resp.date.split('T');
 
-      const newHour = isoHour.slice(0, 5);
-      const newBooking = {...resp, date: isoDate, hour: newHour};
-      console.debug({newBooking});
+      // const newHour = isoHour.slice(0, 5);
+      // const newBooking = {...resp, date: isoDate, hour: newHour};
+      // console.debug({newBooking});
       ToastAndroid.showWithGravityAndOffset(
         'Booking Confirmed',
         ToastAndroid.LONG,

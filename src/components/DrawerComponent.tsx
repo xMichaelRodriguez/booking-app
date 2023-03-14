@@ -11,10 +11,13 @@ import {IconButton, useTheme, Text} from 'react-native-paper';
 import {CreateOrUpdateBooking} from '../screens/dashboard/booking/CreateOrUpdateBooking';
 import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
 import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
+import {ROLE_ADMIN} from '../constants/roles';
+import {useAppSelector} from '../hooks';
 
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
+  const {role} = useAppSelector(state => state.auth);
   const theme = useTheme();
 
   const handleGoBack = (subScreen: string) => {
@@ -51,6 +54,8 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
             ),
           }}
         />
+      </Drawer.Group>
+      <Drawer.Group>
         <Drawer.Screen
           name="Services"
           component={ServicesScreen}
@@ -62,16 +67,22 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           }}
         />
         <Drawer.Screen
-          name="newService"
+          name="manageService"
           component={ServiceManager}
           options={{
-            title: 'Edit Service',
+            title: 'Manage Service',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
             ),
+            drawerItemStyle: {
+              display: role?.id !== ROLE_ADMIN ? 'none' : 'flex',
+            },
           }}
         />
+      </Drawer.Group>
+
+      <Drawer.Group>
         <Drawer.Screen
           name="Bookings"
           component={BookingScreen}

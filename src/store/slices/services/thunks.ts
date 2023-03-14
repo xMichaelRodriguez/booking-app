@@ -35,8 +35,8 @@ export const getServices = () => {
   };
 };
 
-export const addNewService = (service: any) => {
-  return async () => {
+export const addNewService = (service: any, cb: (message: string) => void) => {
+  return async (dispatch: AppDispatch) => {
     const formData = new FormData();
     formData.append('name', service.name);
     formData.append('description', service.description);
@@ -52,12 +52,13 @@ export const addNewService = (service: any) => {
       //   },
       // });
 
-      console.debug(formData.getAll());
-      console.debug(service);
+      cb(`service: '${service.name}' Created`);
+      dispatch(service);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {
+          cb(errorData.message);
           return ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,

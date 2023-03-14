@@ -1,10 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
 type InitialProp = {
   isLoading: boolean;
+  snackVisible: boolean;
 };
 
 const initialState: InitialProp = {
   isLoading: false,
+  snackVisible: false,
 };
 export const uiSlice = createSlice({
   name: 'ui',
@@ -16,6 +18,17 @@ export const uiSlice = createSlice({
     onCancelLoadingUI: state => {
       state.isLoading = false;
     },
+    onToggleSnackBar: state => {
+      state.snackVisible = !state.snackVisible;
+    },
+    onDismissSnackBar: state => {
+      state.snackVisible = false;
+    },
   },
 });
-export const {startLoadingUI, onCancelLoadingUI} = uiSlice.actions;
+export const {
+  startLoadingUI,
+  onCancelLoadingUI,
+  onToggleSnackBar,
+  onDismissSnackBar,
+} = uiSlice.actions;
