@@ -105,7 +105,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
               />
             )}
             ListFooterComponent={
-              !hookIsLoading ? (
+              hookIsLoading ? (
                 <ActivityIndicator
                   style={custom.activityStyle}
                   animating={true}

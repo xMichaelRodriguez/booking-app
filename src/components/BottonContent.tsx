@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text, useTheme, Button} from 'react-native-paper';
+import {Text, useTheme, Button, Divider} from 'react-native-paper';
 import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useAppSelector} from '../hooks';
 import {useNavigation} from '@react-navigation/native';
 import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+
 type Prop = {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
 };
@@ -35,11 +36,13 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
         <Image
           style={[styles.image, {borderRadius: 10}]}
           resizeMode="contain"
-          source={{uri: isActiveService?.mediaUrl}}
+          source={{uri: isActiveService?.secureUrl}}
         />
       </View>
-      <View style={{padding: 10}}>
-        <Text variant="bodyLarge">{isActiveService?.caption}</Text>
+      <View style={{padding: 20}}>
+        <Text variant="labelLarge">{isActiveService?.name}</Text>
+        <Divider style={{margin: 5}} />
+        <Text variant="labelMedium">{isActiveService?.description}</Text>
       </View>
       <View style={{width: '80%'}}>
         <Button mode="contained" onPress={onSchedule}>
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
   containerImage: {
     height: 180,
     width: 180,
-    marginVertical: 20,
+    marginVertical: 8,
   },
   divider: {
     marginVertical: 12,

@@ -3,7 +3,8 @@ export interface IService {
   name: string;
   description: string;
   price: string;
-  image: string;
+  publicId: string;
+  secureUrl: string;
 }
 
 export interface IServiceSerializer {

@@ -44,42 +44,51 @@ export const addNewService = (
   cb: (message: string) => void,
 ) => {
   return async (dispatch: AppDispatch) => {
-    const formData = new FormData();
-    formData.append('name', service.name);
-    formData.append('description', service.description);
-    formData.append('price', service.price);
-    formData.append('image', service.image);
-
     try {
-      console.debug({formData});
+      const formData = formDataGenerator(service);
+
       const token = await getUserSessionParsed();
-      const data = await backendApi.post<IService>('/services', formData, {
+      await backendApi.post<IService>('/services', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-      console.debug({data});
-      cb('service: hola mundo Created');
-      // dispatch(addNewService(data));
+
+      dispatch(getServices());
+      return cb(`service: ${service.name} Created`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {
-          cb(errorData.message);
-          return ToastAndroid.showWithGravityAndOffset(
-            errorData.message,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-            25,
-            50,
-          );
+          return cb(errorData.message[0]);
         }
       }
+
+      return ToastAndroid.showWithGravityAndOffset(
+        'Error',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
     }
   };
 };
 
+const formDataGenerator = (service: IServiceForm) => {
+  const formData = new FormData();
+  formData.append('name', service.name);
+  formData.append('description', service.description);
+  formData.append('price', service.price);
+  formData.append('image', {
+    uri: service.image[0].uri,
+    type: service.image[0].type,
+    name: service.image[0].fileName,
+  });
+  console.debug(service.image[0]);
+  return formData;
+};
 export const getNewServices = (url: string = '') => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const {services} = getState().service;

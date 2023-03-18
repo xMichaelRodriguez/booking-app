@@ -28,9 +28,9 @@ export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
         {backgroundColor: isDark ? '#353740' : '#fbfbfb'},
       ]}>
       <Card.Content>
-        <Card.Cover source={{uri: item.mediaUrl}} />
+        <Card.Cover source={{uri: item.secureUrl}} />
         <Card.Title
-          title={item.caption}
+          title={item.name}
           titleStyle={{
             color: isDark ? '#fbfbfb' : '#282828',
           }}
