@@ -4,7 +4,11 @@ import {backendApi} from '../../../API/backendApi';
 import {getUserSessionParsed, removeUserSession} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {authLogout} from '../auth';
-import {IService, IServiceSerializer} from './interface/services.interface';
+import {
+  IService,
+  IServiceForm,
+  IServiceSerializer,
+} from './interface/services.interface';
 import {
   activeService,
   onClearService,
@@ -35,7 +39,10 @@ export const getServices = () => {
   };
 };
 
-export const addNewService = (service: any, cb: (message: string) => void) => {
+export const addNewService = (
+  service: IServiceForm,
+  cb: (message: string) => void,
+) => {
   return async (dispatch: AppDispatch) => {
     const formData = new FormData();
     formData.append('name', service.name);
@@ -44,16 +51,17 @@ export const addNewService = (service: any, cb: (message: string) => void) => {
     formData.append('image', service.image);
 
     try {
-      // const token = await getUserSessionParsed();
-      // await backendApi.post('/services', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-
-      cb(`service: '${service.name}' Created`);
-      dispatch(service);
+      console.debug({formData});
+      const token = await getUserSessionParsed();
+      const data = await backendApi.post<IService>('/services', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.debug({data});
+      cb('service: hola mundo Created');
+      // dispatch(addNewService(data));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;

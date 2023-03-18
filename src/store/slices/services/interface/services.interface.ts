@@ -20,3 +20,10 @@ export interface IServiceState {
   nextPage: string;
   prevPage: string;
 }
+
+export interface IServiceForm {
+  name: string;
+  description: string;
+  price: string;
+  image: any;
+}

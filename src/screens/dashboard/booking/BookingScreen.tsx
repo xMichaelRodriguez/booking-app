@@ -81,7 +81,8 @@ export const BookingScreen = () => {
       />
     );
   }
-  if (bookings === undefined) {
+  console.debug({bookings});
+  if (Object.entries(bookings).length < 1) {
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
@@ -113,7 +114,7 @@ export const BookingScreen = () => {
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>
-            {isBookingActive && isBookingActive.serviceId?.caption}
+            {isBookingActive && isBookingActive.serviceId?.name}
           </Dialog.Title>
           <Dialog.Content>
             <Text variant="bodyMedium">

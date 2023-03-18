@@ -1,7 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, List, useTheme, Text} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  List,
+  useTheme,
+  Text,
+  Button,
+} from 'react-native-paper';
 import {
   Image,
   StyleSheet,
@@ -30,7 +36,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   const dispatch = useAppDispatch();
   const bottomSheetRef = useRef<BottomSheet>(null);
   // store
-  const {services, isLoading} = useAppSelector(state => state.service);
+  const {services, isLoadingService} = useAppSelector(state => state.service);
   const {isLoading: hookIsLoading, loadMore} = useInfinityScroll();
 
   // Get the height of the screen
@@ -48,7 +54,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     bottomSheetRef.current?.snapToIndex(1);
   };
 
-  if (isLoading) {
+  if (isLoadingService) {
     return (
       <ActivityIndicator
         style={custom.activityStyle}
@@ -58,15 +64,22 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
       />
     );
   }
-  if (services === undefined) {
+
+  if (Object.entries(services).length < 1) {
+    const handleNewService = () => {
+      navigation.navigate('Root', {screen: 'manageService'});
+    };
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
         <Text
-          style={{color: isDark ? '#fbfbfb' : '#282828'}}
+          style={[{color: isDark ? '#fbfbfb' : '#282828'}, {margin: 10}]}
           variant="titleLarge">
           No Data
         </Text>
+        <Button mode="contained" icon="plus" onPress={handleNewService}>
+          New Service
+        </Button>
       </View>
     );
   }
