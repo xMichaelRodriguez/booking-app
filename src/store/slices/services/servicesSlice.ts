@@ -49,6 +49,12 @@ export const serviceSlice = createSlice({
     onAddService: (state, action: PayloadAction<IService>) => {
       state.services.push(action.payload);
     },
+    onDelete: (state, action: PayloadAction<IService>) => {
+      state.services = state.services.filter(
+        service => action.payload.id !== service.id,
+      );
+      state.isActiveService = null;
+    },
   },
 });
 export const {
@@ -56,6 +62,7 @@ export const {
   setServices,
   activeService,
   onClearService,
+  onDelete,
   setNewServices,
   setClearServices,
 } = serviceSlice.actions;

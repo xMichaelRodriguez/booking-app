@@ -2,9 +2,10 @@
 import React from 'react';
 import {Text, useTheme, Button, Divider} from 'react-native-paper';
 import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
-import {useAppSelector} from '../hooks';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import {useNavigation} from '@react-navigation/native';
 import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+import {removeService} from '../store/slices/services/thunks';
 
 type Prop = {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
@@ -13,11 +14,21 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
   const {isActiveService} = useAppSelector(state => state.service);
   const theme = useTheme();
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const onSchedule = () => {
     navigation.navigate('Root', {
       screen: 'BookCake',
     });
     bottomSheetRef?.current?.snapToIndex(0);
+  };
+  const onRemove = () => {
+    dispatch(
+      removeService((isRemoved: boolean) => {
+        if (isRemoved) {
+          bottomSheetRef?.current?.snapToIndex(0);
+        }
+      }),
+    );
   };
 
   if (!isActiveService) {
@@ -44,7 +55,10 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
         <Divider style={{margin: 5}} />
         <Text variant="labelMedium">{isActiveService?.description}</Text>
       </View>
-      <View style={{width: '80%'}}>
+      <View style={{flexDirection: 'row', gap: 5}}>
+        <Button mode="outlined" onPress={onRemove}>
+          Remove
+        </Button>
         <Button mode="contained" onPress={onSchedule}>
           Schedule
         </Button>

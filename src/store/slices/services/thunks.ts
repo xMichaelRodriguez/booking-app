@@ -12,6 +12,7 @@ import {
 import {
   activeService,
   onClearService,
+  onDelete,
   setClearServices,
   setNewServices,
   setServices,
@@ -106,6 +107,46 @@ export const getNewServices = (url: string = '') => {
         data: [...services, ...data.data],
       };
       dispatch(setNewServices(newData));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        if (errorData?.statusCode !== 200) {
+          return ToastAndroid.showWithGravityAndOffset(
+            errorData.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
+      }
+    }
+  };
+};
+
+export const removeService = (cb: (isRemoved: boolean) => void) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const {isActiveService} = getState().service;
+    if (!isActiveService) return;
+
+    try {
+      const token = await getUserSessionParsed();
+      const {id} = isActiveService;
+      await backendApi.delete(`/services/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(onDelete(isActiveService));
+      ToastAndroid.showWithGravityAndOffset(
+        'service removed',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+      cb(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
