@@ -4,9 +4,10 @@ import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
 type Prop = {
   mediaUrl?: string;
-  caption?: string;
+  name?: string;
+  description?: string;
 };
-export const HeaderBook = ({mediaUrl, caption}: Prop) => {
+export const HeaderBook = ({mediaUrl, name, description}: Prop) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
 
@@ -17,7 +18,12 @@ export const HeaderBook = ({mediaUrl, caption}: Prop) => {
         <Text
           variant="titleLarge"
           style={[{color: isDarkTheme ? '#fbfbfb' : '#282828'}]}>
-          {caption}
+          {name}
+        </Text>
+        <Text
+          variant="bodySmall"
+          style={[{color: isDarkTheme ? '#fbfbfb' : '#282828', width: '60%'}]}>
+          {description}
         </Text>
       </View>
     </View>

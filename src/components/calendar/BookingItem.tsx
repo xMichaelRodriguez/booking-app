@@ -71,7 +71,10 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
               {booking.hour}
             </Text>
           </View>
-          <Avatar.Image size={60} source={{uri: booking.serviceId?.mediaUrl}} />
+          <Avatar.Image
+            size={60}
+            source={{uri: booking.serviceId?.secureUrl}}
+          />
           <View
             style={[
               {maxWidth: '50%', overflow: 'hidden'},

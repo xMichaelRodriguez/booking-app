@@ -8,11 +8,12 @@ import {BookingScreen} from '../screens/dashboard/booking/BookingScreen';
 import {DrawerMenu} from './DrawerMenu';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton, useTheme, Text} from 'react-native-paper';
-import {CreateOrUpdateBooking} from '../screens/dashboard/booking/CreateOrUpdateBooking';
 import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
 import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
 import {ROLE_ADMIN} from '../constants/roles';
 import {useAppSelector} from '../hooks';
+import {DetailService} from '../screens/dashboard/services/DetailService';
+import {CalendarCreateBooking} from '../screens/dashboard/booking/components/Calendar';
 
 const Drawer = createDrawerNavigator();
 
@@ -55,6 +56,8 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           }}
         />
       </Drawer.Group>
+
+      {/* services */}
       <Drawer.Group>
         <Drawer.Screen
           name="Services"
@@ -80,8 +83,35 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
             },
           }}
         />
+        <Drawer.Screen
+          name="detailServices"
+          component={DetailService}
+          options={{
+            title: 'Service Details',
+            headerTitleAlign: 'center',
+
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => handleGoBack('Services')}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  margin: 0,
+                }}>
+                <IconButton iconColor="#fbfbfb" icon="chevron-left" />
+                <Text style={{color: '#fbfbfb'}}>Back</Text>
+              </TouchableOpacity>
+            ),
+
+            drawerItemStyle: {
+              display: 'none',
+            },
+          }}
+        />
       </Drawer.Group>
 
+      {/* bookings */}
       <Drawer.Group>
         <Drawer.Screen
           name="Bookings"
@@ -97,7 +127,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
 
         <Drawer.Screen
           name="BookCake"
-          component={CreateOrUpdateBooking}
+          component={CalendarCreateBooking}
           options={{
             title: 'Schedule Order',
             headerTitleAlign: 'center',

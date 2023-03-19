@@ -4,6 +4,7 @@ import {backendApi} from '../../../API/backendApi';
 import {getUserSessionParsed, removeUserSession} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {authLogout} from '../auth';
+import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 import {
   IService,
   IServiceForm,
@@ -45,6 +46,7 @@ export const addNewService = (
   cb: (message: string) => void,
 ) => {
   return async (dispatch: AppDispatch) => {
+    dispatch(startLoadingUI());
     try {
       const formData = formDataGenerator(service);
 
@@ -57,6 +59,7 @@ export const addNewService = (
       });
 
       dispatch(getServices());
+      dispatch(onCancelLoadingUI());
       return cb(`service: ${service.name} Created`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -129,6 +132,7 @@ export const removeService = (cb: (isRemoved: boolean) => void) => {
     const {isActiveService} = getState().service;
     if (!isActiveService) return;
 
+    dispatch(startLoadingUI());
     try {
       const token = await getUserSessionParsed();
       const {id} = isActiveService;
@@ -139,15 +143,17 @@ export const removeService = (cb: (isRemoved: boolean) => void) => {
       });
 
       dispatch(onDelete(isActiveService));
-      ToastAndroid.showWithGravityAndOffset(
-        'service removed',
+      cb(true);
+      dispatch(onCancelLoadingUI());
+      return ToastAndroid.showWithGravityAndOffset(
+        'The service has been deleted',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
         50,
       );
-      cb(true);
     } catch (error) {
+      cb(false);
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {

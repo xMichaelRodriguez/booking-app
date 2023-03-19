@@ -24,7 +24,8 @@ interface IProps {
   control: Control<ICreateBook, any>;
   handleSubmit: UseFormHandleSubmit<ICreateBook>;
   mediaUrl?: string;
-  caption?: string;
+  name?: string;
+  description?: string;
   buttonName: string;
 }
 export const BookVIew = ({
@@ -36,7 +37,8 @@ export const BookVIew = ({
   control,
   handleSubmit,
   mediaUrl,
-  caption,
+  name,
+  description,
   buttonName = 'Confirm',
 }: IProps) => {
   const theme = useTheme();
@@ -45,9 +47,9 @@ export const BookVIew = ({
   const {isLoading} = useAppSelector(state => state.ui);
 
   return (
-    <View style={{margin: 10}}>
+    <View style={{flex: 1, padding: 10}}>
       <View>
-        <HeaderBook mediaUrl={mediaUrl} caption={caption} />
+        <HeaderBook mediaUrl={mediaUrl} name={name} description={description} />
       </View>
       <View style={{marginTop: 10}}>
         <Controller
@@ -116,7 +118,7 @@ export const BookVIew = ({
 
 const styles = StyleSheet.create({
   margins: {
-    margin: 20,
+    paddingVertical: 20,
   },
   activityStyle: {
     justifyContent: 'center',

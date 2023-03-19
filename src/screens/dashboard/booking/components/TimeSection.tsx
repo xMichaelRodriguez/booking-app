@@ -29,8 +29,8 @@ export const TimeSection = React.memo(
           style={[
             {
               color: isDarkTheme ? '#fbfbfb' : '#282828',
-              fontWeight: '800',
-              marginBottom: 25,
+              fontWeight: '700',
+              padding: 20,
             },
           ]}>
           Pick a Time

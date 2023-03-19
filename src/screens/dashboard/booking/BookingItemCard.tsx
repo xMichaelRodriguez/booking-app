@@ -71,13 +71,16 @@ export const BookingItemCard = ({
       ]}>
       <Card.Content>
         <View style={custom.container}>
-          <Avatar.Image size={60} source={{uri: booking.serviceId?.mediaUrl}} />
+          <Avatar.Image
+            size={60}
+            source={{uri: booking.serviceId?.secureUrl}}
+          />
           <View style={{maxWidth: '75%', overflow: 'hidden'}}>
             <Text
               numberOfLines={5}
               variant="titleSmall"
               style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-              {booking.serviceId?.caption}
+              {booking.serviceId?.name}
             </Text>
           </View>
         </View>

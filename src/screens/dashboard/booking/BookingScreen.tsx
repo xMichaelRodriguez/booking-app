@@ -81,7 +81,6 @@ export const BookingScreen = () => {
       />
     );
   }
-  console.debug({bookings});
   if (Object.entries(bookings).length < 1) {
     return (
       <View style={custom.activityStyle}>

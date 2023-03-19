@@ -5,14 +5,14 @@ import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 
-import {useNavigation, useTheme} from '@react-navigation/native';
 import {BookVIew} from '../views/BookVIew';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {createBooking} from '../../../../store/slices/bookings/thunks';
 import {times, weeKendTimes} from '../../../../constants/times';
+import {useTheme} from 'react-native-paper';
+import {ScrollView} from 'react-native-gesture-handler';
 
-export const CalendarComponent = () => {
-  const navigation = useNavigation();
+export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
@@ -71,7 +71,7 @@ export const CalendarComponent = () => {
         if (result) {
           setActiveItem(null);
           reset();
-          return navigation.goBack();
+          return navigation.replace('Root', {screen: 'Services'});
         }
         reset();
       }),
@@ -89,18 +89,21 @@ export const CalendarComponent = () => {
     );
   }
   return (
-    <BookVIew
-      caption={isActiveService.caption}
-      mediaUrl={isActiveService.mediaUrl}
-      activeItem={activeItem}
-      control={control}
-      errors={errors}
-      handlePress={handlePress}
-      handleSubmit={handleSubmit}
-      onSubmit={onSubmit}
-      timeState={timeState}
-      buttonName={'Confirm Booking'}
-    />
+    <ScrollView style={styles.container}>
+      <BookVIew
+        name={isActiveService.name}
+        description={isActiveService.description}
+        mediaUrl={isActiveService.secureUrl}
+        activeItem={activeItem}
+        control={control}
+        errors={errors}
+        handlePress={handlePress}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        timeState={timeState}
+        buttonName={'Confirm Booking'}
+      />
+    </ScrollView>
   );
 };
 
@@ -108,5 +111,9 @@ const styles = StyleSheet.create({
   activityStyle: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    flex: 2,
+    padding: 10,
   },
 });

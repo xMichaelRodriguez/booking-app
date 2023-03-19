@@ -17,10 +17,11 @@ const Notification = ({message}: IProps) => {
       <Snackbar
         visible={snackVisible}
         onDismiss={handleDismissSnackBar}
+        duration={3000}
         action={{
           label: 'Undo',
           onPress: () => {
-            // Do something
+            handleDismissSnackBar();
           },
         }}>
         {message}

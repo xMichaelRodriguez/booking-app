@@ -17,7 +17,7 @@ import {
   useController,
   useForm,
 } from 'react-hook-form';
-import {useAppDispatch} from '../../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {addNewService} from '../../../../store/slices/services/thunks';
 import Notification from '../../../../components/ui/Notification';
 import {onToggleSnackBar} from '../../../../store/slices/ui/uiSlice';
@@ -36,6 +36,7 @@ export const ServiceManager = () => {
   const [imageSelected, setImageSelected] = useState<string | null>(null);
   const [notificationMessage, setNotificationMessage] = useState('');
   const dispatch = useAppDispatch();
+  const {isLoading} = useAppSelector(state => state.ui);
   const {
     control,
     handleSubmit,
@@ -203,7 +204,10 @@ export const ServiceManager = () => {
           </View>
 
           <View style={[styles.containerInput]}>
-            <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+            <Button
+              mode="contained"
+              onPress={handleSubmit(onSubmit)}
+              loading={isLoading}>
               Confirm
             </Button>
           </View>

@@ -51,7 +51,10 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   }, [dispatch]);
 
   const openSheet = () => {
-    bottomSheetRef.current?.snapToIndex(1);
+    navigation.navigate('Root', {
+      screen: 'detailServices',
+    });
+    // bottomSheetRef.current?.snapToIndex(1);
   };
 
   if (isLoadingService) {

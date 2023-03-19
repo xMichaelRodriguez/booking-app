@@ -25,19 +25,22 @@ export const CalendarSection = ({control, name}: IProps) => {
         style={[
           {
             color: isDarkTheme ? '#fbfbfb' : '#282828',
-            marginVertical: 5,
-            fontWeight: '800',
+            padding: 20,
+            fontWeight: '700',
           },
         ]}>
         Pick a Day
       </Text>
       <CalendarStrip
-        highlightDateContainerStyle={styles.highlightDateContainer}
-        highlightDateNameStyle={styles.highlightDateStyle}
-        highlightDateNumberStyle={styles.highlightDateStyle}
-        dateNumberStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
-        dateNameStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
-        calendarHeaderStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        highlightDateContainerStyle={{
+          backgroundColor: '#EE65B3',
+          shadowColor: '#fbfbfb',
+          borderRadius: 5,
+        }}
+        numDaysInWeek={6}
+        dateNumberStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
+        dateNameStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
+        calendarHeaderStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
         iconContainer={{flex: 0}}
         iconLeftStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
@@ -56,13 +59,5 @@ export const CalendarSection = ({control, name}: IProps) => {
   );
 };
 const styles = StyleSheet.create({
-  calendarContainer: {height: 110, color: '#282828'},
-  highlightDateContainer: {
-    backgroundColor: '#EE65B3',
-    shadowColor: '#fbfbfb',
-    borderRadius: 10,
-  },
-  highlightDateStyle: {
-    color: '#fbfbfb',
-  },
+  calendarContainer: {height: 115, color: '#282828'},
 });

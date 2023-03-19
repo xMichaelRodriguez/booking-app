@@ -119,8 +119,9 @@ export const CalendarToUpdate = () => {
   return (
     <ScrollView style={styles.container}>
       <BookVIew
-        mediaUrl={isBookingActive.serviceId?.mediaUrl}
-        caption={isBookingActive.serviceId?.caption}
+        mediaUrl={isBookingActive.serviceId?.secureUrl}
+        name={isBookingActive.serviceId?.name}
+        description={isBookingActive.serviceId?.description}
         activeItem={activeItem}
         control={control}
         errors={errors}
