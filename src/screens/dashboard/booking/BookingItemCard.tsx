@@ -26,7 +26,7 @@ interface IProps {
 
 const statesOfBooking = {
   Reservado: 'blue',
-  Finalizado: 'green',
+  Entregado: 'green',
   Cancelado: 'red',
 };
 
@@ -50,15 +50,15 @@ export const BookingItemCard = ({
   };
 
   const handleEditBook = async () => {
-    if (role && role.id === ROLE_ADMIN) {
-      return onShowDialog(booking);
-    }
-    dispatch(startLoadingUI());
     await dispatch(setActiveBooking(booking));
-
-    navigation.navigate('Root', {
-      screen: 'EditBook',
-    });
+    if (role && role.id === ROLE_ADMIN) {
+      onShowDialog(booking);
+    } else {
+      dispatch(startLoadingUI());
+      navigation.navigate('Root', {
+        screen: 'EditBook',
+      });
+    }
   };
   return (
     <Card

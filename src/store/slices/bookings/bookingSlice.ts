@@ -15,9 +15,9 @@ export const bookingSlice = createSlice({
     },
     setBookings: (state, action: PayloadAction<IBook[]>) => {
       state.isLoading = false;
-      state.bookings = action.payload.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
+      state.bookings = action.payload.sort((a, b) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
     },
 
     onAddBook: (state, action: PayloadAction<IBook>) => {

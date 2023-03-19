@@ -25,7 +25,7 @@ interface IProps {
 
 const statesOfBooking = {
   Reservado: 'blue',
-  Finalizado: 'green',
+  Entregado: 'green',
   Cancelado: 'red',
 };
 export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
@@ -51,6 +51,7 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
       screen: 'EditBook',
     });
   };
+
   return (
     <Card
       mode="contained"
@@ -80,17 +81,21 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
               {maxWidth: '50%', overflow: 'hidden'},
               custom.inlineContianer,
             ]}>
-            <Text
-              numberOfLines={5}
-              variant="titleSmall"
-              style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-              {booking.serviceId?.caption.slice(0, 50)}...
-            </Text>
             <View>
-              <IconButton
-                icon={'wall-sconce-flat-variant-outline'}
-                iconColor={iconColor}
-              />
+              <Text
+                variant="titleMedium"
+                style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
+                {booking.serviceId?.name}
+              </Text>
+              <View>
+                <IconButton
+                  icon={'wall-sconce-flat-variant-outline'}
+                  iconColor={iconColor}
+                />
+                <Text style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
+                  {booking.statusId.name}{' '}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -104,17 +109,14 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
             Cancel
           </Button>
 
-          {role && role.id === ROLE_ADMIN ? (
-            ''
-          ) : (
+          {role && role.id !== ROLE_ADMIN && (
             <Button
               style={custom.buttonSize}
               mode="contained"
               onPress={onEdit}
               loading={isLoading}
               disabled={booking.statusId.id === COMPLETED_STATE_ID}>
-              {' '}
-              {role && role.id !== ROLE_ADMIN ? 'Edit' : 'complete booking'}
+              Edit
             </Button>
           )}
         </View>

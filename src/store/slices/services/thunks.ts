@@ -90,7 +90,6 @@ const formDataGenerator = (service: IServiceForm) => {
     type: service.image[0].type,
     name: service.image[0].fileName,
   });
-  console.debug(service.image[0]);
   return formData;
 };
 export const getNewServices = (url: string = '') => {

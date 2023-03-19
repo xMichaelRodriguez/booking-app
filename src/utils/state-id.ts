@@ -1,1 +1,1 @@
-export const COMPLETED_STATE_ID = 3;
+export const COMPLETED_STATE_ID = 2;

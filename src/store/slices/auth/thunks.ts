@@ -100,7 +100,6 @@ export const starLoginGoogle = (accessToken: string) => {
             25,
             50,
           );
-          // console.error({errorData});
         }
       }
     }

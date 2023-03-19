@@ -85,12 +85,6 @@ export const createBooking = (
         },
       });
 
-      // const resp: IBook = {...data, date: new Date(data.date).toISOString()};
-      // const [isoDate, isoHour] = resp.date.split('T');
-
-      // const newHour = isoHour.slice(0, 5);
-      // const newBooking = {...resp, date: isoDate, hour: newHour};
-      // console.debug({newBooking});
       ToastAndroid.showWithGravityAndOffset(
         'Booking Confirmed',
         ToastAndroid.LONG,
@@ -189,8 +183,9 @@ export const updateBooking = (
 };
 
 export const setActiveBooking = (booking: IBook) => {
-  return async (dispatch: AppDispatch) => {
-    await dispatch(activeBook(booking));
+  return (dispatch: AppDispatch) => {
+    dispatch(activeBook(booking));
+
     dispatch(onCancelLoadingUI());
   };
 };
