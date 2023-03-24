@@ -12,7 +12,7 @@ import {times, weeKendTimes} from '../../../../constants/times';
 import {useTheme} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 
-export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
+export const CreateBooking = ({navigation}: {navigation: any}) => {
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);

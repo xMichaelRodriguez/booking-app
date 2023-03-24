@@ -53,8 +53,8 @@ export const startLogin = (login: ILoginState) => {
       const {id, username, email, isActive, role} = user;
       await storeUserSession(jwt.accessToken);
 
-      dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
+      dispatch(onCancelLoadingUI());
     } catch (error) {
       removeUserSession();
       if (axios.isAxiosError(error)) {

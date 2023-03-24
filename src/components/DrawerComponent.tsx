@@ -8,12 +8,12 @@ import {BookingScreen} from '../screens/dashboard/booking/BookingScreen';
 import {DrawerMenu} from './DrawerMenu';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton, useTheme, Text} from 'react-native-paper';
-import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
+import {UpdateBooking} from '../screens/dashboard/booking/components/UpdateBooking';
 import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
 import {ROLE_ADMIN} from '../constants/roles';
 import {useAppSelector} from '../hooks';
 import {DetailService} from '../screens/dashboard/services/DetailService';
-import {CalendarCreateBooking} from '../screens/dashboard/booking/components/Calendar';
+import {CreateBooking} from '../screens/dashboard/booking/components/CreateBooking';
 
 const Drawer = createDrawerNavigator();
 
@@ -127,7 +127,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
 
         <Drawer.Screen
           name="BookCake"
-          component={CalendarCreateBooking}
+          component={CreateBooking}
           options={{
             title: 'Schedule Order',
             headerTitleAlign: 'center',
@@ -152,7 +152,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
         />
         <Drawer.Screen
           name="EditBook"
-          component={CalendarToUpdate}
+          component={UpdateBooking}
           options={{
             title: 'Edit Book',
             headerTitleAlign: 'center',

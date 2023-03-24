@@ -106,12 +106,17 @@ export const BookVIew = ({
         )}
       </View>
 
-      <Button
-        mode="contained"
-        onPress={handleSubmit(onSubmit)}
-        loading={isLoading}>
-        {buttonName}
-      </Button>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          style={{width: '50%'}}
+          onPress={handleSubmit(onSubmit)}>
+          {buttonName}
+        </Button>
+        <Button mode="outlined" style={{width: '50%'}}>
+          Cancel
+        </Button>
+      </View>
     </View>
   );
 };
@@ -139,5 +144,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 3,
+    justifyContent: 'center',
   },
 });

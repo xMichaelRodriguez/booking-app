@@ -1,11 +1,11 @@
 // Define a type for the slice state
 export interface IAuthState {
-  id: number | null;
-  username: string | null;
-  email: string | null;
+  id: number;
+  username: string;
+  email: string;
   isSigned?: boolean;
-  isActive: boolean | null;
-  role: IRole | null;
+  isActive: boolean;
+  role: IRole;
   isLoading?: boolean;
 }
 

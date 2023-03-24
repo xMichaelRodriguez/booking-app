@@ -51,14 +51,11 @@ export const BookingItemCard = ({
 
   const handleEditBook = async () => {
     await dispatch(setActiveBooking(booking));
-    if (role && role.id === ROLE_ADMIN) {
-      onShowDialog(booking);
-    } else {
-      dispatch(startLoadingUI());
-      navigation.navigate('Root', {
-        screen: 'EditBook',
-      });
-    }
+
+    dispatch(startLoadingUI());
+    navigation.navigate('Root', {
+      screen: 'EditBook',
+    });
   };
   return (
     <Card
@@ -118,7 +115,8 @@ export const BookingItemCard = ({
           <Button
             style={custom.buttonSize}
             mode="outlined"
-            onPress={setActiveOnOpenSheet}>
+            onPress={setActiveOnOpenSheet}
+            disabled={booking.statusId.id === COMPLETED_STATE_ID}>
             Cancel
           </Button>
 
@@ -128,8 +126,7 @@ export const BookingItemCard = ({
             onPress={handleEditBook}
             loading={isLoading}
             disabled={booking.statusId.id === COMPLETED_STATE_ID}>
-            {' '}
-            {role && role.id !== ROLE_ADMIN ? 'Edit' : 'complete booking'}
+            Edit
           </Button>
         </View>
       </Card.Content>

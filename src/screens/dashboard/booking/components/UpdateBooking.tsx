@@ -10,7 +10,7 @@ import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.in
 import {updateBooking} from '../../../../store/slices/bookings/thunks';
 import {BookVIew} from '../views/BookVIew';
 
-export const CalendarToUpdate = () => {
+export const UpdateBooking = () => {
   const navigation = useNavigation();
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
