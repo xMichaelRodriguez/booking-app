@@ -4,13 +4,11 @@ import React from 'react';
 import {View, Image, StyleSheet, useColorScheme} from 'react-native';
 
 import {Avatar, Text, Button, Dialog, Portal} from 'react-native-paper';
-import {ROLE_ADMIN} from '../../../constants/roles';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {removeService} from '../../../store/slices/services/thunks';
 export const DetailService = ({navigation}: {navigation: any}) => {
   const {isActiveService} = useAppSelector(state => state.service);
   const {isLoading} = useAppSelector(state => state.ui);
-  const {role} = useAppSelector(state => state.auth);
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
 
@@ -85,23 +83,21 @@ export const DetailService = ({navigation}: {navigation: any}) => {
         </View>
 
         <View style={styles.buttonContianer}>
-          {role?.id === ROLE_ADMIN ? (
-            <Button
-              style={styles.buttonWidth}
-              mode="outlined"
-              icon="trash-can-outline"
-              onPress={toggleVisible}
-              loading={isLoading}>
-              Remove
-            </Button>
-          ) : (
-            <Button
-              mode="contained"
-              style={styles.buttonWidth}
-              onPress={onSchedule}>
-              Book order
-            </Button>
-          )}
+          <Button
+            style={styles.buttonWidth}
+            mode="outlined"
+            icon="trash-can-outline"
+            onPress={toggleVisible}
+            loading={isLoading}>
+            Remove
+          </Button>
+
+          <Button
+            mode="contained"
+            style={styles.buttonWidth}
+            onPress={onSchedule}>
+            Book order
+          </Button>
         </View>
       </View>
 
@@ -155,21 +151,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonWidth: {
-    width: '100%',
+    width: '50%',
   },
   buttonContianer: {
     position: 'absolute',
     bottom: 10,
     flexDirection: 'row',
-
+    gap: 3,
     alignSelf: 'center',
   },
   containerChildren: {
     justifyContent: 'center',
     alignItems: 'center',
     gap: 25,
-  },
-  buttonWidth2: {
-    width: '90%',
   },
 });

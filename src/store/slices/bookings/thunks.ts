@@ -7,7 +7,7 @@ import {getUserSessionParsed} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {clearActiveService} from '../services/thunks';
 import {onCloseSheetBooton} from '../ui/thunks';
-import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
+import {onCancelLoadingUI, setMessage, startLoadingUI} from '../ui/uiSlice';
 import {
   activeBook,
   onCancelLoading,
@@ -119,8 +119,8 @@ export const updateBooking = (
   cb: (result: boolean) => void,
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(startLoadingUI());
     try {
-      dispatch(startLoadingUI());
       const parsedDate = parserDate(booking.date);
       const token = await getUserSessionParsed();
 
@@ -145,14 +145,14 @@ export const updateBooking = (
         },
       );
       ToastAndroid.showWithGravityAndOffset(
-        'Booking Reschedule',
+        'Booking Rescheduled',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
         50,
       );
       cb(true);
-
+      dispatch(setMessage('Booking Rescheduled'));
       if (isBookingActive) {
         const payloadToSave: IBook = {
           ...isBookingActive,
@@ -161,6 +161,9 @@ export const updateBooking = (
           note: booking.note ?? '',
         };
         dispatch(onUpdateBooking(payloadToSave));
+        dispatch(onClearActiveBooking());
+        dispatch(clearActiveService());
+        dispatch(onCancelLoadingUI());
       }
       dispatch(onClearActiveBooking());
       dispatch(clearActiveService());

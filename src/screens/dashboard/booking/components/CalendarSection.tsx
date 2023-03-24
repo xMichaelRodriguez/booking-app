@@ -48,11 +48,11 @@ export const CalendarSection = ({control, name}: IProps) => {
         iconRightStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
-        startingDate={field.value ? field.value : INITIAL_DATE}
-        minDate={new Date('2022-12-31')}
+        startingDate={field.value ?? INITIAL_DATE}
+        minDate={new Date('2022-01-31')}
         onDateSelected={currentDay => field.onChange(currentDay.toDate())}
         scrollable
-        selectedDate={field.value ? field.value : INITIAL_DATE}
+        selectedDate={field.value ?? INITIAL_DATE}
         style={styles.calendarContainer}
       />
     </>

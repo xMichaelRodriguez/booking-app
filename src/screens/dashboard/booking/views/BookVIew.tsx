@@ -44,8 +44,8 @@ export const BookVIew = ({
   const theme = useTheme();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
-  const {isLoading} = useAppSelector(state => state.ui);
 
+  const {isLoading} = useAppSelector(state => state.ui);
   return (
     <View style={{flex: 1, padding: 10}}>
       <View>
@@ -110,7 +110,8 @@ export const BookVIew = ({
         <Button
           mode="contained"
           style={{width: '50%'}}
-          onPress={handleSubmit(onSubmit)}>
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoading}>
           {buttonName}
         </Button>
         <Button mode="outlined" style={{width: '50%'}}>

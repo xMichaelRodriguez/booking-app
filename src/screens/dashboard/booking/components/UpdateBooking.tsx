@@ -4,7 +4,7 @@ import {useForm, SubmitHandler} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
-import {times, weeKendTimes} from '../../../../constants/times';
+import {INITIAL_DATE, times, weeKendTimes} from '../../../../constants/times';
 import {useAppSelector, useAppDispatch} from '../../../../hooks';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {updateBooking} from '../../../../store/slices/bookings/thunks';
@@ -50,10 +50,12 @@ export const UpdateBooking = () => {
 
   // set value to date by active booking
   useEffect(() => {
-    if (isBookingActive && isBookingActive.date) {
+    if (isBookingActive) {
       const {date} = isBookingActive;
 
       setValue('date', new Date(date));
+    } else {
+      setValue('date', INITIAL_DATE);
     }
   }, [isBookingActive, setValue]);
 

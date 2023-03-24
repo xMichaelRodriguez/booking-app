@@ -169,7 +169,6 @@ export const authLogout = () => {
     await removeUserSession();
     dispatch(setClearBookings());
     dispatch(clearServices());
-    removeUserSession();
     dispatch(logout());
   };
 };

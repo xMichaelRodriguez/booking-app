@@ -15,13 +15,11 @@ import {setActiveBooking} from '../../../store/slices/bookings/thunks';
 import {useNavigation} from '@react-navigation/native';
 import {startLoadingUI} from '../../../store/slices/ui/uiSlice';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
-import {ROLE_ADMIN} from '../../../constants/roles';
 
 interface IProps {
   booking: IBook;
   navigation: any;
   handleOpenSheet: (item: IBook) => void;
-  onShowDialog: (item: IBook) => void;
 }
 
 const statesOfBooking = {
@@ -30,16 +28,11 @@ const statesOfBooking = {
   Cancelado: 'red',
 };
 
-export const BookingItemCard = ({
-  booking,
-  handleOpenSheet,
-  onShowDialog,
-}: IProps) => {
+export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
   const dispatch = useAppDispatch();
   const {isLoading} = useAppSelector(state => state.ui);
-  const {role} = useAppSelector(state => state.auth);
   const navigation = useNavigation();
   const iconColor =
     statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
@@ -50,12 +43,15 @@ export const BookingItemCard = ({
   };
 
   const handleEditBook = async () => {
+    dispatch(startLoadingUI());
     await dispatch(setActiveBooking(booking));
 
-    dispatch(startLoadingUI());
-    navigation.navigate('Root', {
-      screen: 'EditBook',
-    });
+    navigation.navigate(
+      'Root' as never,
+      {
+        screen: 'EditBook',
+      } as never,
+    );
   };
   return (
     <Card

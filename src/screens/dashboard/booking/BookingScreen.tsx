@@ -49,11 +49,6 @@ export const BookingScreen = () => {
     dispatch(getBookings());
   }, [dispatch]);
 
-  const showDialog = (item: IBook) => {
-    setVisible(true);
-    dispatch(setActiveBooking(item));
-  };
-
   const hideDialog = () => {
     dispatch(onClearActiveBooking());
     setVisible(false);
@@ -93,6 +88,7 @@ export const BookingScreen = () => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, padding: 10}}>
       <List.Section>
@@ -105,7 +101,6 @@ export const BookingScreen = () => {
               booking={item}
               handleOpenSheet={openSheet}
               navigation={navigation}
-              onShowDialog={showDialog}
             />
           )}
         />

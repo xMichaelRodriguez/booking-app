@@ -1,12 +1,14 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 type InitialProp = {
   isLoading: boolean;
   snackVisible: boolean;
+  message: string;
 };
 
 const initialState: InitialProp = {
   isLoading: false,
   snackVisible: false,
+  message: '',
 };
 export const uiSlice = createSlice({
   name: 'ui',
@@ -24,11 +26,19 @@ export const uiSlice = createSlice({
     onDismissSnackBar: state => {
       state.snackVisible = false;
     },
+    setMessage: (state, action: PayloadAction<string>) => {
+      state.message = action.payload;
+    },
+    clearMessage: state => {
+      state.message = '';
+    },
   },
 });
 export const {
-  startLoadingUI,
+  clearMessage,
   onCancelLoadingUI,
-  onToggleSnackBar,
   onDismissSnackBar,
+  onToggleSnackBar,
+  setMessage,
+  startLoadingUI,
 } = uiSlice.actions;
