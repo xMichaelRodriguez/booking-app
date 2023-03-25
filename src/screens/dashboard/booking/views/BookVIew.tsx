@@ -109,13 +109,10 @@ export const BookVIew = ({
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
-          style={{width: '50%'}}
+          style={{width: '90%'}}
           onPress={handleSubmit(onSubmit)}
           loading={isLoading}>
           {buttonName}
-        </Button>
-        <Button mode="outlined" style={{width: '50%'}}>
-          Cancel
         </Button>
       </View>
     </View>
