@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {startLoadingUI} from '../../../store/slices/ui/uiSlice';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
 
+
 interface IProps {
   booking: IBook;
   navigation: any;
@@ -113,7 +114,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
             mode="outlined"
             onPress={setActiveOnOpenSheet}
             disabled={booking.statusId.id === COMPLETED_STATE_ID}>
-            Cancel
+            Cancelar
           </Button>
 
           <Button

@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
+import moment, {Moment} from 'moment';
 import React from 'react';
 import {StyleSheet, useColorScheme} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {INITIAL_DATE} from '../../constants/times';
 
 interface IProps {
-  selected: Date;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+  selected: Moment;
+  setSelectedDate: React.Dispatch<React.SetStateAction<moment.Moment>>;
 }
 export const CalendarHeader = ({selected, setSelectedDate}: IProps) => {
   const colorScheme = useColorScheme();
@@ -27,9 +28,9 @@ export const CalendarHeader = ({selected, setSelectedDate}: IProps) => {
       iconRightStyle={{
         tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
       }}
-      startingDate={INITIAL_DATE}
+      startingDate={moment(INITIAL_DATE)}
       selectedDate={selected}
-      onDateSelected={currentDay => setSelectedDate(currentDay.toDate())}
+      onDateSelected={currentDay => setSelectedDate(currentDay)}
       minDate={new Date('2022-12-31')}
       scrollable
       style={styles.calendarContainer}

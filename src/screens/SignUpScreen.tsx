@@ -16,6 +16,7 @@ import DividerWithOr from '../components/DividerWIthOr';
 import {GoogleButton} from '../components/GoogleButton';
 
 import {Logo} from '../components/Logo';
+import WrapperAnimate from '../components/ui/WrapperAnimate';
 import {useAppDispatch} from '../hooks';
 import {startRegister} from '../store/slices/auth/thunks';
 import {validEmail, validPassword} from '../utils/emailRegex';
@@ -27,7 +28,7 @@ interface IFormInput {
 }
 
 export const passwordMessage =
-  'Please choose a more secure password that includes at least one uppercase letter, at least one lowercase letter, at least one of the following special characters: [-, _, *, .] and a length between 8 and 16 characters.';
+  'Por favor, elija una contraseña más segura que incluya al menos una letra mayúscula, al menos una letra minúscula, al menos uno de los siguientes caracteres especiales: [-, _, *, .] y una longitud de entre 8 y 16 caracteres.';
 
 export const SingUpScreen = ({navigation}: {navigation: any}) => {
   const theme = useTheme();
@@ -44,132 +45,134 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
   const onSubmit: SubmitHandler<IFormInput> = data => {
     dispatch(startRegister(data));
   };
+
   return (
     <SafeAreaView style={styles.view}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.logoView}>
-            <Logo />
-          </View>
-          <View style={styles.inputView}>
-            <Controller
-              name="username"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Name'},
-                minLength: {value: 3, message: 'Minimun characters is 3'},
-                maxLength: {value: 16, message: 'Maximun characters is 16'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  // eslint-disable-next-line react-native/no-inline-styles
-                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                  error={!!errors.username}
-                  onBlur={onBlur}
-                  mode="outlined"
-                  label="Username"
-                  value={value}
-                  onChangeText={onChange}
-                />
+      <WrapperAnimate>
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.logoView}>
+              <Logo />
+            </View>
+            <View style={styles.inputView}>
+              <Controller
+                name="username"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Nombre obligatorio'},
+                  minLength: {value: 3, message: 'Minimo de caracteres: 3'},
+                  maxLength: {value: 16, message: 'Maxiomo de caracteres: 16'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    style={{color: isDark ? '#fbfbfb' : '#282828'}}
+                    error={!!errors.username}
+                    onBlur={onBlur}
+                    mode="outlined"
+                    label="Username"
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
+              {errors.username && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.username?.message}.
+                </Text>
               )}
-            />
-            {errors.username && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.username?.message}.
-              </Text>
-            )}
-          </View>
+            </View>
 
-          <View style={styles.inputView}>
-            <Controller
-              name="email"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Email'},
-                pattern: {value: validEmail, message: 'Invalid Email'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                  error={!!errors.email}
-                  onBlur={onBlur}
-                  mode="outlined"
-                  label="Email"
-                  value={value}
-                  onChangeText={onChange}
-                />
+            <View style={styles.inputView}>
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Email Obligatorio'},
+                  pattern: {value: validEmail, message: 'Email invalido'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    style={{color: isDark ? '#fbfbfb' : '#282828'}}
+                    error={!!errors.email}
+                    onBlur={onBlur}
+                    mode="outlined"
+                    label="Email"
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.email.message}
+                </Text>
               )}
-            />
-            {errors.email && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.email.message}
-              </Text>
-            )}
-          </View>
+            </View>
 
-          <View style={styles.inputView}>
-            <Controller
-              name="password"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Password'},
-                pattern: {value: validPassword, message: passwordMessage},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                  error={!!errors.password}
-                  mode="outlined"
-                  label="Password"
-                  secureTextEntry={!isVisible}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
+            <View style={styles.inputView}>
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Contraseña Obligatoria'},
+                  pattern: {value: validPassword, message: passwordMessage},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    style={{color: isDark ? '#fbfbfb' : '#282828'}}
+                    error={!!errors.password}
+                    mode="outlined"
+                    label="Password"
+                    secureTextEntry={!isVisible}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              {errors.password && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.password.message}
+                </Text>
               )}
-            />
-            {errors.password && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.password.message}
-              </Text>
-            )}
 
-            <Checkbox.Item
-              label="Show Password"
-              status={isVisible ? 'checked' : 'unchecked'}
-              position="leading"
-              style={styles.checkbox}
-              labelStyle={[
-                {color: isDark ? '#fbfbfb' : '#282828'},
-                ,
-                styles.labelCheckbox,
-              ]}
-              onPress={() => {
-                setIsVisible(!isVisible);
-              }}
-            />
-          </View>
+              <Checkbox.Item
+                label="Mostrar Contraseña"
+                status={isVisible ? 'checked' : 'unchecked'}
+                position="leading"
+                style={styles.checkbox}
+                labelStyle={[
+                  {color: isDark ? '#fbfbfb' : '#282828'},
+                  ,
+                  styles.labelCheckbox,
+                ]}
+                onPress={() => {
+                  setIsVisible(!isVisible);
+                }}
+              />
+            </View>
 
-          <Button
-            icon="login"
-            mode="contained"
-            onPress={handleSubmit(onSubmit)}>
-            Sign In
-          </Button>
-          <View style={styles.row}>
-            <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
-              Already have an account?{' '}
-            </Text>
-            <TouchableOpacity onPress={() => navigation.replace('SignIn')}>
-              <Text style={[styles.link, {color: theme.colors.primary}]}>
-                Sign In
+            <Button
+              icon="login"
+              mode="contained"
+              onPress={handleSubmit(onSubmit)}>
+              Iniciar Session
+            </Button>
+            <View style={styles.row}>
+              <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
+                Ya tienes una cuenta?{' '}
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.replace('SignIn')}>
+                <Text style={[styles.link, {color: theme.colors.primary}]}>
+                  Iniciar sesion
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <DividerWithOr />
+            <GoogleButton />
           </View>
-          <DividerWithOr />
-          <GoogleButton />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </WrapperAnimate>
     </SafeAreaView>
   );
 };

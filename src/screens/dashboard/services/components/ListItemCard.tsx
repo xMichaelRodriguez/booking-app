@@ -5,6 +5,7 @@ import {StyleSheet, useColorScheme} from 'react-native';
 import {IService} from '../../../../store/slices/services/interface/services.interface';
 import {useAppDispatch} from '../../../../hooks';
 import {setActiveService} from '../../../../store/slices/services/thunks';
+import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 
 interface IProps {
   navigation: any;
@@ -28,13 +29,17 @@ export const ListItemCard = ({item, handleOpenSheet}: IProps) => {
         {backgroundColor: isDark ? '#353740' : '#fbfbfb'},
       ]}>
       <Card.Content>
-        <Card.Cover source={{uri: item.secureUrl}} />
-        <Card.Title
-          title={item.name}
-          titleStyle={{
-            color: isDark ? '#fbfbfb' : '#282828',
-          }}
-        />
+        <WrapperAnimate>
+          <Card.Cover source={{uri: item.secureUrl}} />
+        </WrapperAnimate>
+        <WrapperAnimate>
+          <Card.Title
+            title={item.name}
+            titleStyle={{
+              color: isDark ? '#fbfbfb' : '#282828',
+            }}
+          />
+        </WrapperAnimate>
       </Card.Content>
     </Card>
   );

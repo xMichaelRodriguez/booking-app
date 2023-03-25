@@ -9,6 +9,7 @@ import {
 } from 'react-hook-form';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Text, Button, TextInput, useTheme} from 'react-native-paper';
+import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 import {useAppSelector} from '../../../../hooks';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {CalendarSection} from '../components/CalendarSection';
@@ -39,7 +40,7 @@ export const BookVIew = ({
   mediaUrl,
   name,
   description,
-  buttonName = 'Confirm',
+  buttonName = 'Confirmar',
 }: IProps) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
@@ -48,22 +49,24 @@ export const BookVIew = ({
   const {isLoading} = useAppSelector(state => state.ui);
   return (
     <View style={{flex: 1, padding: 10}}>
-      <View>
+      <WrapperAnimate>
         <HeaderBook mediaUrl={mediaUrl} name={name} description={description} />
-      </View>
+      </WrapperAnimate>
       <View style={{marginTop: 10}}>
-        <Controller
-          control={control}
-          name="date"
-          render={() => <CalendarSection control={control} name="date" />}
-        />
-        {errors.date && (
-          <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
-            {errors.date.message}
-          </Text>
-        )}
+        <WrapperAnimate>
+          <Controller
+            control={control}
+            name="date"
+            render={() => <CalendarSection control={control} name="date" />}
+          />
+          {errors.date && (
+            <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
+              {errors.date.message}
+            </Text>
+          )}
+        </WrapperAnimate>
       </View>
-      <View>
+      <WrapperAnimate>
         <TimeSection
           activeItem={activeItem}
           handlePress={handlePress}
@@ -74,36 +77,38 @@ export const BookVIew = ({
             {errors.hour.message}
           </Text>
         )}
-      </View>
+      </WrapperAnimate>
       <View style={styles.margins}>
-        <Controller
-          name="note"
-          control={control}
-          rules={{
-            maxLength: {
-              value: 500,
-              message: 'Only a maximum of 500 characters are allowed',
-            },
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
-              textColor={isDark ? '#fbfbfb' : '#282828'}
-              multiline
-              numberOfLines={3}
-              error={!!errors.note}
-              onBlur={onBlur}
-              mode="outlined"
-              label="Note"
-              value={value}
-              onChangeText={onChange}
-            />
+        <WrapperAnimate>
+          <Controller
+            name="note"
+            control={control}
+            rules={{
+              maxLength: {
+                value: 500,
+                message: 'Only a maximum of 500 characters are allowed',
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                textColor={isDark ? '#fbfbfb' : '#282828'}
+                multiline
+                numberOfLines={3}
+                error={!!errors.note}
+                onBlur={onBlur}
+                mode="outlined"
+                label="Note"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.note && (
+            <Text style={{color: isDark ? '#FF2727' : theme.colors.error}}>
+              {errors.note.message}
+            </Text>
           )}
-        />
-        {errors.note && (
-          <Text style={{color: isDark ? '#FF2727' : theme.colors.error}}>
-            {errors.note.message}
-          </Text>
-        )}
+        </WrapperAnimate>
       </View>
 
       <View style={styles.buttonContainer}>

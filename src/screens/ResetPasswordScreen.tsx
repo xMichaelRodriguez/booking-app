@@ -63,12 +63,12 @@ export const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
       <View style={[styles.forgotPassword]}>
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text style={[styles.forgotPassword, {color: theme.colors.primary}]}>
-            Sign In
+            Iniciar sesion
           </Text>
         </TouchableOpacity>
       </View>
       <Button icon="send" mode="contained" onPress={handleSubmit(onSubmit)}>
-        send
+        Enviar
       </Button>
     </View>
   );

@@ -47,7 +47,7 @@ export const GoogleButton = () => {
         size={30}
       />
       <Text onPress={onSigin} style={{color: isDark ? '#fbfbfb' : '#808080'}}>
-        Sign in with Google
+        Iniciar sesion con Google
       </Text>
     </TouchableOpacity>
   );

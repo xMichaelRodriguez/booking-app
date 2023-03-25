@@ -112,7 +112,7 @@ export const startRegister = (register: IAuthRegister) => {
       await backendApi.post<IAuthLogin>('/auth/local/register', register);
 
       ToastAndroid.showWithGravityAndOffset(
-        'Email has been sent to confirm your account',
+        'Se ha enviado un correo electrónico para confirmar su cuenta',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,

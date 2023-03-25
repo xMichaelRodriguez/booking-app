@@ -9,6 +9,7 @@ import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.in
 import {createBooking} from '../../../../store/slices/bookings/thunks';
 import {times, weeKendTimes} from '../../../../constants/times';
 import {ScrollView} from 'react-native-gesture-handler';
+import moment from 'moment';
 
 export const CreateBooking = ({navigation}: {navigation: any}) => {
   const [timeState, setTimeState] = useState(times);
@@ -48,9 +49,10 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
 
   const newDateSelected = watch('date');
   useEffect(() => {
-    const currentDate = new Date(getValues().date);
-    const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
-    if (isWeekennd) {
+    const currentDate = moment(getValues().date);
+    const isWeekend =
+      currentDate.weekday() === 0 || currentDate.weekday() === 6;
+    if (isWeekend) {
       return setTimeState(weeKendTimes);
     } else {
       return setTimeState(times);
@@ -79,14 +81,6 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
 
   if (!isActiveService) {
     return navigation.replace('Root', {screen: 'Services'});
-    // return (
-    //   <ActivityIndicator
-    //     style={styles.activityStyle}
-    //     animating={true}
-    //     color={theme.colors.primary}
-    //     size="large"
-    //   />
-    // );
   }
   return (
     <ScrollView style={styles.container}>
@@ -101,7 +95,7 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         timeState={timeState}
-        buttonName={'Confirm Booking'}
+        buttonName={'Confirmmar Orden'}
       />
     </ScrollView>
   );

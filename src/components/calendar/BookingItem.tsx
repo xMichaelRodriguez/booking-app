@@ -47,9 +47,12 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
   const onEdit = async () => {
     dispatch(startLoadingUI());
     await dispatch(setActiveBooking(booking));
-    navigation.navigate('Root', {
-      screen: 'EditBook',
-    });
+    navigation.navigate(
+      'Root' as never,
+      {
+        screen: 'EditBook',
+      } as never,
+    );
   };
 
   return (
@@ -106,7 +109,7 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
             style={custom.buttonSize}
             mode="outlined"
             onPress={setActiveOnOpenSheet}>
-            Cancel
+            Cancelar
           </Button>
 
           {role && role.id !== ROLE_ADMIN && (

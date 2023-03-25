@@ -2,8 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {IconButton, Text} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-import {IState} from '../../interface/booking.interface';
-
+import {IState} from '../../store/slices/bookings/interface/bookin.interface';
 const statesOfBooking = {
   Reservado: 'blue',
   Entregado: 'green',

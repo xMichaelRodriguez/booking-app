@@ -4,6 +4,7 @@ import React from 'react';
 import {View, Image, StyleSheet, useColorScheme} from 'react-native';
 
 import {Avatar, Text, Button, Dialog, Portal} from 'react-native-paper';
+import WrapperAnimate from '../../../components/ui/WrapperAnimate';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {removeService} from '../../../store/slices/services/thunks';
 export const DetailService = ({navigation}: {navigation: any}) => {
@@ -42,45 +43,46 @@ export const DetailService = ({navigation}: {navigation: any}) => {
           uri: isActiveService?.secureUrl,
         }}
       />
-
       <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Name
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            {isActiveService?.name}
-          </Text>
-        </View>
+        <WrapperAnimate>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Name
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              {isActiveService?.name}
+            </Text>
+          </View>
 
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Description
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            {isActiveService?.description}
-          </Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Price
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            $ {isActiveService?.price}
-          </Text>
-        </View>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Description
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              {isActiveService?.description}
+            </Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Price
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              $ {isActiveService?.price}
+            </Text>
+          </View>
+        </WrapperAnimate>
 
         <View style={styles.buttonContianer}>
           <Button
@@ -117,7 +119,7 @@ export const DetailService = ({navigation}: {navigation: any}) => {
               mode="outlined"
               style={styles.buttonWidth}
               onPress={toggleVisible}>
-              Cancel
+              Cancelar
             </Button>
             <Button onPress={onRemove} mode="contained">
               yes, to Delete

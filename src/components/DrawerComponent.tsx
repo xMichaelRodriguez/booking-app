@@ -49,6 +49,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Home"
           component={HomeScreen}
           options={{
+            title: 'Inicio',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="home-outline" size={size} />
@@ -63,6 +64,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Services"
           component={ServicesScreen}
           options={{
+            title: 'Productos',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
@@ -73,7 +75,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="manageService"
           component={ServiceManager}
           options={{
-            title: 'Manage Service',
+            title: 'Administrar Producto',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
@@ -87,7 +89,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="detailServices"
           component={DetailService}
           options={{
-            title: 'Service Details',
+            title: 'detalles de Producto',
             headerTitleAlign: 'center',
 
             headerLeft: () => (
@@ -117,7 +119,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Bookings"
           component={BookingScreen}
           options={{
-            title: 'Booking List',
+            title: 'Lista de Ordenes',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="calendar-clock-outline" size={size} />
@@ -129,7 +131,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="BookCake"
           component={CreateBooking}
           options={{
-            title: 'Schedule Order',
+            title: 'Programar Orden',
             headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity
@@ -154,7 +156,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="EditBook"
           component={UpdateBooking}
           options={{
-            title: 'Edit Book',
+            title: 'Editar Orden',
             headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity

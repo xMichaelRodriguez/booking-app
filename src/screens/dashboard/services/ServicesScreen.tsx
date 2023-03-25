@@ -1,13 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {
-  ActivityIndicator,
-  List,
-  useTheme,
-  Text,
-  Button,
-} from 'react-native-paper';
+import {ActivityIndicator, useTheme, Text, Button} from 'react-native-paper';
 import {Image, StyleSheet, useColorScheme, View} from 'react-native';
 import {INavigationProps} from '../../../interface';
 
@@ -74,39 +68,35 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   }
 
   return (
-    <>
-      <View style={custom.view}>
-        <List.Section>
-          <FlatList
-            style={{paddingHorizontal: 10}}
-            keyboardDismissMode="on-drag"
-            onEndReached={() => {
-              loadMore();
-            }}
-            onEndReachedThreshold={0.5}
-            data={services}
-            renderItem={({item}) => (
-              <ListItemCard
-                handleOpenSheet={openSheet}
-                key={item.id}
-                navigation={navigation}
-                item={item}
-              />
-            )}
-            ListFooterComponent={
-              hookIsLoading ? (
-                <ActivityIndicator
-                  style={custom.activityStyle}
-                  animating={true}
-                  color={theme.colors.primary}
-                  size="large"
-                />
-              ) : null
-            }
+    <View style={custom.view}>
+      <FlatList
+        style={{paddingHorizontal: 10}}
+        keyboardDismissMode="on-drag"
+        onEndReached={() => {
+          loadMore();
+        }}
+        onEndReachedThreshold={0.5}
+        data={services}
+        renderItem={({item}) => (
+          <ListItemCard
+            handleOpenSheet={openSheet}
+            key={item.id}
+            navigation={navigation}
+            item={item}
           />
-        </List.Section>
-      </View>
-    </>
+        )}
+        ListFooterComponent={
+          hookIsLoading ? (
+            <ActivityIndicator
+              style={custom.activityStyle}
+              animating={true}
+              color={theme.colors.primary}
+              size="large"
+            />
+          ) : null
+        }
+      />
+    </View>
   );
 };
 

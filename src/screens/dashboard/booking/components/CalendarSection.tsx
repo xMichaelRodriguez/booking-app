@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import moment from 'moment';
+import React, {useEffect, useState} from 'react';
 import {Control, useController} from 'react-hook-form';
 import {StyleSheet, useColorScheme} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -15,8 +16,17 @@ interface IProps {
 export const CalendarSection = ({control, name}: IProps) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
+  const [date, setDate] = useState(moment());
 
   const {field} = useController({control, name});
+
+  useEffect(() => {
+    setDate(moment(field.value));
+  }, [field.value]);
+
+  // Calcula la fecha mínima disponible
+  const minDate = moment().toDate();
+  const maxDate = moment().add(2, 'year').toDate();
 
   return (
     <>
@@ -32,15 +42,23 @@ export const CalendarSection = ({control, name}: IProps) => {
         Pick a Day
       </Text>
       <CalendarStrip
+        calendarAnimation={{type: 'sequence', duration: 30}}
+        daySelectionAnimation={{
+          type: 'background',
+          duration: 200,
+          highlightColor: '#80DEEA',
+        }}
         highlightDateContainerStyle={{
           backgroundColor: '#EE65B3',
           shadowColor: '#fbfbfb',
           borderRadius: 5,
         }}
         numDaysInWeek={6}
-        dateNumberStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
-        dateNameStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
-        calendarHeaderStyle={{color: isDarkTheme ? '#fbfbfb' : '#000'}}
+        dateNumberStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        dateNameStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
+        disabledDateNameStyle={{color: '#BDBDBD'}}
+        disabledDateNumberStyle={{color: '#BDBDBD'}}
+        calendarHeaderStyle={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}
         iconContainer={{flex: 0}}
         iconLeftStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
@@ -48,16 +66,24 @@ export const CalendarSection = ({control, name}: IProps) => {
         iconRightStyle={{
           tintColor: isDarkTheme ? '#fbfbfb' : '#282828',
         }}
-        startingDate={field.value ?? INITIAL_DATE}
-        minDate={new Date('2022-01-31')}
-        onDateSelected={currentDay => field.onChange(currentDay.toDate())}
+        minDate={minDate}
+        maxDate={maxDate}
+        startingDate={date ?? INITIAL_DATE}
+        onDateSelected={currentDay => {
+          const newDate = new Date(
+            currentDay.year(),
+            currentDay.month(),
+            currentDay.date(),
+          );
+          field.onChange(newDate);
+        }}
         scrollable
-        selectedDate={field.value ?? INITIAL_DATE}
-        style={styles.calendarContainer}
+        selectedDate={date ?? INITIAL_DATE}
+        style={customs.calendarContainer}
       />
     </>
   );
 };
-const styles = StyleSheet.create({
+const customs = StyleSheet.create({
   calendarContainer: {height: 115, color: '#282828'},
 });

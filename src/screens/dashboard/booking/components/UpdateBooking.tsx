@@ -1,4 +1,5 @@
 import {useNavigation, useTheme} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useMemo, useEffect, useState} from 'react';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
@@ -12,6 +13,7 @@ import {BookVIew} from '../views/BookVIew';
 
 export const UpdateBooking = () => {
   const navigation = useNavigation();
+
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isBookingActive} = useAppSelector(state => state.bookings);
@@ -24,7 +26,6 @@ export const UpdateBooking = () => {
     () => (time: string) => {
       setActiveItem(time);
     },
-
     [],
   );
 
@@ -51,9 +52,10 @@ export const UpdateBooking = () => {
   // set value to date by active booking
   useEffect(() => {
     if (isBookingActive) {
-      const {date} = isBookingActive;
+      const {date: bookingDate} = isBookingActive;
+      const formattedDate = moment(bookingDate).format('YYYY-MM-DD');
 
-      setValue('date', new Date(date));
+      setValue('date', formattedDate);
     } else {
       setValue('date', INITIAL_DATE);
     }
@@ -64,17 +66,18 @@ export const UpdateBooking = () => {
     setValue('note', isBookingActive?.note ?? '');
   }, [isBookingActive, setValue]);
 
-  const selec = watch('date');
+  const selected = watch('date');
   // set list hour
   useEffect(() => {
-    const currentDate = new Date(getValues().date);
-    const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
-    if (isWeekennd) {
-      return setTimeState(weeKendTimes);
+    const currentDate = moment(getValues().date);
+    const isWeekend =
+      currentDate.weekday() === 0 || currentDate.weekday() === 6;
+    if (isWeekend) {
+      setTimeState(weeKendTimes);
     } else {
-      return setTimeState(times);
+      setTimeState(times);
     }
-  }, [getValues, selec]);
+  }, [getValues, selected]);
 
   // observer activeItem
   useEffect(() => {
