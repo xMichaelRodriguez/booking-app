@@ -133,6 +133,7 @@ export const updateBooking = (
         clientId,
         serviceId: isBookingActive?.serviceId?.id,
         date: newDate,
+        note: booking?.note,
       };
       await backendApi.patch<IBook>(
         `/bookings/${isBookingActive?.id}`,
