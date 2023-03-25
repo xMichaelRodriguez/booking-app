@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const times = [
   '8:00',
   '8:30',
@@ -31,5 +33,5 @@ export const weeKendTimes = [
   '12:00',
 ];
 
-const today = new Date();
+const today = moment().format('YYYY-MM-DD');
 export const INITIAL_DATE = today;

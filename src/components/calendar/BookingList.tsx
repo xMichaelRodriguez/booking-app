@@ -1,10 +1,11 @@
+import {Moment} from 'moment';
 import React from 'react';
 import {useAppSelector} from '../../hooks';
 import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
 import {BookingItem} from './BookingItem';
 
 interface IProps {
-  selectedDate: Date;
+  selectedDate: Moment;
   handleOpenSheet: (item: IBook) => void;
 }
 export const BookingList = ({selectedDate, handleOpenSheet}: IProps) => {

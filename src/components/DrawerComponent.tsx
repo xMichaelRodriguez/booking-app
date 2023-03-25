@@ -8,12 +8,12 @@ import {BookingScreen} from '../screens/dashboard/booking/BookingScreen';
 import {DrawerMenu} from './DrawerMenu';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IconButton, useTheme, Text} from 'react-native-paper';
-import {CalendarToUpdate} from '../screens/dashboard/booking/components/CalendarToUpdate';
+import {UpdateBooking} from '../screens/dashboard/booking/components/UpdateBooking';
 import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
 import {ROLE_ADMIN} from '../constants/roles';
 import {useAppSelector} from '../hooks';
 import {DetailService} from '../screens/dashboard/services/DetailService';
-import {CalendarCreateBooking} from '../screens/dashboard/booking/components/Calendar';
+import {CreateBooking} from '../screens/dashboard/booking/components/CreateBooking';
 
 const Drawer = createDrawerNavigator();
 
@@ -49,6 +49,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Home"
           component={HomeScreen}
           options={{
+            title: 'Inicio',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="home-outline" size={size} />
@@ -63,6 +64,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Services"
           component={ServicesScreen}
           options={{
+            title: 'Productos',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
@@ -73,7 +75,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="manageService"
           component={ServiceManager}
           options={{
-            title: 'Manage Service',
+            title: 'Administrar Producto',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="store-cog-outline" size={size} />
@@ -87,7 +89,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="detailServices"
           component={DetailService}
           options={{
-            title: 'Service Details',
+            title: 'detalles de Producto',
             headerTitleAlign: 'center',
 
             headerLeft: () => (
@@ -117,7 +119,7 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
           name="Bookings"
           component={BookingScreen}
           options={{
-            title: 'Booking List',
+            title: 'Lista de Ordenes',
             headerTitleAlign: 'center',
             drawerIcon: ({size}) => (
               <IconButton icon="calendar-clock-outline" size={size} />
@@ -127,9 +129,9 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
 
         <Drawer.Screen
           name="BookCake"
-          component={CalendarCreateBooking}
+          component={CreateBooking}
           options={{
-            title: 'Schedule Order',
+            title: 'Programar Orden',
             headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity
@@ -152,9 +154,9 @@ export const DrawerComponent = ({navigation}: {navigation: any}) => {
         />
         <Drawer.Screen
           name="EditBook"
-          component={CalendarToUpdate}
+          component={UpdateBooking}
           options={{
-            title: 'Edit Book',
+            title: 'Editar Orden',
             headerTitleAlign: 'center',
             headerLeft: () => (
               <TouchableOpacity

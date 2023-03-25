@@ -53,8 +53,8 @@ export const startLogin = (login: ILoginState) => {
       const {id, username, email, isActive, role} = user;
       await storeUserSession(jwt.accessToken);
 
-      dispatch(onCancelLoadingUI());
       dispatch(signIn({id, username, email, isActive, role}));
+      dispatch(onCancelLoadingUI());
     } catch (error) {
       removeUserSession();
       if (axios.isAxiosError(error)) {
@@ -112,7 +112,7 @@ export const startRegister = (register: IAuthRegister) => {
       await backendApi.post<IAuthLogin>('/auth/local/register', register);
 
       ToastAndroid.showWithGravityAndOffset(
-        'Email has been sent to confirm your account',
+        'Se ha enviado un correo electrónico para confirmar su cuenta',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
@@ -169,7 +169,6 @@ export const authLogout = () => {
     await removeUserSession();
     dispatch(setClearBookings());
     dispatch(clearServices());
-    removeUserSession();
     dispatch(logout());
   };
 };

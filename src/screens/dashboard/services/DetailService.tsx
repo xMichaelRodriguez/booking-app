@@ -4,13 +4,12 @@ import React from 'react';
 import {View, Image, StyleSheet, useColorScheme} from 'react-native';
 
 import {Avatar, Text, Button, Dialog, Portal} from 'react-native-paper';
-import {ROLE_ADMIN} from '../../../constants/roles';
+import WrapperAnimate from '../../../components/ui/WrapperAnimate';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {removeService} from '../../../store/slices/services/thunks';
 export const DetailService = ({navigation}: {navigation: any}) => {
   const {isActiveService} = useAppSelector(state => state.service);
   const {isLoading} = useAppSelector(state => state.ui);
-  const {role} = useAppSelector(state => state.auth);
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
 
@@ -44,64 +43,63 @@ export const DetailService = ({navigation}: {navigation: any}) => {
           uri: isActiveService?.secureUrl,
         }}
       />
-
       <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Name
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            {isActiveService?.name}
-          </Text>
-        </View>
+        <WrapperAnimate>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Name
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              {isActiveService?.name}
+            </Text>
+          </View>
 
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Description
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            {isActiveService?.description}
-          </Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text
-            variant="bodyLarge"
-            style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            Price
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
-            $ {isActiveService?.price}
-          </Text>
-        </View>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Description
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              {isActiveService?.description}
+            </Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.text, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              Price
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={[styles.subText, {color: isDark ? '#fbfbfb' : '#282828'}]}>
+              $ {isActiveService?.price}
+            </Text>
+          </View>
+        </WrapperAnimate>
 
         <View style={styles.buttonContianer}>
-          {role?.id === ROLE_ADMIN ? (
-            <Button
-              style={styles.buttonWidth}
-              mode="outlined"
-              icon="trash-can-outline"
-              onPress={toggleVisible}
-              loading={isLoading}>
-              Remove
-            </Button>
-          ) : (
-            <Button
-              mode="contained"
-              style={styles.buttonWidth}
-              onPress={onSchedule}>
-              Book order
-            </Button>
-          )}
+          <Button
+            style={styles.buttonWidth}
+            mode="outlined"
+            icon="trash-can-outline"
+            onPress={toggleVisible}
+            loading={isLoading}>
+            Remove
+          </Button>
+
+          <Button
+            mode="contained"
+            style={styles.buttonWidth}
+            onPress={onSchedule}>
+            Book order
+          </Button>
         </View>
       </View>
 
@@ -121,7 +119,7 @@ export const DetailService = ({navigation}: {navigation: any}) => {
               mode="outlined"
               style={styles.buttonWidth}
               onPress={toggleVisible}>
-              Cancel
+              Cancelar
             </Button>
             <Button onPress={onRemove} mode="contained">
               yes, to Delete
@@ -155,21 +153,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonWidth: {
-    width: '100%',
+    width: '50%',
   },
   buttonContianer: {
     position: 'absolute',
     bottom: 10,
     flexDirection: 'row',
-
+    gap: 3,
     alignSelf: 'center',
   },
   containerChildren: {
     justifyContent: 'center',
     alignItems: 'center',
     gap: 25,
-  },
-  buttonWidth2: {
-    width: '90%',
   },
 });

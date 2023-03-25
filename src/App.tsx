@@ -19,6 +19,7 @@ import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
 import {checkIsAuthenticated} from './store/slices/auth';
 import {StyleSheet, useColorScheme} from 'react-native';
 import {darkTheme, lightTheme} from './theme/theme';
+import 'moment/locale/es-us';
 const Stack = createNativeStackNavigator();
 
 function App() {

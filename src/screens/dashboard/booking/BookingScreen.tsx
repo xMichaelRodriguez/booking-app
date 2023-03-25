@@ -24,6 +24,7 @@ import {
 } from '../../../store/slices/bookings/thunks';
 import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
 import {onClearActiveBooking} from '../../../store/slices/bookings/bookingSlice';
+import WrapperAnimate from '../../../components/ui/WrapperAnimate';
 const noDataImage = require('../../../assets/no-data.png');
 export const BookingScreen = () => {
   const theme = useTheme();
@@ -48,11 +49,6 @@ export const BookingScreen = () => {
   useEffect(() => {
     dispatch(getBookings());
   }, [dispatch]);
-
-  const showDialog = (item: IBook) => {
-    setVisible(true);
-    dispatch(setActiveBooking(item));
-  };
 
   const hideDialog = () => {
     dispatch(onClearActiveBooking());
@@ -93,23 +89,25 @@ export const BookingScreen = () => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, padding: 10}}>
-      <List.Section>
-        <FlatList
-          keyboardDismissMode="on-drag"
-          data={bookings}
-          renderItem={({item}) => (
-            <BookingItemCard
-              key={item.id}
-              booking={item}
-              handleOpenSheet={openSheet}
-              navigation={navigation}
-              onShowDialog={showDialog}
-            />
-          )}
-        />
-      </List.Section>
+      <WrapperAnimate>
+        <List.Section>
+          <FlatList
+            keyboardDismissMode="on-drag"
+            data={bookings}
+            renderItem={({item}) => (
+              <BookingItemCard
+                key={item.id}
+                booking={item}
+                handleOpenSheet={openSheet}
+                navigation={navigation}
+              />
+            )}
+          />
+        </List.Section>
+      </WrapperAnimate>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>
@@ -125,7 +123,7 @@ export const BookingScreen = () => {
               mode="outlined"
               style={custom.buttonWidth}
               onPress={hideDialog}>
-              Cancel
+              Cancelar
             </Button>
             <Button onPress={handleComplete} mode="contained">
               yes, to complete
@@ -149,7 +147,7 @@ export const BookingScreen = () => {
             buttonColor={theme.colors.error}
             onPress={handleDeleteBooking}
             loading={uiLoading}>
-            Confirm
+            Confirmar
           </Button>
         </View>
       </ButtonSheetWrapper>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import {ToastAndroid} from 'react-native';
 import {backendApi} from '../../../API/backendApi';
 import {parserDate} from '../../../constants/dateParser';
@@ -7,7 +8,7 @@ import {getUserSessionParsed} from '../../secure-session';
 import {AppDispatch, RootState} from '../../store';
 import {clearActiveService} from '../services/thunks';
 import {onCloseSheetBooton} from '../ui/thunks';
-import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
+import {onCancelLoadingUI, setMessage, startLoadingUI} from '../ui/uiSlice';
 import {
   activeBook,
   onCancelLoading,
@@ -33,7 +34,7 @@ export const getBookings = () => {
       });
 
       const bookings: IBook[] = data.map(item => {
-        item = {...item, date: new Date(item.date).toISOString()};
+        item = {...item, date: moment(item.date).toISOString()};
         let [date, hour] = item.date.split('T');
         hour = hour.slice(0, 5);
         return {...item, date, hour};
@@ -71,7 +72,10 @@ export const createBooking = (
       const {date, hour} = booking;
 
       const dateParsed = parserDate(date);
-      const newDate = new Date(`${dateParsed}T${hour}Z`);
+      const newDate = moment(
+        `${dateParsed}T${hour}:00Z`,
+        'YYYY-MM-DDTHH:mm:ssZ',
+      );
       const parsedDate = newDate.toISOString();
       const payload = {
         clientId,
@@ -86,7 +90,7 @@ export const createBooking = (
       });
 
       ToastAndroid.showWithGravityAndOffset(
-        'Booking Confirmed',
+        'Orden Programada',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
@@ -119,12 +123,12 @@ export const updateBooking = (
   cb: (result: boolean) => void,
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(startLoadingUI());
     try {
-      dispatch(startLoadingUI());
       const parsedDate = parserDate(booking.date);
       const token = await getUserSessionParsed();
 
-      const newDate = new Date(`${parsedDate}T${booking.hour}Z`);
+      const newDate = moment(`${parsedDate}T${booking.hour}Z`);
       const {
         auth: {id: clientId},
         bookings: {isBookingActive},
@@ -133,6 +137,7 @@ export const updateBooking = (
         clientId,
         serviceId: isBookingActive?.serviceId?.id,
         date: newDate,
+        note: booking?.note,
       };
       await backendApi.patch<IBook>(
         `/bookings/${isBookingActive?.id}`,
@@ -145,14 +150,14 @@ export const updateBooking = (
         },
       );
       ToastAndroid.showWithGravityAndOffset(
-        'Booking Reschedule',
+        'Booking Rescheduled',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
         50,
       );
       cb(true);
-
+      dispatch(setMessage('Booking Rescheduled'));
       if (isBookingActive) {
         const payloadToSave: IBook = {
           ...isBookingActive,
@@ -161,6 +166,9 @@ export const updateBooking = (
           note: booking.note ?? '',
         };
         dispatch(onUpdateBooking(payloadToSave));
+        dispatch(onClearActiveBooking());
+        dispatch(clearActiveService());
+        dispatch(onCancelLoadingUI());
       }
       dispatch(onClearActiveBooking());
       dispatch(clearActiveService());

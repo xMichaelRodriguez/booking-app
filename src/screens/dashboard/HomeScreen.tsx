@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import BottomSheet from '@gorhom/bottom-sheet';
+import moment, {Moment} from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
@@ -8,6 +9,7 @@ import {ButtonSheetWrapper} from '../../components/ButtonSheetWrapper';
 import {BookingList} from '../../components/calendar/BookingList';
 import {CalendarHeader} from '../../components/calendar/CalendarHeader';
 import {NotData} from '../../components/ui/NotData';
+import WrapperAnimate from '../../components/ui/WrapperAnimate';
 import {INITIAL_DATE} from '../../constants/times';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
@@ -22,7 +24,9 @@ export const HomeScreen = () => {
   const {bookings} = useAppSelector(state => state.bookings);
   const theme = useTheme();
   const {height} = useWindowDimensions();
-  const [selectedDate, setSelectedDate] = useState(INITIAL_DATE);
+  const [selectedDate, setSelectedDate] = useState<Moment>(
+    moment(INITIAL_DATE),
+  );
   const bottomSheetRef = useRef<BottomSheet>(null);
   const dispatch = useAppDispatch();
   const openSheet = (item: IBook) => {
@@ -44,18 +48,23 @@ export const HomeScreen = () => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={{margin: 5}}>
+      <WrapperAnimate>
         <CalendarHeader
           selected={selectedDate}
           setSelectedDate={setSelectedDate}
         />
-      </View>
-      {bookings ? (
-        <BookingList handleOpenSheet={openSheet} selectedDate={selectedDate} />
-      ) : (
-        <NotData />
-      )}
 
+        {bookings ? (
+          <WrapperAnimate>
+            <BookingList
+              handleOpenSheet={openSheet}
+              selectedDate={selectedDate}
+            />
+          </WrapperAnimate>
+        ) : (
+          <NotData />
+        )}
+      </WrapperAnimate>
       <ButtonSheetWrapper
         bottomSheetRef={bottomSheetRef}
         percentage={'20%'}
@@ -72,7 +81,7 @@ export const HomeScreen = () => {
             buttonColor={theme.colors.error}
             onPress={handleDeleteBooking}
             loading={isLoading}>
-            Confirm
+            Confirmar
           </Button>
         </View>
       </ButtonSheetWrapper>

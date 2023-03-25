@@ -1,26 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
-import {
-  ActivityIndicator,
-  List,
-  useTheme,
-  Text,
-  Button,
-} from 'react-native-paper';
-import {
-  Image,
-  StyleSheet,
-  useColorScheme,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {ActivityIndicator, useTheme, Text, Button} from 'react-native-paper';
+import {Image, StyleSheet, useColorScheme, View} from 'react-native';
 import {INavigationProps} from '../../../interface';
 
 import {ListItemCard} from './components/ListItemCard';
-import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
-import BottomSheet from '@gorhom/bottom-sheet';
-import {BottonContent} from '../../../components/BottonContent';
 import {useInfinityScroll} from '../../../hooks/useInfinityScroll';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {getServices} from '../../../store/slices/services/thunks';
@@ -34,13 +19,9 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   const isDark = scheme === 'dark';
 
   const dispatch = useAppDispatch();
-  const bottomSheetRef = useRef<BottomSheet>(null);
   // store
   const {services, isLoadingService} = useAppSelector(state => state.service);
   const {isLoading: hookIsLoading, loadMore} = useInfinityScroll();
-
-  // Get the height of the screen
-  const {height} = useWindowDimensions();
 
   // load services
   useEffect(() => {
@@ -54,7 +35,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     navigation.navigate('Root', {
       screen: 'detailServices',
     });
-    // bottomSheetRef.current?.snapToIndex(1);
   };
 
   if (isLoadingService) {
@@ -88,45 +68,35 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
   }
 
   return (
-    <>
-      <View style={custom.view}>
-        <List.Section>
-          <FlatList
-            style={{paddingHorizontal: 10}}
-            keyboardDismissMode="on-drag"
-            onEndReached={() => {
-              loadMore();
-            }}
-            onEndReachedThreshold={0.5}
-            data={services}
-            renderItem={({item}) => (
-              <ListItemCard
-                handleOpenSheet={openSheet}
-                key={item.id}
-                navigation={navigation}
-                item={item}
-              />
-            )}
-            ListFooterComponent={
-              hookIsLoading ? (
-                <ActivityIndicator
-                  style={custom.activityStyle}
-                  animating={true}
-                  color={theme.colors.primary}
-                  size="large"
-                />
-              ) : null
-            }
+    <View style={custom.view}>
+      <FlatList
+        style={{paddingHorizontal: 10}}
+        keyboardDismissMode="on-drag"
+        onEndReached={() => {
+          loadMore();
+        }}
+        onEndReachedThreshold={0.5}
+        data={services}
+        renderItem={({item}) => (
+          <ListItemCard
+            handleOpenSheet={openSheet}
+            key={item.id}
+            navigation={navigation}
+            item={item}
           />
-        </List.Section>
-      </View>
-      <ButtonSheetWrapper
-        bottomSheetRef={bottomSheetRef}
-        percentage={'50%'}
-        height={height}>
-        <BottonContent bottomSheetRef={bottomSheetRef} />
-      </ButtonSheetWrapper>
-    </>
+        )}
+        ListFooterComponent={
+          hookIsLoading ? (
+            <ActivityIndicator
+              style={custom.activityStyle}
+              animating={true}
+              color={theme.colors.primary}
+              size="large"
+            />
+          ) : null
+        }
+      />
+    </View>
   );
 };
 

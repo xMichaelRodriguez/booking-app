@@ -1,3 +1,4 @@
+import {Moment} from 'moment';
 import {IService} from '../../services/interface/services.interface';
 
 export interface IBookState {
@@ -30,12 +31,12 @@ interface IUser {
   email: string;
 }
 
-interface IState {
+export interface IState {
   id: number;
   name: string;
 }
 export interface ICreateBook {
-  date: Date;
+  date: Date | Moment | string;
   hour: string;
   note?: string;
 }

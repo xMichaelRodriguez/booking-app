@@ -21,6 +21,8 @@ import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {addNewService} from '../../../../store/slices/services/thunks';
 import Notification from '../../../../components/ui/Notification';
 import {onToggleSnackBar} from '../../../../store/slices/ui/uiSlice';
+import {useFocusEffect} from '@react-navigation/native';
+import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 
 interface IFormInput {
   image: string;
@@ -43,6 +45,7 @@ export const ServiceManager = () => {
     formState: {errors},
     setError,
     reset,
+    clearErrors,
   } = useForm<IFormInput>();
 
   // Get the Image controller
@@ -74,6 +77,14 @@ export const ServiceManager = () => {
       field.onChange(resp.assets);
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      clearErrors();
+      reset();
+    }, [clearErrors, reset]),
+  );
+
   const onSubmit: SubmitHandler<IFormInput> = data => {
     dispatch(
       addNewService(data, (message: string) => {
@@ -86,134 +97,135 @@ export const ServiceManager = () => {
   };
   return (
     <View style={{flex: 1}}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.containerInput}>
-            <Text
-              variant="headlineSmall"
-              style={{
-                marginVertical: 20,
-                color: isDark ? '#fbfbfb' : '#282828',
-              }}>
-              Choose Image
-            </Text>
-            {imageSelected === null ? (
-              <IconButton
-                icon={'image-edit-outline'}
-                size={90}
-                style={styles.imageStyle}
-                mode="outlined"
-                onPress={handlePickerImage}
-              />
-            ) : (
-              <TouchableOpacity onPress={handlePickerImage}>
-                <Image
+      <WrapperAnimate>
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.containerInput}>
+              <Text
+                variant="headlineSmall"
+                style={{
+                  marginVertical: 20,
+                  color: isDark ? '#fbfbfb' : '#282828',
+                }}>
+                Elige una Image
+              </Text>
+              {imageSelected === null ? (
+                <IconButton
+                  icon={'image-edit-outline'}
+                  size={90}
                   style={styles.imageStyle}
-                  source={{
-                    uri: imageSelected,
-                  }}
-                />
-              </TouchableOpacity>
-            )}
-            {errors.image && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.image.message}
-              </Text>
-            )}
-          </View>
-          <View style={styles.containerInput}>
-            <Controller
-              name="name"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Name'},
-                maxLength: {value: 20, message: 'max characters 20'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  label="Name"
                   mode="outlined"
-                  onBlur={onBlur}
-                  textColor={isDark ? '#fbfbfb' : '#282828'}
-                  error={!!errors.name}
-                  value={value}
-                  onChangeText={onChange}
+                  onPress={handlePickerImage}
                 />
+              ) : (
+                <TouchableOpacity onPress={handlePickerImage}>
+                  <Image
+                    style={styles.imageStyle}
+                    source={{
+                      uri: imageSelected,
+                    }}
+                  />
+                </TouchableOpacity>
               )}
-            />
-            {errors.name && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.name.message}
-              </Text>
-            )}
-          </View>
-          <View style={styles.containerInput}>
-            <Controller
-              name="description"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Description'},
-                maxLength: {value: 200, message: 'max characters 200'},
-                minLength: {value: 50, message: 'min characters 50'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  multiline
-                  numberOfLines={3}
-                  label="Description"
-                  mode="outlined"
-                  onBlur={onBlur}
-                  textColor={isDark ? '#fbfbfb' : '#282828'}
-                  error={!!errors.description}
-                  value={value}
-                  onChangeText={onChange}
-                />
+              {errors.image && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.image.message}
+                </Text>
               )}
-            />
-            {errors.description && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.description.message}
-              </Text>
-            )}
-          </View>
-          <View style={styles.containerInput}>
-            <Controller
-              name="price"
-              control={control}
-              rules={{
-                required: {value: true, message: 'Required Price'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <TextInput
-                  label="Price"
-                  mode="outlined"
-                  onBlur={onBlur}
-                  textColor={isDark ? '#fbfbfb' : '#282828'}
-                  keyboardType="decimal-pad"
-                  error={!!errors.price}
-                  value={value}
-                  onChangeText={onChange}
-                />
+            </View>
+            <View style={styles.containerInput}>
+              <Controller
+                name="name"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Required Name'},
+                  maxLength: {value: 20, message: 'max characters 20'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    label="Name"
+                    mode="outlined"
+                    onBlur={onBlur}
+                    textColor={isDark ? '#fbfbfb' : '#282828'}
+                    error={!!errors.name}
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
+              {errors.name && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.name.message}
+                </Text>
               )}
-            />
-            {errors.price && (
-              <Text style={{color: theme.colors.error}}>
-                {errors.price.message}
-              </Text>
-            )}
-          </View>
+            </View>
+            <View style={styles.containerInput}>
+              <Controller
+                name="description"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Required Description'},
+                  maxLength: {value: 200, message: 'max characters 200'},
+                  minLength: {value: 50, message: 'min characters 50'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    multiline
+                    numberOfLines={3}
+                    label="Description"
+                    mode="outlined"
+                    onBlur={onBlur}
+                    textColor={isDark ? '#fbfbfb' : '#282828'}
+                    error={!!errors.description}
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
+              {errors.description && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.description.message}
+                </Text>
+              )}
+            </View>
+            <View style={styles.containerInput}>
+              <Controller
+                name="price"
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Required Price'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    label="Price"
+                    mode="outlined"
+                    onBlur={onBlur}
+                    textColor={isDark ? '#fbfbfb' : '#282828'}
+                    keyboardType="decimal-pad"
+                    error={!!errors.price}
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
+              />
+              {errors.price && (
+                <Text style={{color: theme.colors.error}}>
+                  {errors.price.message}
+                </Text>
+              )}
+            </View>
 
-          <View style={[styles.containerInput]}>
-            <Button
-              mode="contained"
-              onPress={handleSubmit(onSubmit)}
-              loading={isLoading}>
-              Confirm
-            </Button>
+            <View style={[styles.containerInput]}>
+              <Button
+                mode="contained"
+                onPress={handleSubmit(onSubmit)}
+                loading={isLoading}>
+                Confirmar
+              </Button>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-
+        </ScrollView>
+      </WrapperAnimate>
       <Notification message={notificationMessage} />
     </View>
   );

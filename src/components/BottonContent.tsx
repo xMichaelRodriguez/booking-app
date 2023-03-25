@@ -16,9 +16,12 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const onSchedule = () => {
-    navigation.navigate('Root', {
-      screen: 'BookCake',
-    });
+    navigation.navigate(
+      'Root' as never,
+      {
+        screen: 'BookCake',
+      } as never,
+    );
     bottomSheetRef?.current?.snapToIndex(0);
   };
   const onRemove = () => {
@@ -56,11 +59,11 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
         <Text variant="labelMedium">{isActiveService?.description}</Text>
       </View>
       <View style={{flexDirection: 'row', gap: 5}}>
-        <Button mode="outlined" onPress={onRemove}>
-          Remove
-        </Button>
         <Button mode="contained" onPress={onSchedule}>
           Schedule
+        </Button>
+        <Button mode="outlined" onPress={onRemove}>
+          Remove
         </Button>
       </View>
     </View>

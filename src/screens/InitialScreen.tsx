@@ -1,12 +1,21 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Animated} from 'react-native';
 import {Button, useTheme} from 'react-native-paper';
 import {Logo} from '../components/Logo';
 
 export const InitialScreen = ({navigation}: {navigation: any}) => {
   const theme = useTheme();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [fadeIn, setFadeIn] = React.useState(new Animated.Value(0));
+  React.useEffect(() => {
+    Animated.timing(fadeIn, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  }, [fadeIn]);
   return (
-    <View style={styles.view}>
+    <Animated.View style={[styles.view, {opacity: fadeIn}]}>
       <View style={styles.logo}>
         <Logo />
       </View>
@@ -16,7 +25,7 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
         style={[styles.buttonMargin, {borderColor: theme.colors.primary}]}
         mode="outlined"
         onPress={() => navigation.navigate('SignIn')}>
-        Sign In
+        Iniciar Sesion
       </Button>
 
       <Button
@@ -25,9 +34,9 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
         mode="contained"
         style={[styles.buttonMargin, {borderColor: theme.colors.primary}]}
         onPress={() => navigation.navigate('SignUp')}>
-        Sign up
+        Registrarte
       </Button>
-    </View>
+    </Animated.View>
   );
 };
 

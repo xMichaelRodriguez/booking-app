@@ -17,6 +17,7 @@ import {startLogin} from '../../store/slices/auth';
 import {validEmail, validPassword} from '../../utils/emailRegex';
 import {GoogleButton} from '../../components/GoogleButton';
 import DividerWithOr from '../../components/DividerWIthOr';
+import WrapperAnimate from '../../components/ui/WrapperAnimate';
 
 interface IFormInput {
   email: string;
@@ -40,7 +41,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <View>
+    <WrapperAnimate>
       <View style={styles.logoView}>
         <Logo />
       </View>
@@ -98,7 +99,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         )}
 
         <Checkbox.Item
-          label="Show Password"
+          label="Mostrar Contraseña"
           status={isVisible ? 'checked' : 'unchecked'}
           position="leading"
           style={[styles.checkbox]}
@@ -116,7 +117,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}>
           <Text style={[styles.forgotPassword, {color: theme.colors.primary}]}>
-            Forgot your password?
+            Olvidaste Tu Contraseña?
           </Text>
         </TouchableOpacity>
       </View>
@@ -125,22 +126,22 @@ export const SignInView = ({navigation}: {navigation: any}) => {
         mode="contained"
         onPress={handleSubmit(onSubmit)}
         loading={isLoading}>
-        Sign In
+        Iniciar Sesion
       </Button>
       <View style={styles.row}>
         <Text style={{color: isDark ? '#fbfbfb' : '#282828'}}>
-          Don't have an account?
+          No tienes una cuenta?
         </Text>
         <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
           <Text style={[styles.link, {color: theme.colors.primary}]}>
             {' '}
-            Sign Up
+            Registrarse
           </Text>
         </TouchableOpacity>
       </View>
       <DividerWithOr />
       <GoogleButton />
-    </View>
+    </WrapperAnimate>
   );
 };
 const styles = StyleSheet.create({

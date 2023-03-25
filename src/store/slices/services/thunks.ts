@@ -34,7 +34,9 @@ export const getServices = () => {
       });
 
       dispatch(setServices(data));
+      dispatch(onCancelLoadingUI());
     } catch (error) {
+      dispatch(onCancelLoadingUI());
       removeUserSession();
       dispatch(authLogout());
     }
@@ -153,6 +155,7 @@ export const removeService = (cb: (isRemoved: boolean) => void) => {
       );
     } catch (error) {
       cb(false);
+      dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {

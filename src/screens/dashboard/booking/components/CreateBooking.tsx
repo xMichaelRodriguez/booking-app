@@ -1,6 +1,5 @@
 import React, {useMemo, useEffect, useState} from 'react';
 
-import {ActivityIndicator} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
@@ -9,14 +8,13 @@ import {BookVIew} from '../views/BookVIew';
 import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {createBooking} from '../../../../store/slices/bookings/thunks';
 import {times, weeKendTimes} from '../../../../constants/times';
-import {useTheme} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
+import moment from 'moment';
 
-export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
+export const CreateBooking = ({navigation}: {navigation: any}) => {
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
-  const theme = useTheme();
   // TODO hook dispatch
   const dispatch = useAppDispatch();
 
@@ -36,6 +34,7 @@ export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
     setError,
     getValues,
     clearErrors,
+    watch,
     reset,
   } = useForm<ICreateBook>();
 
@@ -48,15 +47,17 @@ export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
     setValue('hour', activeItem);
   }, [activeItem, clearErrors, setValue]);
 
+  const newDateSelected = watch('date');
   useEffect(() => {
-    const currentDate = new Date(getValues().date);
-    const isWeekennd = currentDate.getDay() === 0 || currentDate.getDay() === 6;
-    if (isWeekennd) {
+    const currentDate = moment(getValues().date);
+    const isWeekend =
+      currentDate.weekday() === 0 || currentDate.weekday() === 6;
+    if (isWeekend) {
       return setTimeState(weeKendTimes);
     } else {
       return setTimeState(times);
     }
-  }, [getValues]);
+  }, [getValues, newDateSelected]);
 
   const onSubmit: SubmitHandler<ICreateBook> = data => {
     if (!data.hour) {
@@ -79,14 +80,7 @@ export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
   };
 
   if (!isActiveService) {
-    return (
-      <ActivityIndicator
-        style={styles.activityStyle}
-        animating={true}
-        color={theme.colors.primary}
-        size="large"
-      />
-    );
+    return navigation.replace('Root', {screen: 'Services'});
   }
   return (
     <ScrollView style={styles.container}>
@@ -101,7 +95,7 @@ export const CalendarCreateBooking = ({navigation}: {navigation: any}) => {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         timeState={timeState}
-        buttonName={'Confirm Booking'}
+        buttonName={'Confirmmar Orden'}
       />
     </ScrollView>
   );
