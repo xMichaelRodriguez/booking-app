@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {ServicesScreen} from '../screens/dashboard/services/ServicesScreen';
 import {HomeScreen} from '../screens/dashboard/HomeScreen';
@@ -11,15 +11,46 @@ import {IconButton, useTheme, Text} from 'react-native-paper';
 import {UpdateBooking} from '../screens/dashboard/booking/components/UpdateBooking';
 import {ServiceManager} from '../screens/dashboard/services/components/ServiceManager';
 import {ROLE_ADMIN} from '../constants/roles';
-import {useAppSelector} from '../hooks';
+import {useAppDispatch, useAppSelector} from '../hooks';
 import {DetailService} from '../screens/dashboard/services/DetailService';
 import {CreateBooking} from '../screens/dashboard/booking/components/CreateBooking';
-
+import messaging from '@react-native-firebase/messaging';
+import {subscribeNotifications} from '../store/slices/auth';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
   const {role} = useAppSelector(state => state.auth);
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const token = await messaging().getToken();
+
+        dispatch(subscribeNotifications(token));
+      } catch (error) {
+        console.error({error});
+      }
+    };
+    getToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // TODO: Background Notification
+    const unsubscribe = messaging().setBackgroundMessageHandler(
+      async (remoteMessage: any) => {
+        try {
+          console.log('Notificación recibida en segundo plano', remoteMessage);
+        } catch (error) {
+          console.debug({error});
+        }
+      },
+    );
+    return () => {
+      unsubscribe;
+    };
+  }, []);
 
   const handleGoBack = (subScreen: string) => {
     navigation.replace('Root', {screen: subScreen});

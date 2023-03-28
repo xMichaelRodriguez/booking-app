@@ -164,6 +164,40 @@ export const requestResetPasswordToken = (data: {email: string}) => {
   };
 };
 
+export const subscribeNotifications = (token: string) => {
+  return async () => {
+    try {
+      const jwtToken = await getUserSessionParsed();
+      console.log({token});
+      backendApi.post(
+        '/auth/subscriptions',
+        {token},
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        },
+      );
+
+      ToastAndroid.showWithGravityAndOffset(
+        'Notificaciones Activadas',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    } catch (error) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Error al activar notificaciones',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    }
+  };
+};
+
 export const authLogout = () => {
   return async (dispatch: AppDispatch) => {
     await removeUserSession();
