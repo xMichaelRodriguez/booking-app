@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {backendApi} from '../../../API/backendApi';
 import {ToastAndroid} from 'react-native';
-import {AppDispatch} from '../../store';
+import {AppDispatch, RootState} from '../../store';
 import {logout, signIn, startLoadingLogin} from './authSlice';
 import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
 import {
@@ -165,27 +165,32 @@ export const requestResetPasswordToken = (data: {email: string}) => {
 };
 
 export const subscribeNotifications = (token: string) => {
-  return async () => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const jwtToken = await getUserSessionParsed();
-      console.log({token});
-      backendApi.post(
-        '/auth/subscriptions',
-        {token},
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
+      const {id: authId} = getState().auth;
+      const isSubscribed = await checkSubscription(authId);
+      if (!isSubscribed) {
+        const jwtToken = await getUserSessionParsed();
+        await backendApi.post(
+          '/auth/subscriptions',
+          {token},
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
           },
-        },
-      );
+        );
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Notificaciones Activadas',
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
+        ToastAndroid.showWithGravityAndOffset(
+          'Notificaciones Activadas',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+      } else {
+        return;
+      }
     } catch (error) {
       ToastAndroid.showWithGravityAndOffset(
         'Error al activar notificaciones',
@@ -194,8 +199,22 @@ export const subscribeNotifications = (token: string) => {
         25,
         50,
       );
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response && error.response.data;
+        console.debug({errorData});
+      }
     }
   };
+};
+
+const checkSubscription = async (id: number) => {
+  const token = await getUserSessionParsed();
+  const {data} = await backendApi.get(`/auth/subscriptions/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
 };
 
 export const authLogout = () => {
