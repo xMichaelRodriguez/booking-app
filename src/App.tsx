@@ -20,6 +20,7 @@ import {checkIsAuthenticated} from './store/slices/auth';
 import {StyleSheet, useColorScheme} from 'react-native';
 import {darkTheme, lightTheme} from './theme/theme';
 import 'moment/locale/es-us';
+import {useNotificationPermission} from './hooks/useNotifications';
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -36,12 +37,12 @@ function App() {
   }, [colorScheme]);
 
   const theme = isDarkTheme ? darkTheme : lightTheme;
-
+  const hasPermission = useNotificationPermission();
   useEffect(() => {
     dispatch(checkIsAuthenticated());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isLoading || hasPermission === null) {
     return (
       <ActivityIndicator
         style={custom.activityStyle}

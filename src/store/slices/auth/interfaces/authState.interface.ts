@@ -9,7 +9,7 @@ export interface IAuthState {
   isLoading?: boolean;
 }
 
-interface IRole {
+export interface IRole {
   id: number;
   name: string;
   description: string;

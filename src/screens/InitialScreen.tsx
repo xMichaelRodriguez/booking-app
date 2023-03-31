@@ -5,8 +5,10 @@ import {Logo} from '../components/Logo';
 
 export const InitialScreen = ({navigation}: {navigation: any}) => {
   const theme = useTheme();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fadeIn, setFadeIn] = React.useState(new Animated.Value(0));
+
   React.useEffect(() => {
     Animated.timing(fadeIn, {
       toValue: 1,
@@ -14,6 +16,7 @@ export const InitialScreen = ({navigation}: {navigation: any}) => {
       useNativeDriver: false,
     }).start();
   }, [fadeIn]);
+
   return (
     <Animated.View style={[styles.view, {opacity: fadeIn}]}>
       <View style={styles.logo}>

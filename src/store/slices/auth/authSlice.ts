@@ -1,16 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {RootState} from '../../store';
-import {IAuthState} from './interfaces';
+import {IAuthState, IRole} from './interfaces';
 
 // Define the initial state using that type
 const initialState: IAuthState = {
   isSigned: false,
-  id: null,
-  username: null,
-  email: null,
-  isActive: null,
-  role: null,
+  id: 0,
+  username: '',
+  email: '',
+  isActive: false,
+  role: {} as IRole,
   isLoading: false,
 };
 
@@ -34,11 +34,12 @@ export const authSlice = createSlice({
     },
 
     logout: state => {
-      state.email = null;
-      state.id = null;
-      state.isActive = null;
-      state.role = null;
-      state.username = null;
+      state.id = 0;
+      state.username = '';
+      state.email = '';
+      state.isActive = false;
+      state.role = {} as IRole;
+      state.isLoading = false;
       state.isSigned = false;
       state.isLoading = false;
     },
