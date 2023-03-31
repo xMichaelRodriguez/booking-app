@@ -17,14 +17,13 @@ import {CreateBooking} from '../screens/dashboard/booking/components/CreateBooki
 import messaging from '@react-native-firebase/messaging';
 import {subscribeNotifications} from '../store/slices/auth';
 import {useNotificationPermission} from '../hooks/useNotifications';
-import {requestNotificationPermission} from '../notifications/requestPermissions';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
   const {role} = useAppSelector(state => state.auth);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const hasPermission = requestNotificationPermission();
+  const hasPermission = useNotificationPermission();
   useEffect(() => {
     const getToken = async () => {
       try {

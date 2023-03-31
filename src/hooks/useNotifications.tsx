@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useAppSelector} from '.';
 import {checkNotificationPermission} from '../notifications/checkPermissions';
-import {requestNotificationPermission} from '../notifications/requestPermissions';
+import {requestNotificationsPermission} from '../notifications/requestPermissions';
 
 export function useNotificationPermission() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -12,7 +12,7 @@ export function useNotificationPermission() {
       if (permission) {
         setHasPermission(permission);
       } else {
-        permission = await requestNotificationPermission();
+        permission = await requestNotificationsPermission();
         setHasPermission(permission);
       }
     }
