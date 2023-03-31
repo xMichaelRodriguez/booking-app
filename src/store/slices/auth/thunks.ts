@@ -20,7 +20,6 @@ export const checkIsAuthenticated = () => {
       const token = await getUserSessionParsed();
 
       // TODO: Make http request
-
       const {data} = await backendApi.get<IAuthState>('/auth/me', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,6 +60,7 @@ export const startLogin = (login: ILoginState) => {
         const errorData = error.response && error.response.data;
         if (errorData?.statusCode !== 200) {
           dispatch(onCancelLoadingUI());
+          console.log({errorData});
           return ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,

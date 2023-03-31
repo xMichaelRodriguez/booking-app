@@ -13,12 +13,19 @@ export async function requestNotificationPermission() {
       },
     );
 
-    console.log({permiso: PermissionsAndroid.RESULTS.GRANTED, granted});
-    if (granted) {
-      console.log('Permiso de notificación otorgado');
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log(
+        'Permiso de notificación otorgado',
+        granted,
+        PermissionsAndroid.RESULTS.GRANTED,
+      );
       return true;
     } else {
-      console.log('Permiso de notificación denegado');
+      console.log(
+        'Permiso de notificación denegado',
+        granted,
+        PermissionsAndroid.RESULTS.GRANTED,
+      );
       return false;
     }
   } catch (err) {

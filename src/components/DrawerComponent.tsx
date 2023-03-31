@@ -16,25 +16,29 @@ import {DetailService} from '../screens/dashboard/services/DetailService';
 import {CreateBooking} from '../screens/dashboard/booking/components/CreateBooking';
 import messaging from '@react-native-firebase/messaging';
 import {subscribeNotifications} from '../store/slices/auth';
+import {useNotificationPermission} from '../hooks/useNotifications';
+import {requestNotificationPermission} from '../notifications/requestPermissions';
 const Drawer = createDrawerNavigator();
 
 export const DrawerComponent = ({navigation}: {navigation: any}) => {
   const {role} = useAppSelector(state => state.auth);
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const hasPermission = requestNotificationPermission();
   useEffect(() => {
     const getToken = async () => {
       try {
-        const token = await messaging().getToken();
-
-        dispatch(subscribeNotifications(token));
+        if (await hasPermission) {
+          const token = await messaging().getToken();
+          dispatch(subscribeNotifications(token));
+        }
       } catch (error) {
         console.error({error});
       }
     };
+
     getToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, hasPermission]);
 
   useEffect(() => {
     // TODO: Background Notification
