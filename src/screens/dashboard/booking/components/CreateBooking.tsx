@@ -1,17 +1,18 @@
-import React, {useMemo, useEffect, useState} from 'react';
-
-import {useAppDispatch, useAppSelector} from '../../../../hooks';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {StyleSheet} from 'react-native';
-
-import {BookVIew} from '../views/BookVIew';
-import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
-import {createBooking} from '../../../../store/slices/bookings/thunks';
-import {times, weeKendTimes} from '../../../../constants/times';
-import {ScrollView} from 'react-native-gesture-handler';
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import moment from 'moment';
+import React, {useMemo, useEffect, useState} from 'react';
+import {type SubmitHandler, useForm} from 'react-hook-form';
+import {StyleSheet} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
-export const CreateBooking = ({navigation}: {navigation: any}) => {
+import {times, weeKendTimes} from '../../../../constants/times';
+import {useAppDispatch, useAppSelector} from '../../../../hooks';
+import {type INavigationProps} from '../../../../interface';
+import {type ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {createBooking} from '../../../../store/slices/bookings/thunks';
+import {BookVIew} from '../views/BookVIew';
+
+export const CreateBooking = ({navigation}: INavigationProps) => {
   const [timeState, setTimeState] = useState(times);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {isActiveService} = useAppSelector(state => state.service);
@@ -40,9 +41,8 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
 
   // setHour
   useEffect(() => {
-    if (!activeItem) {
-      return;
-    }
+    if (!activeItem) return;
+
     clearErrors('hour');
     setValue('hour', activeItem);
   }, [activeItem, clearErrors, setValue]);
@@ -53,22 +53,25 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
     const isWeekend =
       currentDate.weekday() === 0 || currentDate.weekday() === 6;
     if (isWeekend) {
-      return setTimeState(weeKendTimes);
-    } else {
-      return setTimeState(times);
+      setTimeState(weeKendTimes);
+      return;
     }
+
+    setTimeState(times);
   }, [getValues, newDateSelected]);
 
   const onSubmit: SubmitHandler<ICreateBook> = data => {
     if (!data.hour) {
-      return setError('hour', {
+      setError('hour', {
         type: 'required',
         message: 'You must select a time',
       });
+      return;
     }
+
     clearErrors('hour');
     dispatch(
-      createBooking(data, (result: boolean) => {
+      createBooking(data, ({result}: {result: boolean}) => {
         if (result) {
           setActiveItem(null);
           reset();
@@ -79,15 +82,15 @@ export const CreateBooking = ({navigation}: {navigation: any}) => {
     );
   };
 
-  if (!isActiveService) {
+  if (isActiveService == null)
     return navigation.replace('Root', {screen: 'Services'});
-  }
+
   return (
     <ScrollView style={styles.container}>
       <BookVIew
         name={isActiveService.name}
         description={isActiveService.description}
-        mediaUrl={isActiveService.secureUrl}
+        mediaUrl={isActiveService?.secureUrl}
         activeItem={activeItem}
         control={control}
         errors={errors}

@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef} from 'react';
+import React, {type ReactNode, useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
 
 interface IProps {

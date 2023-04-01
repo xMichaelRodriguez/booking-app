@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {View, StyleSheet, Animated} from 'react-native';
 import {Button, useTheme} from 'react-native-paper';
-import {Logo} from '../components/Logo';
 
-export const InitialScreen = ({navigation}: {navigation: any}) => {
+import {Logo} from '../components/Logo';
+import {type INavigationProps} from '../interface';
+
+export const InitialScreen = ({navigation}: INavigationProps) => {
   const theme = useTheme();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

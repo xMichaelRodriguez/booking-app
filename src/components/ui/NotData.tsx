@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Image, StyleSheet, useColorScheme} from 'react-native';
 import {Text} from 'react-native-paper';
+
 const noDataImage = require('../../assets/no-data.png');
 export const NotData = () => {
   const scheme = useColorScheme();

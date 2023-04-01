@@ -1,0 +1,16 @@
+.bundle/
+.idea/
+.vscode/
+.node_modules
+android/
+ios/
+**/node_modules/**
+package*
+Gemfile
+
+metro.config.ts
+*.md
+tsconfig.json
+yarn*
+
+.eslint.js

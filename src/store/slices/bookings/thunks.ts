@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable n/no-callback-literal */
 import axios from 'axios';
 import moment from 'moment';
 import {ToastAndroid} from 'react-native';
+
 import {backendApi} from '../../../API/backendApi';
 import {parserDate} from '../../../constants/dateParser';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
 import {getUserSessionParsed} from '../../secure-session';
-import {AppDispatch, RootState} from '../../store';
+import {type AppDispatch, type RootState} from '../../store';
 import {clearActiveService} from '../services/thunks';
 import {onCloseSheetBooton} from '../ui/thunks';
 import {onCancelLoadingUI, setMessage, startLoadingUI} from '../ui/uiSlice';
@@ -18,7 +21,11 @@ import {
   setBookings,
   startLoadingBookings,
 } from './bookingSlice';
-import {IBook, IBookDB, ICreateBook} from './interface/bookin.interface';
+import {
+  type IBook,
+  type IBookDB,
+  type ICreateBook,
+} from './interface/bookin.interface';
 
 export const getBookings = () => {
   return async (dispatch: AppDispatch) => {
@@ -44,7 +51,7 @@ export const getBookings = () => {
       dispatch(onCancelLoading());
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,
@@ -59,7 +66,7 @@ export const getBookings = () => {
 
 export const createBooking = (
   booking: ICreateBook,
-  cb: (result: boolean) => void,
+  cb: ({result}: {result: boolean}) => void,
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(startLoadingUI());
@@ -100,12 +107,14 @@ export const createBooking = (
       dispatch(clearActiveService());
       dispatch(onCancelLoadingUI());
       dispatch(getBookings());
-      cb(true);
+      cb({result: true});
     } catch (error) {
-      cb(false);
+      cb({
+        result: false,
+      });
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,
@@ -120,7 +129,7 @@ export const createBooking = (
 
 export const updateBooking = (
   booking: ICreateBook,
-  cb: (result: boolean) => void,
+  cb: ({result}: {result: boolean}) => void,
 ) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(startLoadingUI());
@@ -139,26 +148,29 @@ export const updateBooking = (
         date: newDate,
         note: booking?.note,
       };
-      await backendApi.patch<IBook>(
-        `/bookings/${isBookingActive?.id}`,
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+      if (isBookingActive != null) {
+        await backendApi.patch<IBook>(
+          `/bookings/${isBookingActive?.id}`,
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
-      ToastAndroid.showWithGravityAndOffset(
-        'Booking Rescheduled',
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
-      cb(true);
-      dispatch(setMessage('Booking Rescheduled'));
-      if (isBookingActive) {
+        );
+        ToastAndroid.showWithGravityAndOffset(
+          'Booking Rescheduled',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+        cb({
+          result: true,
+        });
+        dispatch(setMessage('Booking Rescheduled'));
+
         const payloadToSave: IBook = {
           ...isBookingActive,
           date: parsedDate,
@@ -174,10 +186,12 @@ export const updateBooking = (
       dispatch(clearActiveService());
       dispatch(onCancelLoadingUI());
     } catch (error) {
-      cb(false);
+      cb({
+        result: false,
+      });
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,
@@ -204,33 +218,34 @@ export const setCompleteBookingState = () => {
     try {
       dispatch(startLoadingUI());
       const token = await getUserSessionParsed();
-
-      await backendApi.patch(
-        `/bookings/${isBookingActive?.id}/update-states`,
-        {stateId: COMPLETED_STATE_ID},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+      if (isBookingActive != null) {
+        await backendApi.patch(
+          `/bookings/${isBookingActive.id}/update-states`,
+          {stateId: COMPLETED_STATE_ID},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
+        );
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Completed Booking',
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
-      await dispatch(getBookings());
-      dispatch(onClearActiveBooking());
-      dispatch(clearActiveService());
-      dispatch(onCancelLoadingUI());
+        ToastAndroid.showWithGravityAndOffset(
+          'Completed Booking',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+        await dispatch(getBookings());
+        dispatch(onClearActiveBooking());
+        dispatch(clearActiveService());
+        dispatch(onCancelLoadingUI());
+      }
     } catch (error) {
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,
@@ -243,25 +258,26 @@ export const setCompleteBookingState = () => {
   };
 };
 
-export const onDeleteBook = (cb: (result: boolean) => void) => {
+export const onDeleteBook = (cb: ({result}: {result: boolean}) => void) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(startLoadingUI());
     const {isBookingActive} = getState().bookings;
 
     try {
       const token = await getUserSessionParsed();
-      await backendApi.delete(`/bookings/${isBookingActive?.id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (isBookingActive) {
+
+      if (isBookingActive != null) {
+        await backendApi.delete(`/bookings/${isBookingActive?.id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         dispatch(onClearActiveBooking());
         dispatch(onCancelLoadingUI());
         dispatch(removeBook(isBookingActive));
         dispatch(onCloseSheetBooton());
-        cb(true);
+        cb({result: true});
         ToastAndroid.showWithGravityAndOffset(
           'Booking Removed',
           ToastAndroid.LONG,
@@ -271,11 +287,13 @@ export const onDeleteBook = (cb: (result: boolean) => void) => {
         );
       }
     } catch (error) {
-      cb(false);
+      cb({
+        result: false,
+      });
       dispatch(onCancelLoadingUI());
       dispatch(onClearActiveBooking());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         ToastAndroid.showWithGravityAndOffset(
           errorData.message,
           ToastAndroid.LONG,

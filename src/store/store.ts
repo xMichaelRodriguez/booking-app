@@ -1,4 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
+
 import {authSlice} from './slices/auth';
 import {bookingSlice} from './slices/bookings/bookingSlice';
 import {serviceSlice} from './slices/services/servicesSlice';

@@ -1,5 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {StyleSheet, useColorScheme, View} from 'react-native';
 import {
   Avatar,
   Button,
@@ -8,17 +10,16 @@ import {
   Divider,
   IconButton,
 } from 'react-native-paper';
-import {StyleSheet, useColorScheme, View} from 'react-native';
-import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
+
 import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {type IBook} from '../../../store/slices/bookings/interface/bookin.interface';
 import {setActiveBooking} from '../../../store/slices/bookings/thunks';
-import {useNavigation} from '@react-navigation/native';
 import {startLoadingUI} from '../../../store/slices/ui/uiSlice';
 import {COMPLETED_STATE_ID} from '../../../utils/state-id';
 
-
 interface IProps {
   booking: IBook;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
   handleOpenSheet: (item: IBook) => void;
 }
@@ -36,7 +37,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
   const {isLoading} = useAppSelector(state => state.ui);
   const navigation = useNavigation();
   const iconColor =
-    statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
+    statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ??
     'black';
 
   const setActiveOnOpenSheet = () => {
@@ -45,7 +46,7 @@ export const BookingItemCard = ({booking, handleOpenSheet}: IProps) => {
 
   const handleEditBook = async () => {
     dispatch(startLoadingUI());
-    await dispatch(setActiveBooking(booking));
+    dispatch(setActiveBooking(booking));
 
     navigation.navigate(
       'Root' as never,

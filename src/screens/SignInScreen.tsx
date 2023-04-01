@@ -1,8 +1,10 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+
+import {type INavigationProps} from '../interface';
 import {SignInView} from './views/SignInView';
 
-export const SignInScreen = ({navigation}: {navigation?: any}) => {
+export const SignInScreen = ({navigation}: INavigationProps) => {
   return (
     <View style={styles.view}>
       <SignInView navigation={navigation} />

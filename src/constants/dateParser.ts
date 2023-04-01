@@ -1,4 +1,4 @@
-import moment, {Moment} from 'moment';
+import moment, {type Moment} from 'moment';
 
 export const parserDate = (date: Date | Moment | string) => {
   return moment(date).format('YYYY-MM-DD');

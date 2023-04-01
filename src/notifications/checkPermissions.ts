@@ -6,11 +6,9 @@ export async function checkNotificationPermission() {
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
 
-    if (granted) {
-      return true;
-    } else {
-      return false;
-    }
+    if (granted) return true;
+
+    return false;
   } catch (err) {
     console.warn(err);
     return false;

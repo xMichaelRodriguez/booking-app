@@ -1,8 +1,8 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {IconButton, Text} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
-import {IState} from '../../store/slices/bookings/interface/bookin.interface';
+
+import {type IState} from '../../store/slices/bookings/interface/bookin.interface';
 const statesOfBooking = {
   Reservado: 'blue',
   Entregado: 'green',
@@ -14,16 +14,16 @@ const iconNamePerState = {
   Cancelado: 'calendar-remove-outline',
 };
 
-type props = {
+interface props {
   username: string;
   status: IState;
-};
+}
 export const DescriptionItem = ({username, status}: props) => {
   const iconColor =
-    statesOfBooking[status.name as keyof typeof statesOfBooking] || 'black';
+    statesOfBooking[status.name as keyof typeof statesOfBooking] ?? 'black';
 
   const iconName =
-    iconNamePerState[status.name as keyof typeof iconNamePerState] || '';
+    iconNamePerState[status.name as keyof typeof iconNamePerState] ?? '';
   return (
     <View style={styles.container}>
       <Text>{username}</Text>

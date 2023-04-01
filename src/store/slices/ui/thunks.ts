@@ -1,4 +1,4 @@
-import {AppDispatch} from '../../store';
+import {type AppDispatch} from '../../store';
 import {onClearActiveBooking} from '../bookings/bookingSlice';
 import {clearActiveService} from '../services/thunks';
 

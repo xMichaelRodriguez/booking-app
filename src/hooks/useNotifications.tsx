@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+
 import {useAppSelector} from '.';
 import {checkNotificationPermission} from '../notifications/checkPermissions';
 import {requestNotificationsPermission} from '../notifications/requestPermissions';
@@ -9,17 +10,14 @@ export function useNotificationPermission() {
   useEffect(() => {
     async function checkAndRequestPermission() {
       let permission = await checkNotificationPermission();
-      if (permission) {
-        setHasPermission(permission);
-      } else {
+      if (permission) setHasPermission(permission);
+      else {
         permission = await requestNotificationsPermission();
         setHasPermission(permission);
       }
     }
 
-    if (isLoading === false) {
-      checkAndRequestPermission();
-    }
+    if (!isLoading) checkAndRequestPermission();
 
     return () => {
       setHasPermission(null); // reset the state when the component unmounts

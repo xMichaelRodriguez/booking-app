@@ -4,6 +4,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, useColorScheme} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Avatar, Text} from 'react-native-paper';
+
 import {useAppDispatch} from '../hooks';
 import {starLoginGoogle} from '../store/slices/auth';
 
@@ -26,11 +27,10 @@ export const GoogleButton = () => {
 
       await GoogleSignin.signOut();
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === 'DEVELOPER_ERROR') {
+      if (error instanceof Error)
+        if (error.message === 'DEVELOPER_ERROR')
           console.log('User cancelled the sign-in flow');
-        }
-      }
+
       console.log('Error occurred while signing in with Google');
     }
   };

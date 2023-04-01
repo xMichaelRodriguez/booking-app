@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
+import {Image, StyleSheet, useColorScheme, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, useTheme, Text, Button} from 'react-native-paper';
-import {Image, StyleSheet, useColorScheme, View} from 'react-native';
-import {INavigationProps} from '../../../interface';
 
-import {ListItemCard} from './components/ListItemCard';
-import {useInfinityScroll} from '../../../hooks/useInfinityScroll';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
-import {getServices} from '../../../store/slices/services/thunks';
+import {useInfinityScroll} from '../../../hooks/useInfinityScroll';
+import {type INavigationProps} from '../../../interface';
 import {onClearService} from '../../../store/slices/services/servicesSlice';
+import {getServices} from '../../../store/slices/services/thunks';
+import {ListItemCard} from './components/ListItemCard';
 
 const noDataImage = require('../../../assets/no-data.png');
 
@@ -37,7 +38,7 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
     });
   };
 
-  if (isLoadingService) {
+  if (isLoadingService)
     return (
       <ActivityIndicator
         style={custom.activityStyle}
@@ -46,7 +47,6 @@ export const ServicesScreen = ({navigation}: INavigationProps) => {
         size="large"
       />
     );
-  }
 
   if (Object.entries(services).length < 1) {
     const handleNewService = () => {

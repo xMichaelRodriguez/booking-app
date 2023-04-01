@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import React, {useMemo, RefObject, useCallback} from 'react';
+import React, {useMemo, type RefObject, useCallback} from 'react';
+
 import {useAppDispatch} from '../hooks';
 import {onCloseSheetBooton} from '../store/slices/ui/thunks';
 
-type Props = {
+interface Props {
   bottomSheetRef: RefObject<BottomSheet>;
   children: React.ReactNode;
   percentage: string;
   height: number;
-};
+}
 
 export const ButtonSheetWrapper = ({
   bottomSheetRef,
@@ -50,7 +52,7 @@ export const ButtonSheetWrapper = ({
       enablePanDownToClose={true}>
       <BottomSheetView
         style={{
-          height: height,
+          height,
         }}>
         {children}
       </BottomSheetView>

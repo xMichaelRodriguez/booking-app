@@ -1,15 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {Text, useTheme, Button, Divider} from 'react-native-paper';
-import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../hooks';
+import {type BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {useNavigation} from '@react-navigation/native';
-import {BottomSheetMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+import React from 'react';
+import {Image, ActivityIndicator, StyleSheet, View} from 'react-native';
+import {Text, useTheme, Button, Divider} from 'react-native-paper';
+
+import {useAppDispatch, useAppSelector} from '../hooks';
 import {removeService} from '../store/slices/services/thunks';
 
-type Prop = {
+interface Prop {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
-};
+}
 export const BottonContent = ({bottomSheetRef}: Prop) => {
   const {isActiveService} = useAppSelector(state => state.service);
   const theme = useTheme();
@@ -26,15 +27,13 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
   };
   const onRemove = () => {
     dispatch(
-      removeService((isRemoved: boolean) => {
-        if (isRemoved) {
-          bottomSheetRef?.current?.snapToIndex(0);
-        }
+      removeService(({isRemoved}: {isRemoved: boolean}) => {
+        if (isRemoved) bottomSheetRef?.current?.snapToIndex(0);
       }),
     );
   };
 
-  if (!isActiveService) {
+  if (isActiveService == null)
     return (
       <ActivityIndicator
         style={styles.activityStyle}
@@ -43,7 +42,7 @@ export const BottonContent = ({bottomSheetRef}: Prop) => {
         size="large"
       />
     );
-  }
+
   return (
     <View style={styles.bottomSheetContainer}>
       <View style={styles.containerImage}>

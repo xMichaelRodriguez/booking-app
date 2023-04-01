@@ -1,13 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Card} from 'react-native-paper';
 import {StyleSheet, useColorScheme} from 'react-native';
-import {IService} from '../../../../store/slices/services/interface/services.interface';
-import {useAppDispatch} from '../../../../hooks';
-import {setActiveService} from '../../../../store/slices/services/thunks';
+import {Card} from 'react-native-paper';
+
 import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
+import {useAppDispatch} from '../../../../hooks';
+import {type IService} from '../../../../store/slices/services/interface/services.interface';
+import {setActiveService} from '../../../../store/slices/services/thunks';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
   item: IService;
   handleOpenSheet: () => void;

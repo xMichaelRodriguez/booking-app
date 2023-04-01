@@ -1,8 +1,9 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
+
 import {
-  IService,
-  IServiceSerializer,
-  IServiceState,
+  type IService,
+  type IServiceSerializer,
+  type IServiceState,
 } from './interface/services.interface';
 
 const initialState: IServiceState = {

@@ -1,7 +1,8 @@
-import {Moment} from 'moment';
+import {type Moment} from 'moment';
 import React from 'react';
+
 import {useAppSelector} from '../../hooks';
-import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
+import {type IBook} from '../../store/slices/bookings/interface/bookin.interface';
 import {BookingItem} from './BookingItem';
 
 interface IProps {

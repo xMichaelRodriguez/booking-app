@@ -1,16 +1,18 @@
 import React from 'react';
-import {useForm, SubmitHandler, Controller} from 'react-hook-form';
+import {useForm, type SubmitHandler, Controller} from 'react-hook-form';
 import {StyleSheet, TouchableOpacity, useColorScheme, View} from 'react-native';
 import {Text, useTheme, TextInput, Button} from 'react-native-paper';
+
 import {Logo} from '../components/Logo';
 import {useAppDispatch} from '../hooks';
+import {type INavigationProps} from '../interface';
 import {requestResetPasswordToken} from '../store/slices/auth';
 import {validEmail} from '../utils/emailRegex';
 
 interface IFormInput {
   email: string;
 }
-export const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
+export const ResetPasswordScreen = ({navigation}: INavigationProps) => {
   const theme = useTheme();
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
@@ -44,7 +46,7 @@ export const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               textColor={isDark ? '#fbfbfb' : '#282828'}
-              error={!!errors.email}
+              error={!(errors.email == null)}
               onBlur={onBlur}
               mode="outlined"
               label="Email"
@@ -53,7 +55,7 @@ export const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
             />
           )}
         />
-        {errors.email && (
+        {errors.email != null && (
           <Text style={{color: theme.colors.error}}>
             {errors.email.message}
           </Text>

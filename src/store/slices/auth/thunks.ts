@@ -1,17 +1,25 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import axios from 'axios';
-import {backendApi} from '../../../API/backendApi';
 import {ToastAndroid} from 'react-native';
-import {AppDispatch, RootState} from '../../store';
-import {logout, signIn, startLoadingLogin} from './authSlice';
-import {IAuthLogin, IAuthRegister, IAuthState, ILoginState} from './interfaces';
+
+import {backendApi} from '../../../API/backendApi';
 import {
   getUserSessionParsed,
   removeUserSession,
   storeUserSession,
 } from '../../secure-session';
-import {clearServices} from '../services/thunks';
+import {type AppDispatch, type RootState} from '../../store';
 import {setClearBookings} from '../bookings/bookingSlice';
+import {clearServices} from '../services/thunks';
 import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
+import {logout, signIn, startLoadingLogin} from './authSlice';
+import {
+  type IAuthLogin,
+  type IAuthRegister,
+  type IAuthState,
+  type ILoginState,
+} from './interfaces';
 
 export const checkIsAuthenticated = () => {
   return async (dispatch: AppDispatch) => {
@@ -30,7 +38,7 @@ export const checkIsAuthenticated = () => {
       dispatch(signIn(data));
     } catch (error) {
       await removeUserSession();
-      return dispatch(authLogout());
+      await dispatch(authLogout());
     }
   };
 };
@@ -52,16 +60,26 @@ export const startLogin = (login: ILoginState) => {
       const {id, username, email, isActive, role} = user;
       await storeUserSession(jwt.accessToken);
 
-      dispatch(signIn({id, username, email, isActive, role}));
+      dispatch(
+        signIn({
+          id,
+          username,
+          email,
+          isActive,
+          role,
+          isLoading: false,
+          isSigned: true,
+        }),
+      );
       dispatch(onCancelLoadingUI());
     } catch (error) {
       removeUserSession();
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         if (errorData?.statusCode !== 200) {
           dispatch(onCancelLoadingUI());
           console.log({errorData});
-          return ToastAndroid.showWithGravityAndOffset(
+          ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
@@ -87,20 +105,29 @@ export const starLoginGoogle = (accessToken: string) => {
       await storeUserSession(jwt.accessToken);
 
       dispatch(onCancelLoadingUI());
-      dispatch(signIn({id, username, email, isActive, role}));
+      dispatch(
+        signIn({
+          id,
+          username,
+          email,
+          isActive,
+          role,
+          isLoading: false,
+          isSigned: true,
+        }),
+      );
     } catch (error) {
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData?.statusCode !== 200) {
-          return ToastAndroid.showWithGravityAndOffset(
+        const errorData = error?.response?.data;
+        if (errorData?.statusCode !== 200)
+          ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        }
       }
     }
   };
@@ -120,8 +147,8 @@ export const startRegister = (register: IAuthRegister) => {
       );
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData.statusCode !== 201) {
+        const errorData = error?.response?.data;
+        if (errorData.statusCode !== 201)
           ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
@@ -129,7 +156,6 @@ export const startRegister = (register: IAuthRegister) => {
             25,
             50,
           );
-        }
       }
     }
   };
@@ -149,8 +175,8 @@ export const requestResetPasswordToken = (data: {email: string}) => {
       );
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData.statusCode !== 201) {
+        const errorData = error?.response?.data;
+        if (errorData.statusCode !== 201)
           ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
@@ -158,7 +184,6 @@ export const requestResetPasswordToken = (data: {email: string}) => {
             25,
             50,
           );
-        }
       }
     }
   };
@@ -188,9 +213,7 @@ export const subscribeNotifications = (token: string) => {
           25,
           50,
         );
-      } else {
-        return;
-      }
+      } else return;
     } catch (error) {
       ToastAndroid.showWithGravityAndOffset(
         'Error al activar notificaciones',
@@ -200,7 +223,7 @@ export const subscribeNotifications = (token: string) => {
         50,
       );
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         console.debug({errorData});
       }
     }

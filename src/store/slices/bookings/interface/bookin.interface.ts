@@ -1,5 +1,6 @@
-import {Moment} from 'moment';
-import {IService} from '../../services/interface/services.interface';
+import {type Moment} from 'moment';
+
+import {type IService} from '../../services/interface/services.interface';
 
 export interface IBookState {
   bookings: IBook[];

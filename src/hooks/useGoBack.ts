@@ -2,10 +2,11 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {BackHandler} from 'react-native';
 
-type hookProps = {
+interface hookProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
   screenName: string;
-};
+}
 export const useGoBack = ({navigation, screenName}: hookProps) => {
   useFocusEffect(
     useCallback(() => {
@@ -22,7 +23,9 @@ export const useGoBack = ({navigation, screenName}: hookProps) => {
         },
       );
 
-      return () => subscription.remove();
+      return () => {
+        subscription.remove();
+      };
     }, [navigation, screenName]),
   );
 };

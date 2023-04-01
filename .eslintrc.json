@@ -1,0 +1,56 @@
+{
+  "root": true,
+  "extends": [
+    "@react-native-community",
+    "plugin:react/recommended",
+    "standard-with-typescript",
+    "standard",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "eslint-plugin-import-helpers"
+  ],
+  "rules": {
+    "@typescript-eslint/dot-notation": "error",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "no-else-return": "error",
+    "no-lone-blocks": "error",
+    "no-use-before-define": "off",
+    "prettier/prettier": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "space-before-function-paren": "off",
+    "@typescript-eslint/no-callback-literal": "off",
+    "@typescript-eslintconsistent-type-assertions": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "curly": ["error", "multi"],
+    "no-unused-expressions": [
+      "error",
+      {"allowShortCircuit": true, "allowTernary": true}
+    ],
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always", // new line between groups
+        "groups": ["module", ["parent", "sibling", "index"]],
+        "alphabetize": {"order": "asc", "ignoreCase": true}
+      }
+    ]
+  }
+}

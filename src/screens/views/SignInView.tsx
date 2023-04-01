@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {useForm, Controller, SubmitHandler} from 'react-hook-form';
+import {useForm, Controller, type SubmitHandler} from 'react-hook-form';
 import {
   StyleSheet,
   Text,
@@ -9,15 +10,15 @@ import {
   useColorScheme,
 } from 'react-native';
 import {Button, Checkbox, TextInput, useTheme} from 'react-native-paper';
-import {Logo} from '../../components/Logo';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {passwordMessage} from '../SignUpScreen';
-import {startLogin} from '../../store/slices/auth';
 
-import {validEmail, validPassword} from '../../utils/emailRegex';
-import {GoogleButton} from '../../components/GoogleButton';
 import DividerWithOr from '../../components/DividerWIthOr';
+import {GoogleButton} from '../../components/GoogleButton';
+import {Logo} from '../../components/Logo';
 import WrapperAnimate from '../../components/ui/WrapperAnimate';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {startLogin} from '../../store/slices/auth';
+import {validEmail, validPassword} from '../../utils/emailRegex';
+import {passwordMessage} from '../SignUpScreen';
 
 interface IFormInput {
   email: string;
@@ -56,7 +57,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               textColor={isDark ? '#fbfbfb' : '#282828'}
-              error={!!errors.email}
+              error={!(errors.email == null)}
               onBlur={onBlur}
               mode="outlined"
               label="Email"
@@ -65,7 +66,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
             />
           )}
         />
-        {errors.email && (
+        {errors.email != null && (
           <Text style={{color: theme.colors.error}}>
             {errors.email.message}
           </Text>
@@ -82,7 +83,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
           render={({field: {onChange, onBlur, value}}) => (
             <TextInput
               textColor={isDark ? '#fbfbfb' : '#282828'}
-              error={!!errors.password}
+              error={!(errors.password == null)}
               mode="outlined"
               label="Password"
               secureTextEntry={!isVisible}
@@ -92,7 +93,7 @@ export const SignInView = ({navigation}: {navigation: any}) => {
             />
           )}
         />
-        {errors.password && (
+        {errors.password != null && (
           <Text style={{color: theme.colors.error}}>
             {errors.password?.message}
           </Text>

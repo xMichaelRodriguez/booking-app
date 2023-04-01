@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable react-native/no-inline-styles */
+import type BottomSheet from '@gorhom/bottom-sheet';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef} from 'react';
-import {List, Button, Text, useTheme, Dialog, Portal} from 'react-native-paper';
 import {
   Image,
   FlatList,
@@ -11,20 +13,21 @@ import {
   ActivityIndicator,
   // ActivityIndicator,
 } from 'react-native';
-import {BookingItemCard} from './BookingItemCard';
-import {useNavigation} from '@react-navigation/native';
+import {List, Button, Text, useTheme, Dialog, Portal} from 'react-native-paper';
+
 import {ButtonSheetWrapper} from '../../../components/ButtonSheetWrapper';
-import BottomSheet from '@gorhom/bottom-sheet';
+import WrapperAnimate from '../../../components/ui/WrapperAnimate';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
+import {onClearActiveBooking} from '../../../store/slices/bookings/bookingSlice';
+import {type IBook} from '../../../store/slices/bookings/interface/bookin.interface';
 import {
   getBookings,
   onDeleteBook,
   setActiveBooking,
   setCompleteBookingState,
 } from '../../../store/slices/bookings/thunks';
-import {IBook} from '../../../store/slices/bookings/interface/bookin.interface';
-import {onClearActiveBooking} from '../../../store/slices/bookings/bookingSlice';
-import WrapperAnimate from '../../../components/ui/WrapperAnimate';
+import {BookingItemCard} from './BookingItemCard';
+
 const noDataImage = require('../../../assets/no-data.png');
 export const BookingScreen = () => {
   const theme = useTheme();
@@ -58,7 +61,8 @@ export const BookingScreen = () => {
   const handleDeleteBooking = () => {
     dispatch(
       onDeleteBook(
-        (result: boolean) => result && bottomSheetRef.current?.snapToIndex(0),
+        ({result}: {result: boolean}) =>
+          result && bottomSheetRef.current?.snapToIndex(0),
       ),
     );
   };
@@ -67,7 +71,7 @@ export const BookingScreen = () => {
     hideDialog();
   };
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <ActivityIndicator
         style={custom.activityStyle}
@@ -76,8 +80,8 @@ export const BookingScreen = () => {
         size="large"
       />
     );
-  }
-  if (Object.entries(bookings).length < 1) {
+
+  if (Object.entries(bookings).length < 1)
     return (
       <View style={custom.activityStyle}>
         <Image style={custom.image} source={noDataImage} />
@@ -88,7 +92,6 @@ export const BookingScreen = () => {
         </Text>
       </View>
     );
-  }
 
   return (
     <View style={{flex: 1, padding: 10}}>
@@ -110,9 +113,7 @@ export const BookingScreen = () => {
       </WrapperAnimate>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>
-            {isBookingActive && isBookingActive.serviceId?.name}
-          </Dialog.Title>
+          <Dialog.Title>{isBookingActive?.serviceId?.name}</Dialog.Title>
           <Dialog.Content>
             <Text variant="bodyMedium">
               do you want to complete this booking?

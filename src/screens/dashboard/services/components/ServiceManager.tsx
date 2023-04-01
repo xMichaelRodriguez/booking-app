@@ -1,7 +1,16 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable react-native/no-inline-styles */
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useState} from 'react';
-
+import {
+  Controller,
+  type SubmitHandler,
+  useController,
+  useForm,
+} from 'react-hook-form';
 import {Image, StyleSheet, useColorScheme, View} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import * as ImagePicker from 'react-native-image-picker';
 import {
   Button,
   IconButton,
@@ -9,20 +18,12 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import * as ImagePicker from 'react-native-image-picker';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {
-  Controller,
-  SubmitHandler,
-  useController,
-  useForm,
-} from 'react-hook-form';
+
+import Notification from '../../../../components/ui/Notification';
+import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 import {useAppDispatch, useAppSelector} from '../../../../hooks';
 import {addNewService} from '../../../../store/slices/services/thunks';
-import Notification from '../../../../components/ui/Notification';
 import {onToggleSnackBar} from '../../../../store/slices/ui/uiSlice';
-import {useFocusEffect} from '@react-navigation/native';
-import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 
 interface IFormInput {
   image: string;
@@ -62,15 +63,13 @@ export const ServiceManager = () => {
       selectionLimit: 1,
     });
 
-    // eslint-disable-next-line curly
-    if (!resp.assets) return;
+    if (resp.assets == null) return;
 
     if (resp.assets[0]) {
       const {uri} = resp.assets[0];
       if (!uri) {
-        return (
-          fieldState.invalid && setError('image', {message: 'Invalid Image'})
-        );
+        fieldState.invalid && setError('image', {message: 'Invalid Image'});
+        return;
       }
 
       setImageSelected(uri);
@@ -87,7 +86,7 @@ export const ServiceManager = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = data => {
     dispatch(
-      addNewService(data, (message: string) => {
+      addNewService(data, ({message}: {message: string}) => {
         setNotificationMessage(message);
         dispatch(onToggleSnackBar());
         reset({price: '', image: '', description: '', name: ''});
@@ -127,7 +126,7 @@ export const ServiceManager = () => {
                   />
                 </TouchableOpacity>
               )}
-              {errors.image && (
+              {errors.image != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.image.message}
                 </Text>
@@ -147,13 +146,13 @@ export const ServiceManager = () => {
                     mode="outlined"
                     onBlur={onBlur}
                     textColor={isDark ? '#fbfbfb' : '#282828'}
-                    error={!!errors.name}
+                    error={!(errors.name == null)}
                     value={value}
                     onChangeText={onChange}
                   />
                 )}
               />
-              {errors.name && (
+              {errors.name != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.name.message}
                 </Text>
@@ -176,13 +175,13 @@ export const ServiceManager = () => {
                     mode="outlined"
                     onBlur={onBlur}
                     textColor={isDark ? '#fbfbfb' : '#282828'}
-                    error={!!errors.description}
+                    error={!(errors.description == null)}
                     value={value}
                     onChangeText={onChange}
                   />
                 )}
               />
-              {errors.description && (
+              {errors.description != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.description.message}
                 </Text>
@@ -202,13 +201,13 @@ export const ServiceManager = () => {
                     onBlur={onBlur}
                     textColor={isDark ? '#fbfbfb' : '#282828'}
                     keyboardType="decimal-pad"
-                    error={!!errors.price}
+                    error={!(errors.price == null)}
                     value={value}
                     onChangeText={onChange}
                   />
                 )}
               />
-              {errors.price && (
+              {errors.price != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.price.message}
                 </Text>

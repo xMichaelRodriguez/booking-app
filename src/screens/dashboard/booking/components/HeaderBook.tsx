@@ -2,11 +2,11 @@
 import React from 'react';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Text} from 'react-native-paper';
-type Prop = {
+interface Prop {
   mediaUrl?: string;
   name?: string;
   description?: string;
-};
+}
 export const HeaderBook = ({mediaUrl, name, description}: Prop) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';

@@ -3,10 +3,10 @@ export interface IAuthState {
   id: number;
   username: string;
   email: string;
-  isSigned?: boolean;
+  isSigned: boolean;
   isActive: boolean;
   role: IRole;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export interface IRole {
@@ -25,9 +25,9 @@ export interface IAuthLogin {
   jwt: Access;
 }
 
-type Access = {
+interface Access {
   accessToken: string;
-};
+}
 
 export interface IAuthRegister {
   username: string;

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-native/no-inline-styles */
 
 import React from 'react';
 import {View, Image, StyleSheet, useColorScheme} from 'react-native';
-
 import {Avatar, Text, Button, Dialog, Portal} from 'react-native-paper';
+
 import WrapperAnimate from '../../../components/ui/WrapperAnimate';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {removeService} from '../../../store/slices/services/thunks';
@@ -28,10 +29,8 @@ export const DetailService = ({navigation}: {navigation: any}) => {
 
   const onRemove = () => {
     dispatch(
-      removeService((isRemoved: boolean) => {
-        if (isRemoved) {
-          navigation.goBack();
-        }
+      removeService(({isRemoved}: {isRemoved: boolean}) => {
+        if (isRemoved) navigation.goBack();
       }),
     );
   };

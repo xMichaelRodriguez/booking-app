@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -11,9 +12,10 @@ import {
   Text,
   useTheme,
 } from 'react-native-paper';
+
 import {ROLE_ADMIN} from '../../constants/roles';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
+import {type IBook} from '../../store/slices/bookings/interface/bookin.interface';
 import {setActiveBooking} from '../../store/slices/bookings/thunks';
 import {startLoadingUI} from '../../store/slices/ui/uiSlice';
 import {COMPLETED_STATE_ID} from '../../utils/state-id';
@@ -36,7 +38,7 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
   const {role} = useAppSelector(state => state.auth);
   const {isLoading} = useAppSelector(state => state.ui);
   const iconColor =
-    statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ||
+    statesOfBooking[booking.statusId.name as keyof typeof statesOfBooking] ??
     'black';
 
   const dispatch = useAppDispatch();
@@ -46,7 +48,7 @@ export const BookingItem = ({booking, handleOpenSheet}: IProps) => {
 
   const onEdit = async () => {
     dispatch(startLoadingUI());
-    await dispatch(setActiveBooking(booking));
+    dispatch(setActiveBooking(booking));
     navigation.navigate(
       'Root' as never,
       {

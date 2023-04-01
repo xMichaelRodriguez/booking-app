@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-native/no-inline-styles */
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
-import {Control, useController} from 'react-hook-form';
+import {type Control, useController} from 'react-hook-form';
 import {StyleSheet, useColorScheme} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {Text} from 'react-native-paper';
+
 import {INITIAL_DATE} from '../../../../constants/times';
-import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {type ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 
 interface IProps {
   control: Control<ICreateBook, any>;

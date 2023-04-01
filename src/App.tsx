@@ -5,19 +5,19 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {InitialScreen} from './screens/InitialScreen';
-import {SignInScreen} from './screens/SignInScreen';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, useColorScheme} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
-import {SingUpScreen} from './screens/SignUpScreen';
+
 import {DrawerComponent} from './components/DrawerComponent';
 import {useAppDispatch, useAppSelector} from './hooks';
+import {InitialScreen} from './screens/InitialScreen';
 import {ResetPasswordScreen} from './screens/ResetPasswordScreen';
+import {SignInScreen} from './screens/SignInScreen';
+import {SingUpScreen} from './screens/SignUpScreen';
 import {checkIsAuthenticated} from './store/slices/auth';
-import {StyleSheet, useColorScheme} from 'react-native';
 import {darkTheme, lightTheme} from './theme/theme';
 import 'moment/locale/es-us';
 const Stack = createNativeStackNavigator();
@@ -40,7 +40,7 @@ function App() {
     dispatch(checkIsAuthenticated());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <ActivityIndicator
         style={custom.activityStyle}
@@ -49,9 +49,8 @@ function App() {
         size="large"
       />
     );
-  }
 
-  if (!isSigned) {
+  if (!isSigned)
     return (
       <NavigationContainer theme={theme}>
         <Stack.Navigator initialRouteName="InitialScreen">
@@ -82,7 +81,7 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
     );
-  }
+
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator>

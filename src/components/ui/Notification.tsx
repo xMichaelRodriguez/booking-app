@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Snackbar} from 'react-native-paper';
+
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {onDismissSnackBar} from '../../store/slices/ui/uiSlice';
 
-type IProps = {
+interface IProps {
   message: string;
-};
+}
 const Notification = ({message}: IProps) => {
   const {snackVisible} = useAppSelector(state => state.ui);
   const dispatch = useAppDispatch();

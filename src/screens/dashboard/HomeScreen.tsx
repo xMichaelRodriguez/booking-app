@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable react-native/no-inline-styles */
-import BottomSheet from '@gorhom/bottom-sheet';
-import moment, {Moment} from 'moment';
+import type BottomSheet from '@gorhom/bottom-sheet';
+import moment, {type Moment} from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
-
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
+
 import {ButtonSheetWrapper} from '../../components/ButtonSheetWrapper';
 import {BookingList} from '../../components/calendar/BookingList';
 import {CalendarHeader} from '../../components/calendar/CalendarHeader';
@@ -12,7 +13,7 @@ import {NotData} from '../../components/ui/NotData';
 import WrapperAnimate from '../../components/ui/WrapperAnimate';
 import {INITIAL_DATE} from '../../constants/times';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {IBook} from '../../store/slices/bookings/interface/bookin.interface';
+import {type IBook} from '../../store/slices/bookings/interface/bookin.interface';
 import {
   getBookings,
   onDeleteBook,
@@ -37,7 +38,8 @@ export const HomeScreen = () => {
   const handleDeleteBooking = () => {
     dispatch(
       onDeleteBook(
-        (result: boolean) => result && bottomSheetRef.current?.snapToIndex(0),
+        ({result}: {result: boolean}) =>
+          result && bottomSheetRef.current?.snapToIndex(0),
       ),
     );
   };

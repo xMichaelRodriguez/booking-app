@@ -1,5 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IBook, IBookState} from './interface/bookin.interface';
+import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
+
+import {type IBook, type IBookState} from './interface/bookin.interface';
 
 const initialState: IBookState = {
   bookings: [],
@@ -28,9 +29,7 @@ export const bookingSlice = createSlice({
       const index = state.bookings.findIndex(
         booking => booking.id === action.payload.id,
       );
-      if (index !== -1) {
-        state.bookings[index] = action.payload;
-      }
+      if (index !== -1) state.bookings[index] = action.payload;
     },
     activeBook: (state, action: PayloadAction<IBook>) => {
       state.isBookingActive = action.payload;

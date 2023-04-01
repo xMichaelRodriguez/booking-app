@@ -44,9 +44,8 @@ export async function requestNotificationsPermission(): Promise<boolean> {
         {cancelable: false},
       );
       return false;
-    } else {
-      return false;
     }
+    return false;
   } catch (err) {
     console.warn(err);
     return false;

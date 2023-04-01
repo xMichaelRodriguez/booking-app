@@ -1,7 +1,7 @@
 import React from 'react';
-import {AnimatedFAB} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
-import {useTheme} from 'react-native-paper';
+import {AnimatedFAB, useTheme} from 'react-native-paper';
+
 // import {useNavigation} from '@react-navigation/native';
 
 export const FabButton = ({isExtended}: {isExtended: boolean}) => {

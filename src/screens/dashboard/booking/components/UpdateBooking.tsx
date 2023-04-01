@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import {useNavigation, useTheme} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useMemo, useEffect, useState} from 'react';
-import {useForm, SubmitHandler} from 'react-hook-form';
+import {useForm, type SubmitHandler} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
+
 import {INITIAL_DATE, times, weeKendTimes} from '../../../../constants/times';
 import {useAppSelector, useAppDispatch} from '../../../../hooks';
-import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {type ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {updateBooking} from '../../../../store/slices/bookings/thunks';
 import {BookVIew} from '../views/BookVIew';
 
@@ -51,14 +53,12 @@ export const UpdateBooking = () => {
 
   // set value to date by active booking
   useEffect(() => {
-    if (isBookingActive) {
+    if (isBookingActive != null) {
       const {date: bookingDate} = isBookingActive;
       const formattedDate = moment(bookingDate).format('YYYY-MM-DD');
 
       setValue('date', formattedDate);
-    } else {
-      setValue('date', INITIAL_DATE);
-    }
+    } else setValue('date', INITIAL_DATE);
   }, [isBookingActive, setValue]);
 
   // set note by active booking
@@ -72,11 +72,8 @@ export const UpdateBooking = () => {
     const currentDate = moment(getValues().date);
     const isWeekend =
       currentDate.weekday() === 0 || currentDate.weekday() === 6;
-    if (isWeekend) {
-      setTimeState(weeKendTimes);
-    } else {
-      setTimeState(times);
-    }
+    if (isWeekend) setTimeState(weeKendTimes);
+    else setTimeState(times);
   }, [getValues, selected]);
 
   // observer activeItem
@@ -86,31 +83,35 @@ export const UpdateBooking = () => {
 
   const onSubmit: SubmitHandler<ICreateBook> = data => {
     if (!data.hour) {
-      return setError('hour', {
+      setError('hour', {
         type: 'required',
         message: 'You must select a time',
       });
+      return;
     }
+
     clearErrors('hour');
     if (!data.date) {
-      return setError('date', {
+      setError('date', {
         type: 'required',
         message: 'You must select a date',
       });
+      return;
     }
+
     clearErrors('date');
 
     dispatch(
-      updateBooking(data, (result: boolean) => {
+      updateBooking(data, ({result}: {result: boolean}) => {
         if (result) {
           reset();
-          return navigation.goBack();
+          navigation.goBack();
         }
       }),
     );
   };
 
-  if (!isBookingActive) {
+  if (isBookingActive == null)
     return (
       <ActivityIndicator
         style={styles.activityStyle}
@@ -119,7 +120,6 @@ export const UpdateBooking = () => {
         size="large"
       />
     );
-  }
 
   return (
     <ScrollView style={styles.container}>

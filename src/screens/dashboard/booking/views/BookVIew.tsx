@@ -1,17 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
-  Control,
+  type Control,
   Controller,
-  FieldErrors,
-  SubmitHandler,
-  UseFormHandleSubmit,
+  type FieldErrors,
+  type SubmitHandler,
+  type UseFormHandleSubmit,
 } from 'react-hook-form';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Text, Button, TextInput, useTheme} from 'react-native-paper';
+
 import WrapperAnimate from '../../../../components/ui/WrapperAnimate';
 import {useAppSelector} from '../../../../hooks';
-import {ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
+import {type ICreateBook} from '../../../../store/slices/bookings/interface/bookin.interface';
 import {CalendarSection} from '../components/CalendarSection';
 import {HeaderBook} from '../components/HeaderBook';
 import {TimeSection} from '../components/TimeSection';
@@ -22,6 +23,7 @@ interface IProps {
   timeState: string[];
   handlePress: (time: string) => void;
   onSubmit: SubmitHandler<ICreateBook>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<ICreateBook, any>;
   handleSubmit: UseFormHandleSubmit<ICreateBook>;
   mediaUrl?: string;
@@ -59,7 +61,7 @@ export const BookVIew = ({
             name="date"
             render={() => <CalendarSection control={control} name="date" />}
           />
-          {errors.date && (
+          {errors.date != null && (
             <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
               {errors.date.message}
             </Text>
@@ -72,7 +74,7 @@ export const BookVIew = ({
           handlePress={handlePress}
           timeState={timeState}
         />
-        {errors.hour && (
+        {errors.hour != null && (
           <Text style={{color: isDark ? '#EA0000' : theme.colors.error}}>
             {errors.hour.message}
           </Text>
@@ -94,7 +96,7 @@ export const BookVIew = ({
                 textColor={isDark ? '#fbfbfb' : '#282828'}
                 multiline
                 numberOfLines={3}
-                error={!!errors.note}
+                error={!(errors.note == null)}
                 onBlur={onBlur}
                 mode="outlined"
                 label="Note"
@@ -103,7 +105,7 @@ export const BookVIew = ({
               />
             )}
           />
-          {errors.note && (
+          {errors.note != null && (
             <Text style={{color: isDark ? '#FF2727' : theme.colors.error}}>
               {errors.note.message}
             </Text>

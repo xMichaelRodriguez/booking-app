@@ -1,9 +1,9 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-type InitialProp = {
+import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
+interface InitialProp {
   isLoading: boolean;
   snackVisible: boolean;
   message: string;
-};
+}
 
 const initialState: InitialProp = {
   isLoading: false,
@@ -14,7 +14,7 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    startLoadingUI: (state /*action*/) => {
+    startLoadingUI: (state /* action */) => {
       state.isLoading = true;
     },
     onCancelLoadingUI: state => {

@@ -3,6 +3,7 @@ import {useColorScheme} from 'react-native';
 import 'react-native-gesture-handler';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider} from 'react-redux';
+
 import App from './src/App';
 import {store} from './src/store';
 import {darkTheme, lightTheme} from './src/theme/theme';

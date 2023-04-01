@@ -4,9 +4,11 @@ import {DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import React from 'react';
 import {StyleSheet, useColorScheme, View} from 'react-native';
 import {Avatar, Divider, IconButton, Text} from 'react-native-paper';
+
 import {useAppDispatch, useAppSelector} from '../hooks';
 import {authLogout} from '../store/slices/auth';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const DrawerMenu = ({props}: {props: any}) => {
   const colorScheme = useColorScheme();
   const isDarkTheme = colorScheme === 'dark';
@@ -25,12 +27,12 @@ export const DrawerMenu = ({props}: {props: any}) => {
             styles.titleUser,
             {color: isDarkTheme ? '#fbfbfb' : '#282828'},
           ]}>
-          {username && username}
+          {username.length > 0 && username}
         </Text>
         <Text
           variant="bodyMedium"
           style={{color: isDarkTheme ? '#fbfbfb' : '#282828'}}>
-          {email && email}
+          {email.length > 0 && email}
         </Text>
       </View>
       <DrawerItemList {...props} />

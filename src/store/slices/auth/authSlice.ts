@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
+
 import type {RootState} from '../../store';
-import {IAuthState, IRole} from './interfaces';
+import {type IAuthState, type IRole} from './interfaces';
 
 // Define the initial state using that type
 const initialState: IAuthState = {
@@ -10,7 +11,7 @@ const initialState: IAuthState = {
   username: '',
   email: '',
   isActive: false,
-  role: {} as IRole,
+  role: {id: 0, description: '', name: ''},
   isLoading: false,
 };
 

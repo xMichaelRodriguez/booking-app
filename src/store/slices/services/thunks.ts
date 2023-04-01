@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable n/no-callback-literal */
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
+
 import {backendApi} from '../../../API/backendApi';
 import {getUserSessionParsed, removeUserSession} from '../../secure-session';
-import {AppDispatch, RootState} from '../../store';
+import {type AppDispatch, type RootState} from '../../store';
 import {authLogout} from '../auth';
 import {onCancelLoadingUI, startLoadingUI} from '../ui/uiSlice';
 import {
-  IService,
-  IServiceForm,
-  IServiceSerializer,
+  type IService,
+  type IServiceForm,
+  type IServiceSerializer,
 } from './interface/services.interface';
 import {
   activeService,
@@ -45,7 +48,7 @@ export const getServices = () => {
 
 export const addNewService = (
   service: IServiceForm,
-  cb: (message: string) => void,
+  cb: ({message}: {message: string}) => void,
 ) => {
   return async (dispatch: AppDispatch) => {
     dispatch(startLoadingUI());
@@ -62,16 +65,18 @@ export const addNewService = (
 
       dispatch(getServices());
       dispatch(onCancelLoadingUI());
-      return cb(`service: ${service.name} Created`);
+      cb({message: `service: ${service.name} Created`});
+      return;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
+        const errorData = error?.response?.data;
         if (errorData?.statusCode !== 200) {
-          return cb(errorData.message[0]);
+          cb({message: errorData.message[0]});
+          return;
         }
       }
 
-      return ToastAndroid.showWithGravityAndOffset(
+      ToastAndroid.showWithGravityAndOffset(
         'Error',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
@@ -94,7 +99,7 @@ const formDataGenerator = (service: IServiceForm) => {
   });
   return formData;
 };
-export const getNewServices = (url: string = '') => {
+export const getNewServices = (url = '') => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const {services} = getState().service;
     try {
@@ -113,25 +118,26 @@ export const getNewServices = (url: string = '') => {
       dispatch(setNewServices(newData));
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData?.statusCode !== 200) {
-          return ToastAndroid.showWithGravityAndOffset(
+        const errorData = error?.response?.data;
+        if (errorData?.statusCode !== 200)
+          ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        }
       }
     }
   };
 };
 
-export const removeService = (cb: (isRemoved: boolean) => void) => {
+export const removeService = (
+  cb: ({isRemoved}: {isRemoved: boolean}) => void,
+) => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const {isActiveService} = getState().service;
-    if (!isActiveService) return;
+    if (isActiveService == null) return;
 
     dispatch(startLoadingUI());
     try {
@@ -144,29 +150,29 @@ export const removeService = (cb: (isRemoved: boolean) => void) => {
       });
 
       dispatch(onDelete(isActiveService));
-      cb(true);
+      cb({isRemoved: true});
       dispatch(onCancelLoadingUI());
-      return ToastAndroid.showWithGravityAndOffset(
+      ToastAndroid.showWithGravityAndOffset(
         'The service has been deleted',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
         50,
       );
+      return;
     } catch (error) {
-      cb(false);
+      cb({isRemoved: false});
       dispatch(onCancelLoadingUI());
       if (axios.isAxiosError(error)) {
-        const errorData = error.response && error.response.data;
-        if (errorData?.statusCode !== 200) {
-          return ToastAndroid.showWithGravityAndOffset(
+        const errorData = error?.response?.data;
+        if (errorData?.statusCode !== 200)
+          ToastAndroid.showWithGravityAndOffset(
             errorData.message,
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        }
       }
     }
   };

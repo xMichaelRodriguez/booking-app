@@ -1,7 +1,7 @@
 /* eslint-disable no-sparse-arrays */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, type SubmitHandler, useForm} from 'react-hook-form';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -12,12 +12,13 @@ import {
 } from 'react-native';
 import {Button, Checkbox, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+
 import DividerWithOr from '../components/DividerWIthOr';
 import {GoogleButton} from '../components/GoogleButton';
-
 import {Logo} from '../components/Logo';
 import WrapperAnimate from '../components/ui/WrapperAnimate';
 import {useAppDispatch} from '../hooks';
+import {type INavigationProps} from '../interface';
 import {startRegister} from '../store/slices/auth/thunks';
 import {validEmail, validPassword} from '../utils/emailRegex';
 
@@ -30,7 +31,7 @@ interface IFormInput {
 export const passwordMessage =
   'Por favor, elija una contraseña más segura que incluya al menos una letra mayúscula, al menos una letra minúscula, al menos uno de los siguientes caracteres especiales: [-, _, *, .] y una longitud de entre 8 y 16 caracteres.';
 
-export const SingUpScreen = ({navigation}: {navigation: any}) => {
+export const SingUpScreen = ({navigation}: INavigationProps) => {
   const theme = useTheme();
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
@@ -66,7 +67,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                 render={({field: {onChange, onBlur, value}}) => (
                   <TextInput
                     style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                    error={!!errors.username}
+                    error={!(errors.username == null)}
                     onBlur={onBlur}
                     mode="outlined"
                     label="Username"
@@ -75,7 +76,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                   />
                 )}
               />
-              {errors.username && (
+              {errors.username != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.username?.message}.
                 </Text>
@@ -93,7 +94,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                 render={({field: {onChange, onBlur, value}}) => (
                   <TextInput
                     style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                    error={!!errors.email}
+                    error={!(errors.email == null)}
                     onBlur={onBlur}
                     mode="outlined"
                     label="Email"
@@ -102,7 +103,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                   />
                 )}
               />
-              {errors.email && (
+              {errors.email != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.email.message}
                 </Text>
@@ -120,7 +121,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                 render={({field: {onChange, onBlur, value}}) => (
                   <TextInput
                     style={{color: isDark ? '#fbfbfb' : '#282828'}}
-                    error={!!errors.password}
+                    error={!(errors.password == null)}
                     mode="outlined"
                     label="Password"
                     secureTextEntry={!isVisible}
@@ -130,7 +131,7 @@ export const SingUpScreen = ({navigation}: {navigation: any}) => {
                   />
                 )}
               />
-              {errors.password && (
+              {errors.password != null && (
                 <Text style={{color: theme.colors.error}}>
                   {errors.password.message}
                 </Text>

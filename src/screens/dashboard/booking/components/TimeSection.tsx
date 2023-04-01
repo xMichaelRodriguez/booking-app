@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react-native/no-inline-styles */
 import {useTheme} from '@react-navigation/native';
 import React, {useCallback} from 'react';
@@ -17,7 +18,7 @@ export const TimeSection = React.memo(
     const background = theme.colors.primary + '90';
     const handleSelect = useCallback(
       (item: string) => {
-        return handlePress(item);
+        handlePress(item);
       },
       [handlePress],
     );
@@ -50,7 +51,9 @@ export const TimeSection = React.memo(
               textStyle={{
                 color: '#fbfbfb',
               }}
-              onPress={() => handleSelect(item)}>
+              onPress={() => {
+                handleSelect(item);
+              }}>
               {item}
             </Chip>
           ))}

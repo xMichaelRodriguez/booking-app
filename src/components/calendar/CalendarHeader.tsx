@@ -1,8 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import moment, {Moment} from 'moment';
+import moment, {type Moment} from 'moment';
 import React from 'react';
 import {StyleSheet, useColorScheme} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
+
 import {INITIAL_DATE} from '../../constants/times';
 
 interface IProps {
@@ -30,7 +31,9 @@ export const CalendarHeader = ({selected, setSelectedDate}: IProps) => {
       }}
       startingDate={moment(INITIAL_DATE)}
       selectedDate={selected}
-      onDateSelected={currentDay => setSelectedDate(currentDay)}
+      onDateSelected={currentDay => {
+        setSelectedDate(currentDay);
+      }}
       minDate={new Date('2022-12-31')}
       scrollable
       style={styles.calendarContainer}
